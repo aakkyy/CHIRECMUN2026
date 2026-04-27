@@ -26,7 +26,18 @@ export default function Hero() {
   const canvasRef = useRef(null)
   const heroRef   = useRef(null)
   const [clicked, setClicked] = useState({})
+  const chirecRowRef = useRef(null)
   const toggleLetter = (i) => setClicked(prev => ({ ...prev, [i]: !prev[i] }))
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (chirecRowRef.current && !chirecRowRef.current.contains(e.target)) {
+        setClicked({})
+      }
+    }
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [])
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
@@ -138,6 +149,7 @@ export default function Hero() {
         {/* CHIREC — letter by letter */}
         <h1 className={styles.title}>
           <motion.div
+            ref={chirecRowRef}
             className={styles.chirecRow}
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
           >

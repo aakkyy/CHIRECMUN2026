@@ -1,7 +1,20 @@
 .footer {
-  background: #06060b;
-  border-top: 1px solid rgba(192,57,43,0.2);
+  background: linear-gradient(135deg, #0e0405 0%, #120810 50%, #010510 100%);
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(to right, rgba(192,57,43,0.5), rgba(86,204,242,0.3)) 1;
+  position: relative;
 }
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(192,57,43,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(86,204,242,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.inner { position: relative; z-index: 1; }
 
 .inner {
   max-width: 1120px;
@@ -126,7 +139,9 @@
 
 /* Bottom bar */
 .bar {
-  border-top: 1px solid rgba(192,57,43,0.1);
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.06);
   padding: 1rem 2rem;
   text-align: center;
   font-family: 'Lato', sans-serif;
