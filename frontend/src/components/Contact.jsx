@@ -15,7 +15,7 @@ export default function Contact() {
     const { firstName, lastName, email, message } = form
     const body = encodeURIComponent(`Name: ${firstName} ${lastName}\n\n${message}`)
     const subject = encodeURIComponent('CHIREC MUN 2026 — Enquiry')
-    window.location.href = `mailto:mun@chirec.ac.in?subject=${subject}&body=${body}`
+    window.location.href = `mailto:contact.mun@chirec.ac.in?subject=${subject}&body=${body}`
     setSent(true)
   }
 
@@ -48,7 +48,7 @@ export default function Contact() {
                 <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/>
                 </svg>
-                <a href="mailto:mun@chirec.ac.in" className={styles.link}>mun@chirec.ac.in</a>
+                <a href="mailto:contact.mun@chirec.ac.in" className={styles.link}>contact.mun@chirec.ac.in</a>
               </motion.div>
               <motion.div className={styles.row} variants={itemVariant}>
                 <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

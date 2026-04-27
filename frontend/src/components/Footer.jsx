@@ -60,7 +60,7 @@ export default function Footer() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/>
               </svg>
-              <a href="mailto:mun@chirec.ac.in" className={styles.footLink}>mun@chirec.ac.in</a>
+              <a href="mailto:contact.mun@chirec.ac.in" className={styles.footLink}>contact.mun@chirec.ac.in</a>
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
