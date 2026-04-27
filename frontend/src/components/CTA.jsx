@@ -11,7 +11,7 @@ export default function CTA() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let W, H, particles = [], raf
+    let W, H, particles = [], raf = null, visible = false
 
     function resize() {
       const r = canvas.parentElement.getBoundingClientRect()
@@ -21,13 +21,14 @@ export default function CTA() {
     }
     function init() {
       particles = []
-      for (let i = 0; i < 80; i++) {
-        particles.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.4+0.3,
-          vx:(Math.random()-0.5)*0.4, vy:-Math.random()*0.55-0.15, life:Math.random(),
+      for (let i = 0; i < 40; i++) {
+        particles.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.2+0.3,
+          vx:(Math.random()-0.5)*0.35, vy:-Math.random()*0.45-0.12, life:Math.random(),
           dec:Math.random()*0.003+0.001, col:Math.random()<0.5?'rgba(86,204,242,':'rgba(192,57,43,' })
       }
     }
     function draw() {
+      if (!visible) { raf = null; return }
       ctx.clearRect(0,0,W,H)
       for (const p of particles) {
         p.x+=p.vx; p.y+=p.vy; p.life-=p.dec
@@ -35,11 +36,15 @@ export default function CTA() {
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
         ctx.fillStyle=p.col+(p.life*0.5)+')'; ctx.fill()
       }
-      raf=requestAnimationFrame(draw)
+      raf = requestAnimationFrame(draw)
     }
-    const timer = setTimeout(()=>{ resize(); draw() },100)
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (visible && !raf) raf = requestAnimationFrame(draw)
+    }, { threshold: 0.01 })
+    const timer = setTimeout(()=>{ resize(); observer.observe(canvas.parentElement); raf = requestAnimationFrame(draw) },100)
     window.addEventListener('resize',resize)
-    return () => { clearTimeout(timer); cancelAnimationFrame(raf); window.removeEventListener('resize',resize) }
+    return () => { clearTimeout(timer); if (raf) cancelAnimationFrame(raf); observer.disconnect(); window.removeEventListener('resize',resize) }
   }, [])
 
   return (

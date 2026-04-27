@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
@@ -25,6 +25,8 @@ const fadeUp = {
 export default function Hero() {
   const canvasRef = useRef(null)
   const heroRef   = useRef(null)
+  const [clicked, setClicked] = useState({})
+  const toggleLetter = (i) => setClicked(prev => ({ ...prev, [i]: !prev[i] }))
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
@@ -34,7 +36,9 @@ export default function Hero() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let W, H, stars = [], dust = [], shooters = [], t = 0, raf
+    let W, H, stars = [], dust = [], shooters = [], t = 0, raf = null
+    let lastTime = 0
+    const FPS = 30, INTERVAL = 1000 / FPS
 
     function resize() {
       W = canvas.width  = window.innerWidth
@@ -43,37 +47,39 @@ export default function Hero() {
     }
     function init() {
       stars = []; dust = []
-      const count = Math.floor(W * H / 2000)
+      const count = Math.min(Math.floor(W * H / 3500), 180)
       for (let i = 0; i < count; i++) {
         const r = Math.random()
-        stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.6+0.2,
+        stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.5+0.2,
           s: Math.random()*0.8+0.2, b: Math.random(),
           col: r<.10?'#56CCF2':r<.18?'#85DEFF':r<.25?'#c0392b':'#ffffff' })
       }
-      for (let i = 0; i < 480; i++) {
+      for (let i = 0; i < 150; i++) {
         const arm = Math.floor(Math.random()*3), aa = (arm/3)*Math.PI*2
         const dist = Math.random()*Math.min(W,H)*0.42+25
         const ang  = aa + dist*0.011 + (Math.random()-0.5)*0.9
         const r = Math.random()
         dust.push({ ang, dist, av:(1e-4+Math.random()*1.2e-4)*(Math.random()<.5?1:-1),
-          rr:Math.random()*2.6+0.3, al:Math.random()*0.48+0.08,
+          rr:Math.random()*2.4+0.3, al:Math.random()*0.44+0.08,
           col: r<.28?'rgba(192,57,43,':r<.54?'rgba(86,204,242,':r<.72?'rgba(120,55,210,':'rgba(45,85,200,' })
       }
     }
     function shoot() {
-      if (Math.random()<0.006 && shooters.length<3) {
+      if (Math.random()<0.004 && shooters.length<2) {
         const a = Math.PI/4+(Math.random()-0.5)*0.6
         shooters.push({ x:Math.random()*W, y:Math.random()*H*0.4,
           vx:Math.cos(a)*(7+Math.random()*5), vy:Math.sin(a)*(7+Math.random()*5), life:1, tail:[] })
       }
     }
-    function draw() {
+    function draw(ts) {
+      if (ts - lastTime < INTERVAL) { raf = requestAnimationFrame(draw); return }
+      lastTime = ts
       t++; ctx.clearRect(0,0,W,H)
       const bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.8)
       bg.addColorStop(0,'rgba(22,8,36,1)'); bg.addColorStop(.35,'rgba(12,5,20,1)'); bg.addColorStop(1,'rgba(2,2,8,1)')
       ctx.fillStyle=bg; ctx.fillRect(0,0,W,H)
       const core = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,210)
-      core.addColorStop(0,'rgba(86,204,242,.10)'); core.addColorStop(.3,'rgba(192,57,43,.06)'); core.addColorStop(1,'rgba(0,0,0,0)')
+      core.addColorStop(0,'rgba(86,204,242,.08)'); core.addColorStop(.3,'rgba(192,57,43,.05)'); core.addColorStop(1,'rgba(0,0,0,0)')
       ctx.fillStyle=core; ctx.fillRect(0,0,W,H)
       for (const s of stars) {
         const tw=.5+.5*Math.sin(t*s.s*.04+s.b*Math.PI*2)
@@ -89,20 +95,21 @@ export default function Hero() {
       shoot()
       for (let i=shooters.length-1;i>=0;i--) {
         const s=shooters[i]; s.tail.push({x:s.x,y:s.y})
-        if(s.tail.length>24) s.tail.shift()
-        s.x+=s.vx; s.y+=s.vy; s.life-=.02
+        if(s.tail.length>20) s.tail.shift()
+        s.x+=s.vx; s.y+=s.vy; s.life-=.025
         for (let j=0;j<s.tail.length-1;j++) {
           const a=(j/s.tail.length)*s.life*.85
           ctx.beginPath(); ctx.moveTo(s.tail[j].x,s.tail[j].y); ctx.lineTo(s.tail[j+1].x,s.tail[j+1].y)
-          ctx.strokeStyle=`rgba(86,204,242,${a})`; ctx.lineWidth=(j/s.tail.length)*2.5; ctx.stroke()
+          ctx.strokeStyle=`rgba(86,204,242,${a})`; ctx.lineWidth=(j/s.tail.length)*2.2; ctx.stroke()
         }
         if(s.life<=0||s.x>W+60||s.y>H+60) shooters.splice(i,1)
       }
-      raf=requestAnimationFrame(draw)
+      raf = requestAnimationFrame(draw)
     }
     window.addEventListener('resize',resize)
-    resize(); draw()
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize',resize) }
+    resize()
+    raf = requestAnimationFrame(draw)
+    return () => { if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize',resize) }
   }, [])
 
   return (
@@ -139,13 +146,22 @@ export default function Hero() {
                 key={i}
                 className={styles.chirec}
                 variants={letterVariant}
+                animate={clicked[i] ? {
+                  color: l.color,
+                  textShadow: `0 0 65px ${l.glow}, 0 0 28px ${l.glow}`,
+                  scale: 1.1,
+                  y: -8,
+                } : undefined}
                 whileHover={{
                   color: l.color,
                   textShadow: `0 0 50px ${l.glow}, 0 0 20px ${l.glow}`,
                   y: -10,
                   scale: 1.12,
-                  transition: { type: 'spring', stiffness: 400, damping: 18 },
                 }}
+                whileTap={{ scale: 0.94 }}
+                onClick={() => toggleLetter(i)}
+                transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+                style={{ cursor: 'pointer' }}
               >{l.char}</motion.span>
             ))}
           </motion.div>

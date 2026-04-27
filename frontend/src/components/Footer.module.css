@@ -1,6 +1,6 @@
 .footer {
   background: #06060b;
-  border-top: 1px solid rgba(86,204,242,0.14);
+  border-top: 1px solid rgba(192,57,43,0.2);
 }
 
 .inner {
@@ -43,7 +43,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #56CCF2;
+  color: #c0392b;
 }
 
 .copy {
@@ -65,7 +65,7 @@
   text-decoration: none;
   transition: color 0.2s;
 }
-.devLink:hover { color: rgba(86,204,242,0.6); }
+.devLink:hover { color: rgba(192,57,43,0.75); }
 
 /* Columns */
 .colHead {
@@ -92,7 +92,7 @@
   transition: color 0.2s;
   text-decoration: none;
 }
-.footLink:hover { color: #56CCF2; }
+.footLink:hover { color: #e74c3c; }
 
 /* Details list */
 .detailList {
@@ -112,7 +112,7 @@
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  color: #56CCF2;
+  color: #c0392b;
   margin-top: 2px;
 }
 
@@ -126,7 +126,7 @@
 
 /* Bottom bar */
 .bar {
-  border-top: 1px solid rgba(86,204,242,0.08);
+  border-top: 1px solid rgba(192,57,43,0.1);
   padding: 1rem 2rem;
   text-align: center;
   font-family: 'Lato', sans-serif;

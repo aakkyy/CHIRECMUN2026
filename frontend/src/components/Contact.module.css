@@ -1,6 +1,6 @@
 .section {
   background: #09090f;
-  border-top: 1px solid rgba(86,204,242,0.12);
+  border-top: 1px solid rgba(192,57,43,0.15);
 }
 
 .grid {
@@ -17,7 +17,7 @@
   font-weight: 700;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: #56CCF2;
+  color: #c0392b;
   margin-bottom: 0.6rem;
 }
 
@@ -46,7 +46,7 @@
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  color: #56CCF2;
+  color: #c0392b;
   margin-top: 2px;
 }
 
@@ -63,7 +63,7 @@
   color: rgba(244,244,239,0.65);
   transition: color 0.2s;
 }
-.link:hover { color: #56CCF2; }
+.link:hover { color: #e74c3c; }
 
 /* RIGHT — form */
 .form {
@@ -97,7 +97,7 @@
 
 .input {
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(86,204,242,0.2);
+  border: 1px solid rgba(192,57,43,0.22);
   border-radius: 6px;
   padding: 0.75rem 1rem;
   color: #f4f4ef;
@@ -108,8 +108,8 @@
   width: 100%;
 }
 .input:focus {
-  border-color: rgba(86,204,242,0.55);
-  box-shadow: 0 0 0 3px rgba(86,204,242,0.08);
+  border-color: rgba(192,57,43,0.55);
+  box-shadow: 0 0 0 3px rgba(192,57,43,0.08);
 }
 
 .textarea {
@@ -123,8 +123,8 @@
 }
 
 .btn {
-  background: #56CCF2;
-  color: #09090f;
+  background: #c0392b;
+  color: #fff;
   font-family: 'Lato', sans-serif;
   font-weight: 800;
   font-size: 0.82rem;
@@ -137,9 +137,9 @@
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 .btn:hover {
-  background: #85DEFF;
+  background: #e74c3c;
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(86,204,242,0.35);
+  box-shadow: 0 6px 22px rgba(192,57,43,0.45);
 }
 
 /* Thank you state */
@@ -151,15 +151,15 @@
   gap: 1rem;
   padding: 4rem 2rem;
   text-align: center;
-  border: 1px solid rgba(86,204,242,0.2);
+  border: 1px solid rgba(192,57,43,0.22);
   border-radius: 12px;
-  background: rgba(86,204,242,0.04);
+  background: rgba(192,57,43,0.04);
 }
 .thankYou h3 {
   font-family: 'Rubik', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #56CCF2;
+  color: #e74c3c;
 }
 .thankYou p {
   font-family: 'Lato', sans-serif;

@@ -10,22 +10,22 @@
   background: rgba(10, 18, 30, 0.45);
   backdrop-filter: blur(22px) saturate(180%);
   -webkit-backdrop-filter: blur(22px) saturate(180%);
-  border: 1px solid rgba(86,204,242,0.18);
+  border: 1px solid rgba(192,57,43,0.22);
   box-shadow:
-    0 0 0 1px rgba(86,204,242,0.06) inset,
+    0 0 0 1px rgba(192,57,43,0.07) inset,
     0 8px 32px rgba(0,0,0,0.45),
-    0 0 40px rgba(86,204,242,0.06);
+    0 0 40px rgba(192,57,43,0.07);
   transition: box-shadow 0.35s, background 0.35s, border-color 0.35s;
   will-change: transform;
 }
 
 .scrolled {
   background: rgba(8, 14, 26, 0.72);
-  border-color: rgba(86,204,242,0.28);
+  border-color: rgba(192,57,43,0.36);
   box-shadow:
-    0 0 0 1px rgba(86,204,242,0.1) inset,
+    0 0 0 1px rgba(192,57,43,0.12) inset,
     0 12px 40px rgba(0,0,0,0.55),
-    0 0 60px rgba(86,204,242,0.08);
+    0 0 60px rgba(192,57,43,0.1);
 }
 
 .inner {
@@ -46,7 +46,7 @@
 
 .logoWrap {
   border-radius: 50%;
-  border: 1.5px solid rgba(86,204,242,0.35);
+  border: 1.5px solid rgba(192,57,43,0.4);
   background: rgba(9,9,15,0.6);
   padding: 2px;
   display: flex;
@@ -55,8 +55,8 @@
   transition: box-shadow 0.3s, border-color 0.3s;
 }
 .brand:hover .logoWrap {
-  border-color: rgba(86,204,242,0.7);
-  box-shadow: 0 0 18px rgba(86,204,242,0.35);
+  border-color: rgba(192,57,43,0.8);
+  box-shadow: 0 0 18px rgba(192,57,43,0.4);
 }
 
 .logoImg {
@@ -87,7 +87,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #56CCF2;
+  color: #c0392b;
   margin-top: 3px;
 }
 
@@ -115,7 +115,7 @@
   position: absolute;
   left: 0; bottom: -2px;
   width: 0; height: 1px;
-  background: #56CCF2;
+  background: #c0392b;
   transition: width 0.25s cubic-bezier(.22,1,.36,1);
 }
 .link:hover { color: #f4f4ef; }
@@ -185,12 +185,12 @@
   transition: color 0.2s;
   text-decoration: none;
 }
-.mmLink:hover { color: #56CCF2; }
+.mmLink:hover { color: #e74c3c; }
 
 .mmCta {
   font-size: 1.1rem !important;
-  border: 2px solid #56CCF2;
-  color: #56CCF2 !important;
+  border: 2px solid #c0392b;
+  color: #e74c3c !important;
   padding: 0.75rem 2rem;
   border-radius: 999px;
 }
