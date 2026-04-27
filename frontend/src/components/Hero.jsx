@@ -160,11 +160,11 @@ export default function Hero() {
                 variants={letterVariant}
                 style={{
                   cursor: 'pointer',
-                  color: clicked[i] ? l.color : undefined,
+                  color: clicked[i] ? l.color : '#f4f4ef',
                   textShadow: clicked[i]
                     ? `0 0 65px ${l.glow}, 0 0 28px ${l.glow}`
-                    : undefined,
-                  transition: 'color 0.32s ease, text-shadow 0.32s ease',
+                    : 'none',
+                  transition: 'color 0.3s ease, text-shadow 0.3s ease',
                 }}
                 whileHover={{
                   opacity: 1,
