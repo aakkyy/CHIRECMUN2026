@@ -146,22 +146,25 @@ export default function Hero() {
                 key={i}
                 className={styles.chirec}
                 variants={letterVariant}
-                animate={clicked[i] ? {
-                  color: l.color,
-                  textShadow: `0 0 65px ${l.glow}, 0 0 28px ${l.glow}`,
-                  scale: 1.1,
-                  y: -8,
-                } : undefined}
+                style={{
+                  cursor: 'pointer',
+                  color: clicked[i] ? l.color : undefined,
+                  textShadow: clicked[i]
+                    ? `0 0 65px ${l.glow}, 0 0 28px ${l.glow}`
+                    : undefined,
+                  transition: 'color 0.32s ease, text-shadow 0.32s ease',
+                }}
                 whileHover={{
+                  opacity: 1,
                   color: l.color,
                   textShadow: `0 0 50px ${l.glow}, 0 0 20px ${l.glow}`,
                   y: -10,
                   scale: 1.12,
+                  transition: { type: 'spring', stiffness: 400, damping: 18 },
                 }}
-                whileTap={{ scale: 0.94 }}
+                whileTap={{ opacity: 1, scale: 0.94 }}
                 onClick={() => toggleLetter(i)}
                 transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-                style={{ cursor: 'pointer' }}
               >{l.char}</motion.span>
             ))}
           </motion.div>
