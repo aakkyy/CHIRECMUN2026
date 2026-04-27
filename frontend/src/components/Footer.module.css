@@ -1,16 +1,17 @@
 .footer {
-  background: linear-gradient(135deg, #0e0405 0%, #120810 50%, #010510 100%);
-  border-top: 1px solid transparent;
-  border-image: linear-gradient(to right, rgba(192,57,43,0.5), rgba(86,204,242,0.3)) 1;
+  background: linear-gradient(to right, #1a0404 0%, #0d0810 50%, #040b1e 100%);
+  border-top: 2px solid transparent;
+  border-image: linear-gradient(to right, #c0392b, #56CCF2) 1;
   position: relative;
+  overflow: hidden;
 }
 .footer::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 80% at 0% 50%, rgba(192,57,43,0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(86,204,242,0.06) 0%, transparent 70%);
+    radial-gradient(ellipse 55% 100% at 0% 50%, rgba(192,57,43,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 100% at 100% 50%, rgba(86,204,242,0.12) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
