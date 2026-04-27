@@ -1,0 +1,124 @@
+.section {
+  background: #09090f;
+}
+
+.eyebrow {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #56CCF2;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: #f4f4ef;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.sub {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: rgba(244,244,239,0.42);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.mapWrap {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(86,204,242,0.18);
+  box-shadow: 0 0 60px rgba(86,204,242,0.07), 0 24px 60px rgba(0,0,0,0.5);
+  margin-bottom: 1.75rem;
+  height: 460px;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  filter: invert(90%) hue-rotate(180deg);
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(86,204,242,0.1);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  flex-wrap: wrap;
+}
+
+.detailItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 200px;
+}
+.detailItem svg {
+  color: #56CCF2;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.detailLabel {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.35);
+  margin-bottom: 4px;
+}
+
+.detailValue {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.88rem;
+  color: rgba(244,244,239,0.78);
+  line-height: 1.5;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(86,204,242,0.12);
+  flex-shrink: 0;
+}
+
+.mapsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #56CCF2;
+  border: 1.5px solid rgba(86,204,242,0.35);
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s;
+  text-decoration: none;
+}
+.mapsLink:hover {
+  background: #56CCF2;
+  color: #09090f;
+  border-color: #56CCF2;
+}
+
+@media (max-width: 720px) {
+  .mapWrap { height: 320px; }
+  .details { flex-direction: column; gap: 1.2rem; }
+  .divider { width: 100%; height: 1px; }
+}

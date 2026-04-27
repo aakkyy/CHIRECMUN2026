@@ -1,0 +1,131 @@
+.section {
+  background: #0e0e18;
+  border-top: 1px solid rgba(86,204,242,0.14);
+  border-bottom: 1px solid rgba(86,204,242,0.14);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.bgText {
+  position: absolute;
+  bottom: -0.1em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(7rem, 20vw, 16rem);
+  font-weight: 900;
+  color: rgba(86,204,242,0.035);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.06em;
+}
+
+.eyebrow {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #56CCF2;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: #f4f4ef;
+  margin-bottom: 3.5rem;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+
+.numBox {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(86,204,242,0.18);
+  border-radius: 10px;
+  padding: 1.2rem 1.8rem;
+  min-width: 110px;
+  min-height: 7rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 30px rgba(86,204,242,0.1);
+  position: relative;
+  overflow: hidden;
+}
+.numBox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(86,204,242,0.03) 0%, transparent 100%);
+}
+
+.num {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 900;
+  color: #56CCF2;
+  line-height: 1;
+  display: block;
+  text-shadow: 0 0 40px rgba(86,204,242,0.45);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.4);
+  margin-top: 0.9rem;
+}
+
+.colon {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #c0392b;
+  padding-bottom: 2.5rem;
+  opacity: 0.65;
+  line-height: 1;
+}
+
+.sub {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: rgba(244,244,239,0.38);
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .block   { padding: 0 0.8rem; }
+  .numBox  { min-width: 72px; padding: 0.9rem 1rem; }
+  .colon   { padding-bottom: 2rem; }
+}
+

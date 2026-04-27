@@ -1,0 +1,90 @@
+/* ═══════════════════════════════════════════════════
+   CHIREC MUN 2026  |  Global Reset + Design Tokens
+   ═══════════════════════════════════════════════════ */
+:root {
+  --bg:       #09090f;
+  --bg2:      #0e0e18;
+  --bg3:      #141420;
+  --red:      #c0392b;
+  --red-h:    #e74c3c;
+  --red-d:    #8e1f15;
+  --gold:     #56CCF2;
+  --gold-h:   #85DEFF;
+  --gold-d:   #2AAFE0;
+  --white:    #f4f4ef;
+  --muted:    rgba(244,244,239,0.45);
+  --border:   rgba(86,204,242,0.15);
+  --border2:  rgba(86,204,242,0.28);
+  --glass:    rgba(255,255,255,0.03);
+  --glass2:   rgba(255,255,255,0.055);
+  --r:        10px;
+  --r-sm:     6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { min-height: 100vh; }
+
+img { display: block; max-width: 100%; }
+a   { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ── Shared ─────────────────────────────── */
+.section {
+  padding: 96px 0;
+}
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1),
+              transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── Reveal variants ─────────────────────── */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-44px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1),
+              transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(44px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1),
+              transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.90);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1),
+              transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible { opacity: 1; transform: none; }
+
+/* ── Stagger helpers ─────────────────────── */
+.d1 { transition-delay: 0.08s !important; }
+.d2 { transition-delay: 0.18s !important; }
+.d3 { transition-delay: 0.28s !important; }
+.d4 { transition-delay: 0.38s !important; }
+.d5 { transition-delay: 0.48s !important; }

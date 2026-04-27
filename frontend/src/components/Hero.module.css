@@ -1,0 +1,213 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #020209;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 65% at 50% 50%, rgba(5,5,16,.2) 0%, rgba(2,2,10,.85) 100%),
+    linear-gradient(to bottom, rgba(9,9,15,.45) 0%, transparent 28%, transparent 72%, rgba(9,9,15,.75) 100%);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 1.1rem;
+  will-change: transform, opacity;
+}
+
+.chirecRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.04em;
+}
+
+.logoWrap {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  border: 2px solid rgba(86,204,242,0.25);
+  background: rgba(9,9,15,0.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px;
+  box-shadow: 0 0 50px rgba(86,204,242,0.15), inset 0 0 20px rgba(86,204,242,0.04);
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.logoImg { width: 90px; height: 90px; object-fit: contain; border-radius: 6px; }
+
+.badge {
+  display: inline-block;
+  padding: 5px 18px;
+  border: 1px solid rgba(86,204,242,0.3);
+  border-radius: 100px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #56CCF2;
+  background: rgba(86,204,242,0.07);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Rubik', sans-serif;
+  line-height: 1;
+}
+
+.chirec {
+  display: inline-block;
+  font-size: clamp(3.8rem, 11vw, 7.5rem);
+  font-weight: 900;
+  color: #f4f4ef;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 80px rgba(192,57,43,0.3);
+}
+
+.mun {
+  font-size: clamp(0.85rem, 2vw, 1.3rem);
+  font-weight: 300;
+  color: rgba(244,244,239,0.7);
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.year {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #c0392b;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 40px rgba(192,57,43,0.55);
+}
+
+.slogan {
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #56CCF2;
+  text-shadow: 0 0 30px rgba(86,204,242,0.4);
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(244,244,239,0.45);
+  letter-spacing: 0.05em;
+}
+.location svg { color: #56CCF2; flex-shrink: 0; }
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 2.2rem;
+  background: #c0392b;
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 2px solid #c0392b;
+  transition: background .25s, box-shadow .25s, transform .2s;
+}
+.btnPrimary:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  box-shadow: 0 8px 30px rgba(192,57,43,0.5);
+  transform: translateY(-2px);
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9rem 2.2rem;
+  background: transparent;
+  color: #56CCF2;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 2px solid rgba(86,204,242,0.6);
+  transition: background .25s, color .25s, transform .2s;
+}
+.btnGhost:hover {
+  background: #56CCF2;
+  color: #09090f;
+  transform: translateY(-2px);
+}
+
+.scrollHint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.8; }
+}
+
+.scrollLabel {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(86,204,242,0.7);
+}
+
+.scrollLine {
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(to bottom, #56CCF2, transparent);
+}
