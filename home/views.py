@@ -8,3 +8,7 @@ def index(request):
         'slogan': 'Represent. Reason. Resolve.',
     }
     return render(request, 'home/index.html', context)
+
+
+def faq(request):
+    return render(request, 'home/index.html', {})

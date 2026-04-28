@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Stats from './components/Stats'
@@ -7,11 +8,11 @@ import Secretariat from './components/Secretariat'
 import Location from './components/Location'
 import CTA from './components/CTA'
 import Contact from './components/Contact'
-import FAQ from './components/FAQ'
 import Footer from './components/Footer'
+import FAQPage from './pages/FAQPage'
 import { useReveal } from './hooks/useReveal'
 
-export default function App() {
+function HomePage() {
   useReveal()
   return (
     <>
@@ -23,9 +24,17 @@ export default function App() {
       <Secretariat />
       <Location />
       <CTA />
-      <FAQ />
       <Contact />
       <Footer />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/faq" element={<FAQPage />} />
+    </Routes>
   )
 }

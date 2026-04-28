@@ -3,12 +3,12 @@ import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
 
 const links = [
-  { label: 'About',       href: '#about' },
-  { label: 'Secretariat', href: '#secretariat' },
-  { label: 'Conference',  href: '#countdown' },
-  { label: 'Location',    href: '#location' },
-  { label: 'FAQs',        href: '#faq' },
-  { label: 'Contact',     href: '#contact' },
+  { label: 'About',       href: '/#about' },
+  { label: 'Secretariat', href: '/#secretariat' },
+  { label: 'Conference',  href: '/#countdown' },
+  { label: 'Location',    href: '/#location' },
+  { label: 'FAQs',        href: '/faq' },
+  { label: 'Contact',     href: '/#contact' },
 ]
 
 export default function Navbar() {
