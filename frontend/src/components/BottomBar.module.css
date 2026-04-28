@@ -1,5 +1,5 @@
 .bar {
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255,255,255,0.12);
   padding: 1.6rem 3rem;
   display: flex;
   align-items: center;
@@ -10,15 +10,15 @@
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(244,244,239,0.18);
+  color: rgba(244,244,239,0.42);
 }
 
 .devLink {
-  color: rgba(244,244,239,0.28);
+  color: rgba(244,244,239,0.55);
   text-decoration: none;
   transition: color 0.2s;
 }
-.devLink:hover { color: rgba(192,57,43,0.7); }
+.devLink:hover { color: rgba(231,76,60,0.85); }
 
 @media (max-width: 700px) {
   .bar { flex-direction: column; text-align: center; padding: 1.4rem 2rem; }
