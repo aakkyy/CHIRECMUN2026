@@ -92,7 +92,7 @@ export default function FAQPage() {
 
   return (
     <div className={styles.page}>
-      <AnimatedBg variant="blue" />
+      <AnimatedBg variant="cosmic" />
       <div className={styles.overlay} />
 
       <Navbar />
