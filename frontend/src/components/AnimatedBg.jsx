@@ -17,14 +17,16 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
 
     /* ── resize ── */
     function resize() {
+      const p   = canvas.parentElement
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      W = window.innerWidth
-      H = window.innerHeight
-      canvas.width  = W * dpr
-      canvas.height = H * dpr
-      canvas.style.width  = W + 'px'
-      canvas.style.height = H + 'px'
+      const cw  = p ? p.offsetWidth  || window.innerWidth  : window.innerWidth
+      const ch  = p ? p.offsetHeight || window.innerHeight : window.innerHeight
+      canvas.width  = cw * dpr
+      canvas.height = ch * dpr
+      canvas.style.width  = cw + 'px'
+      canvas.style.height = ch + 'px'
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      W = cw; H = ch
 
       if (variant === 'cosmic') {
         buildCosmicStatic()
@@ -465,11 +467,9 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
 
   return (
     <canvas ref={ref} style={{
-      position: 'fixed',
-      top: 0, left: 0,
-      width: '100vw', height: '100vh',
-      pointerEvents: 'none',
-      zIndex: 0,
+      position: 'absolute', inset: 0,
+      width: '100%', height: '100%',
+      pointerEvents: 'none', zIndex: 0,
     }} />
   )
 }
