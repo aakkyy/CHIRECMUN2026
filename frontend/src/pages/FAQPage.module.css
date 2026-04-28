@@ -41,11 +41,24 @@
   margin-bottom: 1rem;
   perspective: 700px;
   animation: titleGlow 5s ease-in-out infinite;
+  cursor: default;
+  transition: color 0.4s;
+}
+
+.title:hover {
+  animation: titleGlow 5s ease-in-out infinite, colorCycle 2.4s linear infinite;
 }
 
 @keyframes titleGlow {
   0%, 100% { text-shadow: none; }
   50%       { text-shadow: 0 0 55px rgba(231,76,60,0.18), 0 0 110px rgba(192,57,43,0.09); }
+}
+
+@keyframes colorCycle {
+  0%         { color: #56CCF2; }   /* blue  */
+  33%        { color: #9b59b6; }   /* purple */
+  66%        { color: #e74c3c; }   /* red   */
+  100%       { color: #56CCF2; }   /* back  */
 }
 
 .titleWord {

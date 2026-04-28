@@ -13,7 +13,9 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     let bgStars = [], fgStars = [], asteroids = [], planets = []
     let comet = null
     let lastTime = 0
-    const FPS = 30, INTERVAL = 1000 / FPS
+    const isCosmic = variant === 'cosmic'
+    const FPS = isCosmic ? 24 : 30
+    const INTERVAL = 1000 / FPS
 
     /* ── resize ── */
     function resize() {
@@ -31,8 +33,8 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     }
 
     function buildObjects() {
-      /* tiny background star field */
-      bgStars = Array.from({ length: 300 }, () => ({
+      /* tiny background star field — halved for perf */
+      bgStars = Array.from({ length: 140 }, () => ({
         x: Math.random() * W,
         y: Math.random() * H,
         r: Math.random() * 0.45 + 0.08,
@@ -40,7 +42,7 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
       }))
 
       /* foreground twinkling stars */
-      fgStars = Array.from({ length: 100 }, () => ({
+      fgStars = Array.from({ length: 55 }, () => ({
         x:      Math.random() * W,
         y:      Math.random() * H,
         r:      Math.random() * 1.3 + 0.3,
@@ -96,7 +98,7 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
       ]
 
       /* asteroids — shapes generated once so they don't flicker */
-      asteroids = Array.from({ length: 14 }, () => {
+      asteroids = Array.from({ length: 7 }, () => {
         const sides = Math.floor(Math.random() * 4) + 5
         const verts = Array.from({ length: sides }, (_, i) => {
           const angle  = (i / sides) * Math.PI * 2
@@ -350,23 +352,20 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     }
 
     function drawWaves() {
+      /* 10 waves total (was 14) — step 5px instead of 3px for perf */
       const waves = [
-        /* Red waves — varying positions, speeds, amplitudes */
-        { col: '192,57,43',  yFrac: 0.11, amp: 0.072, freq: 0.0029, speed: 0.140, width: 2.2, alpha: 0.40, ph: 0.00 },
-        { col: '231,76,60',  yFrac: 0.23, amp: 0.052, freq: 0.0038, speed: 0.215, width: 1.4, alpha: 0.27, ph: 1.40 },
-        { col: '192,57,43',  yFrac: 0.37, amp: 0.094, freq: 0.0023, speed: 0.172, width: 3.1, alpha: 0.44, ph: 2.75 },
-        { col: '255,92,72',  yFrac: 0.51, amp: 0.058, freq: 0.0044, speed: 0.108, width: 1.1, alpha: 0.22, ph: 0.82 },
-        { col: '192,57,43',  yFrac: 0.65, amp: 0.082, freq: 0.0033, speed: 0.262, width: 1.9, alpha: 0.33, ph: 3.30 },
-        { col: '231,76,60',  yFrac: 0.79, amp: 0.048, freq: 0.0048, speed: 0.155, width: 1.0, alpha: 0.18, ph: 2.05 },
-        { col: '200,62,42',  yFrac: 0.91, amp: 0.038, freq: 0.0036, speed: 0.322, width: 0.9, alpha: 0.13, ph: 1.10 },
-        /* Blue waves */
-        { col: '28,115,215', yFrac: 0.06, amp: 0.065, freq: 0.0034, speed: 0.192, width: 1.8, alpha: 0.33, ph: 0.60 },
-        { col: '86,204,242', yFrac: 0.17, amp: 0.082, freq: 0.0027, speed: 0.128, width: 2.5, alpha: 0.42, ph: 1.95 },
-        { col: '38,135,225', yFrac: 0.31, amp: 0.054, freq: 0.0042, speed: 0.245, width: 1.3, alpha: 0.24, ph: 3.05 },
-        { col: '60,178,255', yFrac: 0.45, amp: 0.102, freq: 0.0021, speed: 0.185, width: 3.3, alpha: 0.47, ph: 0.38 },
-        { col: '86,204,242', yFrac: 0.58, amp: 0.068, freq: 0.0037, speed: 0.295, width: 1.7, alpha: 0.30, ph: 3.72 },
-        { col: '28,115,215', yFrac: 0.72, amp: 0.044, freq: 0.0046, speed: 0.118, width: 1.0, alpha: 0.16, ph: 2.28 },
-        { col: '58,158,238', yFrac: 0.85, amp: 0.058, freq: 0.0031, speed: 0.232, width: 1.5, alpha: 0.22, ph: 1.52 },
+        /* Red */
+        { col: '192,57,43',  yFrac: 0.10, amp: 0.075, freq: 0.0028, speed: 0.14, width: 2.2, alpha: 0.42, ph: 0.00 },
+        { col: '231,76,60',  yFrac: 0.28, amp: 0.055, freq: 0.0038, speed: 0.21, width: 1.4, alpha: 0.28, ph: 1.40 },
+        { col: '192,57,43',  yFrac: 0.48, amp: 0.096, freq: 0.0023, speed: 0.17, width: 3.0, alpha: 0.45, ph: 2.75 },
+        { col: '231,76,60',  yFrac: 0.67, amp: 0.058, freq: 0.0040, speed: 0.26, width: 1.6, alpha: 0.28, ph: 3.30 },
+        { col: '192,57,43',  yFrac: 0.86, amp: 0.045, freq: 0.0034, speed: 0.15, width: 1.0, alpha: 0.18, ph: 2.05 },
+        /* Blue */
+        { col: '28,115,215', yFrac: 0.06, amp: 0.065, freq: 0.0034, speed: 0.19, width: 1.8, alpha: 0.34, ph: 0.60 },
+        { col: '86,204,242', yFrac: 0.22, amp: 0.082, freq: 0.0027, speed: 0.13, width: 2.5, alpha: 0.43, ph: 1.95 },
+        { col: '60,178,255', yFrac: 0.40, amp: 0.100, freq: 0.0021, speed: 0.18, width: 3.2, alpha: 0.46, ph: 0.38 },
+        { col: '86,204,242', yFrac: 0.58, amp: 0.065, freq: 0.0037, speed: 0.29, width: 1.6, alpha: 0.28, ph: 3.72 },
+        { col: '28,115,215', yFrac: 0.78, amp: 0.048, freq: 0.0044, speed: 0.12, width: 1.0, alpha: 0.18, ph: 2.28 },
       ]
 
       for (const w of waves) {
@@ -375,17 +374,16 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
         const phase = w.ph + t * w.speed
 
         ctx.beginPath()
-        for (let x = 0; x <= W; x += 3) {
+        for (let x = 0; x <= W; x += 5) {       /* step 5 vs 3 = 40% fewer points */
           const y = yBase
             + amp        * Math.sin(x * w.freq       + phase)
             + amp * 0.34 * Math.sin(x * w.freq * 2.2 + phase * 1.35 + 0.95)
-            + amp * 0.11 * Math.sin(x * w.freq * 4.1 + phase * 0.72 + 2.1)
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
         }
 
         /* diffuse glow pass */
-        ctx.strokeStyle = `rgba(${w.col},${w.alpha * 0.33})`
-        ctx.lineWidth   = w.width * 3.8
+        ctx.strokeStyle = `rgba(${w.col},${w.alpha * 0.30})`
+        ctx.lineWidth   = w.width * 3.5
         ctx.stroke()
 
         /* bright core pass */
