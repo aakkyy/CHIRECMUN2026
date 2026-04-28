@@ -7,6 +7,7 @@ const links = [
   { label: 'Secretariat', href: '#secretariat' },
   { label: 'Conference',  href: '#countdown' },
   { label: 'Location',    href: '#location' },
+  { label: 'FAQs',        href: '#faq' },
   { label: 'Contact',     href: '#contact' },
 ]
 

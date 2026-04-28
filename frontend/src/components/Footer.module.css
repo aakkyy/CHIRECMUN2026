@@ -95,7 +95,7 @@
   transition: color 0.2s;
   letter-spacing: 0.01em;
 }
-.link:hover { color: #f4f4ef; }
+.link:hover { color: #e74c3c; }
 
 /* ── BOTTOM BAR ── */
 .bar {

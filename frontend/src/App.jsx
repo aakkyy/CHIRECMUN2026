@@ -7,6 +7,7 @@ import Secretariat from './components/Secretariat'
 import Location from './components/Location'
 import CTA from './components/CTA'
 import Contact from './components/Contact'
+import FAQ from './components/FAQ'
 import Footer from './components/Footer'
 import { useReveal } from './hooks/useReveal'
 
@@ -22,6 +23,7 @@ export default function App() {
       <Secretariat />
       <Location />
       <CTA />
+      <FAQ />
       <Contact />
       <Footer />
     </>
