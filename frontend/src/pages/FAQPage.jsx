@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from './FAQPage.module.css'
 import AnimatedBg from '../components/AnimatedBg'
+import BottomBar from '../components/BottomBar'
 import logoImg from '../assets/logo.png'
 
 const faqs = [
@@ -140,10 +141,7 @@ export default function FAQPage() {
         ))}
       </div>
 
-      {/* Footer strip */}
-      <div className={styles.foot}>
-        <span>&copy; 2026 CHIREC Model United Nations &nbsp;&bull;&nbsp; Edition XIV</span>
-      </div>
+      <BottomBar />
     </div>
   )
 }

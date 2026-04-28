@@ -1,0 +1,25 @@
+.bar {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 1.6rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.18);
+}
+
+.devLink {
+  color: rgba(244,244,239,0.28);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.devLink:hover { color: rgba(192,57,43,0.7); }
+
+@media (max-width: 700px) {
+  .bar { flex-direction: column; text-align: center; padding: 1.4rem 2rem; }
+}
