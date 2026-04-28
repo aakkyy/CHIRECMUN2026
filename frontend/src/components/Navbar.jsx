@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
 
@@ -7,11 +8,12 @@ const links = [
   { label: 'Secretariat', href: '/#secretariat' },
   { label: 'Conference',  href: '/#countdown' },
   { label: 'Location',    href: '/#location' },
-  { label: 'FAQs',        href: '/faq' },
+  { label: 'FAQs',        href: '/faq',  exact: true },
   { label: 'Contact',     href: '/#contact' },
 ]
 
 export default function Navbar() {
+  const location = useLocation()
   const [scrolled,  setScrolled]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const navRef     = useRef(null)
@@ -85,7 +87,7 @@ export default function Navbar() {
     <>
       <nav ref={navRef} className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
-          <a href="#hero" className={styles.brand}>
+          <a href="/" className={styles.brand}>
             <div className={styles.logoWrap}>
               <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
             </div>
@@ -96,13 +98,23 @@ export default function Navbar() {
           </a>
 
           <ul className={styles.links}>
-            {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className={styles.link}>{l.label}</a>
-              </li>
-            ))}
+            {links.map((l) => {
+              const isActive = l.exact
+                ? location.pathname === l.href
+                : false
+              return (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              )
+            })}
             <li>
-              <a href="#register" className={styles.cta}>Register Now</a>
+              <a href="/#register" className={styles.cta}>Register Now</a>
             </li>
           </ul>
 
@@ -124,7 +136,7 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href="#register" className={`${styles.mmLink} ${styles.mmCta}`}
+          <a href="/#register" className={`${styles.mmLink} ${styles.mmCta}`}
              onClick={() => setMenuOpen(false)}>
             Register Now
           </a>

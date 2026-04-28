@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from './FAQPage.module.css'
 import AnimatedBg from '../components/AnimatedBg'
+import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
-import logoImg from '../assets/logo.png'
 
 const faqs = [
   {
@@ -96,21 +95,7 @@ export default function FAQPage() {
       <AnimatedBg variant="blue" />
       <div className={styles.overlay} />
 
-      {/* Mini nav */}
-      <nav className={styles.nav}>
-        <Link to="/" className={styles.back}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
-          </svg>
-          Back to Home
-        </Link>
-        <Link to="/" className={styles.brand}>
-          <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
-          <span className={styles.brandName}>CHIREC MUN 2026</span>
-        </Link>
-        <a href="/#register" className={styles.register}>Register</a>
-      </nav>
+      <Navbar />
 
       {/* Hero text */}
       <div className={styles.hero}>
