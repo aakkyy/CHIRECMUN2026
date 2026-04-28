@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import styles from './FAQPage.module.css'
 import AnimatedBg from '../components/AnimatedBg'
 import Navbar from '../components/Navbar'
@@ -68,19 +68,10 @@ function FAQItem({ faq, isOpen, onToggle, index }) {
         </motion.div>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            className={styles.answer}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-          >
-            <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Pure CSS transition — no layout reflow, no framer-motion height calc */}
+      <div className={`${styles.answer} ${isOpen ? styles.answerOpen : ''}`}>
+        <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
+      </div>
     </motion.div>
   )
 }

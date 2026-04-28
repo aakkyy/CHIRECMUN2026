@@ -175,8 +175,18 @@
   transform: rotate(90deg); /* vertical arm of the + */
 }
 
-/* ── ANSWER ── */
-.answer { overflow: hidden; }
+/* ── ANSWER — CSS-only, no JS height calculation ── */
+.answer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.32s ease, opacity 0.25s ease;
+}
+
+.answerOpen {
+  max-height: 400px;
+  opacity: 1;
+}
 
 .aText {
   font-family: 'Lato', sans-serif;
