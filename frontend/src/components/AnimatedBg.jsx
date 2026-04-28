@@ -17,12 +17,11 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     const FPS = isCosmic ? 24 : 30
     const INTERVAL = 1000 / FPS
 
-    /* ── resize ── */
+    /* ── resize — always viewport-sized so scroll never affects canvas cost ── */
     function resize() {
-      const p   = canvas.parentElement
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const cw  = p.offsetWidth  || window.innerWidth
-      const ch  = p.offsetHeight || 600
+      const cw  = window.innerWidth
+      const ch  = window.innerHeight
       canvas.width  = cw * dpr
       canvas.height = ch * dpr
       canvas.style.width  = cw + 'px'
@@ -572,32 +571,31 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
       raf = requestAnimationFrame(draw)
     }
 
-    /* ── IntersectionObserver ── */
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting
-      if (visible && !raf) raf = requestAnimationFrame(draw)
-    }, { threshold: 0.01 })
-
+    /* canvas is fixed so it's always visible — just start immediately */
+    visible = true
     const timer = setTimeout(() => {
       resize()
-      observer.observe(canvas.parentElement)
       raf = requestAnimationFrame(draw)
     }, 60)
 
+    const onVisibility = () => { visible = !document.hidden }
+    document.addEventListener('visibilitychange', onVisibility)
     window.addEventListener('resize', resize)
     return () => {
       clearTimeout(timer)
       if (raf) cancelAnimationFrame(raf)
-      observer.disconnect()
+      document.removeEventListener('visibilitychange', onVisibility)
       window.removeEventListener('resize', resize)
     }
   }, [variant])
 
   return (
     <canvas ref={ref} style={{
-      position: 'absolute', inset: 0,
-      width: '100%', height: '100%',
-      pointerEvents: 'none', zIndex: 0,
+      position: 'fixed',
+      top: 0, left: 0,
+      width: '100vw', height: '100vh',
+      pointerEvents: 'none',
+      zIndex: 0,
     }} />
   )
 }
