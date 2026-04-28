@@ -12,7 +12,7 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     let visible = false, lastTime = 0
     let staticCanvas = null   // pre-rendered bg — only rebuilt on resize
     let fgStars = []          // for non-cosmic variants
-    const FPS = 20
+    const FPS = variant === 'cosmic' ? 12 : 30
     const INTERVAL = 1000 / FPS
 
     /* ── resize ── */
