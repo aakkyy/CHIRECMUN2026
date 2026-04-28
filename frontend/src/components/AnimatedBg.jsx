@@ -26,8 +26,12 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
       canvas.style.height = H + 'px'
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      if (variant === 'cosmic') buildCosmicStatic()
-      else buildLegacyStars()
+      if (variant === 'cosmic') {
+        buildCosmicStatic()
+        ctx.drawImage(staticCanvas, 0, 0, W, H)
+      } else {
+        buildLegacyStars()
+      }
     }
 
     /* ════════════════════════════════════════════
@@ -414,9 +418,9 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
       t += 0.012
 
       if (variant === 'cosmic') {
-        /* blit pre-rendered static bg — one drawImage call, zero gradients */
-        if (staticCanvas) ctx.drawImage(staticCanvas, 0, 0, W, H)
-        drawCosmicWaves()
+        /* cosmic is fully static — drawn once in resize(), no loop needed */
+        raf = null
+        return
 
       } else if (variant === 'streams' || variant === 'nebula') {
         ctx.fillStyle = '#06060f'; ctx.fillRect(0, 0, W, H)
@@ -440,7 +444,12 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
     visible = true
     const timer = setTimeout(() => {
       resize()
-      raf = requestAnimationFrame(draw)
+      if (variant === 'cosmic') {
+        /* draw once, never animate — zero ongoing GPU cost */
+        if (staticCanvas) ctx.drawImage(staticCanvas, 0, 0, W, H)
+      } else {
+        raf = requestAnimationFrame(draw)
+      }
     }, 60)
 
     const onVisibility = () => { visible = !document.hidden }
