@@ -42,7 +42,6 @@
   perspective: 700px;
   animation: titleGlow 5s ease-in-out infinite;
   cursor: default;
-  transition: color 0.4s;
 }
 
 .title:hover {
@@ -55,10 +54,10 @@
 }
 
 @keyframes colorCycle {
-  0%         { color: #56CCF2; }   /* blue  */
-  33%        { color: #9b59b6; }   /* purple */
-  66%        { color: #e74c3c; }   /* red   */
-  100%       { color: #56CCF2; }   /* back  */
+  0%   { color: #56CCF2; }
+  33%  { color: #9b59b6; }
+  66%  { color: #e74c3c; }
+  100% { color: #56CCF2; }
 }
 
 .titleWord {
@@ -87,10 +86,12 @@
   gap: 0.85rem;
 }
 
-/* ── EACH ITEM ──
-   Asymmetric shape: sharp left (accent bar side), rounded right.
-   Left accent lives as an inset box-shadow so it respects the radius.
-*/
+/* ── EACH ITEM — CSS entry animation, no framer-motion ── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 .item {
   background: linear-gradient(135deg,
     rgba(18,4,8,0.82) 0%,
@@ -101,9 +102,9 @@
   overflow: hidden;
   box-shadow:
     inset 4px 0 0 rgba(192,57,43,0.40),
-    inset 0 1px 0 rgba(255,255,255,0.03),
-    0 2px 12px rgba(192,57,43,0.03);
-  transition: border-color 0.3s, box-shadow 0.3s;
+    inset 0 1px 0 rgba(255,255,255,0.03);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  animation: fadeSlideIn 0.38s ease both;
 }
 
 .itemOpen {
@@ -137,7 +138,7 @@
   flex: 1;
 }
 
-/* ── +/× TOGGLE ── */
+/* ── +/× TOGGLE — pure CSS rotation ── */
 .toggle {
   width: 26px;
   height: 26px;
@@ -148,10 +149,11 @@
   justify-content: center;
   position: relative;
   flex-shrink: 0;
-  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+  transition: transform 0.22s ease, background 0.2s, border-color 0.2s;
 }
 
 .toggleOpen {
+  transform: rotate(45deg);
   background: rgba(192,57,43,0.15);
   border-color: rgba(231,76,60,0.55);
 }
@@ -166,21 +168,22 @@
   display: block;
 }
 
-.vBar {
-  transform: rotate(90deg); /* vertical arm of the + */
+.vBar { transform: rotate(90deg); }
+
+/* ── ANSWER — grid-template-rows trick, zero layout reflow ── */
+.answerWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
 }
 
-/* ── ANSWER — CSS-only, no JS height calculation ── */
-.answer {
-  max-height: 0;
-  opacity: 0;
+.answerWrapOpen {
+  grid-template-rows: 1fr;
+}
+
+.answerInner {
   overflow: hidden;
-  transition: max-height 0.32s ease, opacity 0.25s ease;
-}
-
-.answerOpen {
-  max-height: 400px;
-  opacity: 1;
+  min-height: 0;
 }
 
 .aText {

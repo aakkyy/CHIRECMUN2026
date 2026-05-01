@@ -8,7 +8,7 @@ import BottomBar from '../components/BottomBar'
 const faqs = [
   {
     q: 'What is an MUN?',
-    a: 'A Model United Nations (MUN) is an educational simulation of the United Nations where students take on the roles of delegates representing different countries. Participants research global issues, debate policies, and collaborate on resolutions — building skills in public speaking, diplomacy, critical thinking, and leadership.',
+    a: 'A Model United Nations (MUN) is an educational simulation of the United Nations where students take on the roles of delegates representing different countries. Participants research global issues, debate policies, and collaborate on resolutions — building skills in public speaking, diplomacy, critical thinking, and leadership. All delegates are required to read the code of conduct thoroughly before attending.',
   },
   {
     q: 'What forms must be signed prior to the conference?',
@@ -21,11 +21,11 @@ const faqs = [
   },
   {
     q: 'What food options are available for delegates?',
-    a: 'Delegates can buy food from stalls, but school lunch will also be provided for free.',
+    a: 'Delegates can buy food from stalls, and school lunch will also be provided for free. Please note that carrying your own food from outside is not permitted.',
   },
   {
     q: 'What is the dress code that must be followed?',
-    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference (skirts and dresses are not allowed), and traditional clothing on Day 2.',
+    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference. Skirts, dresses, and sleeveless attire are not allowed. Traditional clothing is required on Day 2.',
   },
   {
     q: 'Where is the event occurring?',
@@ -46,33 +46,28 @@ const faqs = [
   },
 ]
 
+/* Zero framer-motion in FAQItem — pure CSS for every interaction */
 function FAQItem({ faq, isOpen, onToggle, index }) {
   return (
-    <motion.div
+    <div
       className={`${styles.item} ${isOpen ? styles.itemOpen : ''}`}
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ type: 'spring', stiffness: 80, damping: 20, delay: index * 0.06 }}
+      style={{ animationDelay: `${index * 0.055}s` }}
     >
       <button className={styles.question} onClick={onToggle} aria-expanded={isOpen}>
         <span className={styles.qText}>{faq.q}</span>
-
-        {/* + rotates 45° into × */}
-        <motion.div
-          className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}
-          animate={{ rotate: isOpen ? 45 : 0 }}
-          transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-        >
+        <div className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}>
           <span className={styles.hBar} />
           <span className={styles.vBar} />
-        </motion.div>
+        </div>
       </button>
 
-      {/* Pure CSS transition — no layout reflow, no framer-motion height calc */}
-      <div className={`${styles.answer} ${isOpen ? styles.answerOpen : ''}`}>
-        <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
+      {/* grid-template-rows trick — no layout reflow, compositor-only */}
+      <div className={`${styles.answerWrap} ${isOpen ? styles.answerWrapOpen : ''}`}>
+        <div className={styles.answerInner}>
+          <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
+        </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
