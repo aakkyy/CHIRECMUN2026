@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: 'What is the dress code that must be followed?',
-    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference. Skirts, dresses, and sleeveless attire are not allowed. Traditional clothing is required on Day 2.',
+    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference. Skirts, dresses, and sleeveless attire are not allowed. Traditional clothing may be worn on Day 2.',
   },
   {
     q: 'Where is the event occurring?',
