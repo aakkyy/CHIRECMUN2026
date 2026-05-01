@@ -7,7 +7,7 @@ import { viewport } from '../lib/motion'
 const faqs = [
   {
     q: 'What is an MUN?',
-    a: 'A Model United Nations (MUN) is an educational simulation of the United Nations where students take on the roles of delegates representing different countries. Participants research global issues, debate policies, and collaborate on resolutions — building skills in public speaking, diplomacy, critical thinking, and leadership.',
+    a: 'A Model United Nations (MUN) is an educational simulation of the United Nations where students take on the roles of delegates representing different countries. Participants research global issues, debate policies, and collaborate on resolutions, building skills in public speaking, diplomacy, critical thinking, and leadership.',
   },
   {
     q: 'What forms must be signed prior to the conference?',
@@ -41,7 +41,7 @@ const faqs = [
   },
   {
     q: 'Is there a social night?',
-    a: 'Yes — there will be a social night following the last committee session on Day 2.',
+    a: 'Yes, there will be a social night following the last committee session on Day 2.',
   },
 ]
 

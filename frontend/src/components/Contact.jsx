@@ -14,7 +14,7 @@ export default function Contact() {
     e.preventDefault()
     const { firstName, lastName, email, message } = form
     const body = encodeURIComponent(`Name: ${firstName} ${lastName}\n\n${message}`)
-    const subject = encodeURIComponent('CHIREC MUN 2026 — Enquiry')
+    const subject = encodeURIComponent('CHIREC MUN 2026 Enquiry')
     window.location.href = `mailto:contact.mun@chirec.ac.in?subject=${subject}&body=${body}`
     setSent(true)
   }
@@ -39,7 +39,7 @@ export default function Contact() {
                   <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
                 </svg>
                 <div>
-                  <p>CHIREC International School — IBDP &amp; Cambridge Campus</p>
+                  <p>CHIREC International School, IBDP &amp; Cambridge Campus</p>
                   <p>F8HM+3VM, Spring Valley, Serilingampalle (M)</p>
                   <p>Hyderabad, Telangana 500133</p>
                 </div>
