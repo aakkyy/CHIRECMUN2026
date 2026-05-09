@@ -81,7 +81,6 @@ export default function Navbar() {
             aria-label="Go to homepage"
             onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
           >
-            <div className={styles.logoRing} />
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
           </div>
           <a href="/" className={styles.brandName} onClick={handleBrandClick}>CHIREC MUN.</a>

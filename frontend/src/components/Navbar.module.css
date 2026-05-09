@@ -50,8 +50,8 @@
 
 .logoBtnWrap {
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
   flex-shrink: 0;
   outline: none;
@@ -61,37 +61,38 @@
 }
 
 .logoImg {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   border-radius: 50%;
   display: block;
-  border: 1.5px solid rgba(192,57,43,0.52);
-  background: rgba(9,9,15,0.75);
+  background: #17181f;
+  border: none;
+  /* default: raised — dark gap + outer ring + lift shadow + top highlight */
   box-shadow:
-    0 4px 18px rgba(192,57,43,0.38),
-    inset 0 1px 0 rgba(255,255,255,0.09);
-  position: relative;
-  z-index: 1;
+    0 0 0 2.5px rgba(0,0,0,0.55),
+    0 0 0 4.5px rgba(175,175,175,0.20),
+    0 8px 22px rgba(0,0,0,0.80),
+    inset 0 1px 1px rgba(255,255,255,0.10);
+  transition: box-shadow 0.22s ease;
 }
 
-.logoBtnWrap:hover .logoImg,
+/* hover: flatter, ring slightly brighter */
+.logoBtnWrap:hover .logoImg {
+  box-shadow:
+    0 0 0 2.5px rgba(0,0,0,0.55),
+    0 0 0 4.5px rgba(175,175,175,0.30),
+    0 3px 10px rgba(0,0,0,0.60),
+    inset 0 2px 5px rgba(0,0,0,0.22);
+}
+
+/* pressed: sunken */
 .logoBtnWrap:active .logoImg {
-  animation-play-state: paused;
-}
-
-.logoRing {
-  position: absolute;
-  inset: -7px;
-  border-radius: 50%;
-  border: 1px solid rgba(192,57,43,0.28);
-  animation: ringPulse 2.8s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.logoBtnWrap:hover .logoRing {
-  animation-play-state: paused;
+  box-shadow:
+    0 0 0 2.5px rgba(0,0,0,0.55),
+    0 0 0 4.5px rgba(140,140,140,0.28),
+    0 1px 4px rgba(0,0,0,0.50),
+    inset 0 3px 7px rgba(0,0,0,0.40);
 }
 
 /* ── CENTER LINKS PILL ── */
