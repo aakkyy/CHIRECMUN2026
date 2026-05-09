@@ -47,7 +47,20 @@ export default function Navbar() {
     if (!el) return
     el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1)'
     el.style.transform  = 'perspective(260px) rotateY(0deg) rotateX(0deg) scale(1)'
-    navigate('/')
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      navigate('/')
+    }
+  }
+
+  const handleBrandClick = (e) => {
+    e.preventDefault()
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      navigate('/')
+    }
   }
 
   return (
@@ -71,7 +84,7 @@ export default function Navbar() {
             <div className={styles.logoRing} />
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
           </div>
-          <a href="/" className={styles.brandName}>CHIREC MUN.</a>
+          <a href="/" className={styles.brandName} onClick={handleBrandClick}>CHIREC MUN.</a>
         </div>
 
         {/* CENTER — links pill */}
