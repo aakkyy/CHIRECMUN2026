@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTheme } from '../hooks/useTheme'
+import BlobButton from './BlobButton'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
 
@@ -74,16 +75,14 @@ export default function Navbar() {
 
         {/* RIGHT — theme toggle + CTA */}
         <div className={styles.rightGroup}>
-          <button
-            className={styles.themeToggle}
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
+          <button className={styles.themeToggle} onClick={toggleTheme} aria-label="Toggle theme">
             <span key={theme} className={styles.themeIcon}>
               {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
             </span>
           </button>
-          <a href="/#register" className={styles.cta}>Register Now</a>
+          <BlobButton href="/#register" className={styles.cta} variant="red">
+            Register Now
+          </BlobButton>
         </div>
 
       </div>

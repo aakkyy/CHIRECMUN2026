@@ -1,19 +1,37 @@
 import { motion } from 'framer-motion'
 import AnimatedBg from './AnimatedBg'
 import styles from './About.module.css'
-import { itemVariant, slideLeft, slideRight, stagger, viewport } from '../lib/motion'
+import { slideLeft, viewport } from '../lib/motion'
 
 const pillars = [
-  { letter: 'R', color: 'red',   title: 'Represent', body: 'Step into the shoes of your nation. Argue its interests, defend its positions, and make your voice heard on the world stage.' },
-  { letter: 'R', color: 'gold',  title: 'Reason',    body: 'Research deeply. Engage with evidence. Think critically about the most complex global challenges of our time.' },
-  { letter: 'R', color: 'white', title: 'Resolve',   body: 'Draft solutions. Build consensus. Leave the room having moved the needle toward something better.' },
+  {
+    letter: 'R',
+    variant: 'red',
+    title: 'Represent',
+    body: 'Step into the shoes of your nation. Argue its interests, defend its positions, and make your voice heard on the world stage.',
+    sparkle: true,
+  },
+  {
+    letter: 'R',
+    variant: 'blue',
+    title: 'Reason',
+    body: 'Research deeply. Engage with evidence. Think critically about the most complex global challenges of our time.',
+    sparkle: false,
+  },
+  {
+    letter: 'R',
+    variant: 'mix',
+    title: 'Resolve',
+    body: 'Draft solutions. Build consensus. Leave the room having moved the needle toward something better.',
+    sparkle: false,
+  },
 ]
 
 export default function About() {
   return (
-    <section className={`section ${styles.section}`} id="about" style={{position:'relative',overflow:'hidden'}}>
+    <section className={`section ${styles.section}`} id="about" style={{ position: 'relative', overflow: 'hidden' }}>
       <AnimatedBg variant="nebula" color="86,204,242" color2="120,55,210" />
-      <div className="container" style={{position:"relative",zIndex:1}}>
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className={styles.grid}>
 
           <motion.div
@@ -44,23 +62,32 @@ export default function About() {
             </motion.a>
           </motion.div>
 
-          <motion.div
-            className={styles.right}
-            initial="hidden" whileInView="visible" viewport={viewport}
-            variants={stagger(0.1, 0.1)}
-          >
-            {pillars.map((p) => (
-              <motion.div key={p.title} className={styles.pillar} variants={slideRight}
-                whileHover={{ x: 6, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
-              >
-                <div className={`${styles.icon} ${styles[p.color]}`}>{p.letter}</div>
-                <div>
-                  <h3 className={styles.pillarTitle}>{p.title}</h3>
-                  <p className={styles.pillarBody}>{p.body}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* RIGHT — gradient-bordered container like image 5 */}
+          <div className={styles.pillarsContainer}>
+            <div className={styles.pillarsInner}>
+              {pillars.map((p, i) => (
+                <motion.div
+                  key={p.title}
+                  className={`${styles.pillarWrap} ${styles[`wrap_${p.variant}`]}`}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={viewport}
+                  transition={{ type: 'spring', stiffness: 80, damping: 20, delay: i * 0.1 }}
+                >
+                  <div className={styles.pillar}>
+                    {p.sparkle && <span className={styles.sparkle}>✦</span>}
+                    <div className={`${styles.icon} ${styles[`icon_${p.variant}`]}`}>
+                      {p.letter}
+                    </div>
+                    <div>
+                      <h3 className={styles.pillarTitle}>{p.title}</h3>
+                      <p className={styles.pillarBody}>{p.body}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
 
         </div>
       </div>
