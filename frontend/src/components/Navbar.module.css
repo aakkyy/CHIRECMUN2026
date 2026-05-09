@@ -74,7 +74,6 @@
   box-shadow:
     0 4px 18px rgba(192,57,43,0.38),
     inset 0 1px 0 rgba(255,255,255,0.09);
-  animation: logoFloat 2.8s ease-in-out infinite;
   position: relative;
   z-index: 1;
 }
@@ -105,10 +104,9 @@
   gap: 0.2rem;
   list-style: none;
   margin: 0;
-  padding: 0.38rem 1rem;
-  background: rgba(18, 20, 30, 0.72);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 999px;
+  padding: 0;
+  background: none;
+  border: none;
 }
 
 .link {
