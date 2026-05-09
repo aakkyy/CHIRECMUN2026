@@ -1,19 +1,3 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-
-export default defineConfig({
-  plugins: [react()],
-  base: '/static/react/',
-  build: {
-    outDir: resolve(__dirname, '../home/static/react'),
-    emptyOutDir: false,
-    rollupOptions: {
-      output: {
-        entryFileNames: 'assets/main.js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]',
-      },
-    },
-  },
-})
+// Superseded by vite.config.ts — this file is kept only for compatibility.
+// vite.config.ts takes precedence when TypeScript support is active.
+export default {}
