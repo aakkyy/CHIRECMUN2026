@@ -79,7 +79,7 @@
 }
 
 .cautionText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.55rem;
   font-weight: 900;
   letter-spacing: 0.2em;
@@ -89,7 +89,7 @@
 }
 
 .label {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.25em;
@@ -99,7 +99,7 @@
 }
 
 .sub {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.6rem;
   color: rgba(192,57,43,0.75);
   letter-spacing: 0.1em;
@@ -132,7 +132,7 @@
 }
 
 .cautionText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.22em;
@@ -141,7 +141,7 @@
 }
 
 .csLabel {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.25em;

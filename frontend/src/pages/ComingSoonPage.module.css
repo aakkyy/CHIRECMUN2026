@@ -37,7 +37,7 @@
 }
 
 .sub {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: clamp(0.85rem, 2vw, 1.1rem);
   font-weight: 700;
   letter-spacing: 0.42em;

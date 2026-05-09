@@ -65,7 +65,7 @@
   padding: 5px 18px;
   border: 1px solid rgba(86,204,242,0.3);
   border-radius: 100px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.32em;
@@ -109,7 +109,7 @@
 }
 
 .slogan {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: clamp(0.9rem, 2vw, 1.25rem);
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -122,7 +122,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
   color: rgba(244,244,239,0.45);
   letter-spacing: 0.05em;
@@ -145,7 +145,7 @@
   backdrop-filter: blur(18px) saturate(200%);
   -webkit-backdrop-filter: blur(18px) saturate(200%);
   color: #fff;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 800;
   font-size: 0.82rem;
   letter-spacing: 0.07em;
@@ -175,7 +175,7 @@
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   color: #56CCF2;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.07em;
@@ -216,7 +216,7 @@
 }
 
 .scrollLabel {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.32em;

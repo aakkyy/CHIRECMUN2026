@@ -3,7 +3,7 @@
 }
 
 .eyebrow {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -68,7 +68,7 @@
 }
 
 .qText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   color: #e74c3c;
@@ -91,7 +91,7 @@
 }
 
 .aText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: rgba(231,76,60,0.62);
   line-height: 1.85;

@@ -1,6 +1,13 @@
 /* ═══════════════════════════════════════════════════
    CHIREC MUN 2026  |  Global Reset + Design Tokens
    ═══════════════════════════════════════════════════ */
+/* ── Font stack ───────────────────────────── */
+:root {
+  --font-brand: 'Rubik', sans-serif;   /* CHIREC branding, hero titles    */
+  --font-ui:    'Geist', sans-serif;   /* nav, buttons, labels, eyebrows  */
+  --font-body:  'Inter', sans-serif;   /* paragraphs, FAQs, descriptions  */
+}
+
 :root, [data-theme="dark"] {
   --bg:       #09090f;
   --bg2:      #0e0e18;
@@ -52,7 +59,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--theme-bg);
   color: var(--theme-text);
-  font-family: 'Lato', sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   line-height: 1.75;
   overflow-x: hidden;

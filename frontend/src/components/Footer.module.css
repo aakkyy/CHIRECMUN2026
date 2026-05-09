@@ -48,7 +48,7 @@
 .brandName:hover { color: #e74c3c; }
 
 .desc {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
   color: rgba(244,244,239,0.38);
   line-height: 1.9;
@@ -65,7 +65,7 @@
   border: 1px solid rgba(231,76,60,0.45);
   border-radius: 999px;
   color: #fff;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.07em;
@@ -91,7 +91,7 @@
 }
 
 .link {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 1.05rem;
   color: rgba(244,244,239,0.42);
   text-decoration: none;
@@ -111,7 +111,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;

@@ -19,7 +19,7 @@
 }
 
 .eyebrow {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -47,7 +47,7 @@
 .titleWord:last-child { margin-right: 0; }
 
 .sub {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: rgba(231,76,60,0.55);
   letter-spacing: 0.04em;
@@ -108,7 +108,7 @@
 }
 
 .qText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
   color: #e74c3c;
@@ -166,7 +166,7 @@
 }
 
 .aText {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   color: rgba(231,76,60,0.72);
   line-height: 1.85;

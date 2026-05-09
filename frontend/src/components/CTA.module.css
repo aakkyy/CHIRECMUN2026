@@ -22,7 +22,7 @@
 }
 
 .eyebrow {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.35em;
@@ -41,7 +41,7 @@
 }
 
 .sub {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1rem;
   color: rgba(244,244,239,0.52);
   line-height: 1.75;
@@ -64,7 +64,7 @@
   backdrop-filter: blur(18px) saturate(200%);
   -webkit-backdrop-filter: blur(18px) saturate(200%);
   color: #fff;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 900;
   font-size: 0.82rem;
   letter-spacing: 0.08em;
@@ -94,7 +94,7 @@
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   color: rgba(244,244,239,0.88);
-  font-family: 'Lato', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.08em;
