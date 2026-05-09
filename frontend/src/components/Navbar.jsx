@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
@@ -15,46 +14,8 @@ const links = [
 export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
-  const logoRef  = useRef(null)
 
-  /* ── 3D logo handlers ── */
-  const onLogoMove = (e) => {
-    const el = logoRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width  - 0.5
-    const y = (e.clientY - rect.top)  / rect.height - 0.5
-    el.style.transition = 'none'
-    el.style.transform  = `perspective(260px) rotateY(${x * 38}deg) rotateX(${-y * 38}deg) scale(1.14)`
-  }
-
-  const onLogoLeave = () => {
-    const el = logoRef.current
-    if (!el) return
-    el.style.transition = 'transform 0.55s cubic-bezier(0.22,1,0.36,1)'
-    el.style.transform  = 'perspective(260px) rotateY(0deg) rotateX(0deg) scale(1)'
-  }
-
-  const onLogoDown = () => {
-    const el = logoRef.current
-    if (!el) return
-    el.style.transition = 'transform 0.1s ease'
-    el.style.transform  = 'perspective(260px) rotateY(0deg) rotateX(0deg) scale(0.86)'
-  }
-
-  const onLogoUp = () => {
-    const el = logoRef.current
-    if (!el) return
-    el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1)'
-    el.style.transform  = 'perspective(260px) rotateY(0deg) rotateX(0deg) scale(1)'
-    if (location.pathname === '/') {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    } else {
-      navigate('/')
-    }
-  }
-
-  const handleBrandClick = (e) => {
+  const handleHomeClick = (e) => {
     e.preventDefault()
     if (location.pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -67,23 +28,12 @@ export default function Navbar() {
     <nav className={styles.nav}>
       <div className={styles.inner}>
 
-        {/* LEFT — 3D logo + brand name */}
+        {/* LEFT — logo + brand name */}
         <div className={styles.brand}>
-          <div
-            ref={logoRef}
-            className={styles.logoBtnWrap}
-            onMouseMove={onLogoMove}
-            onMouseLeave={onLogoLeave}
-            onMouseDown={onLogoDown}
-            onMouseUp={onLogoUp}
-            role="button"
-            tabIndex={0}
-            aria-label="Go to homepage"
-            onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
-          >
+          <button className={styles.logoBtnWrap} onClick={handleHomeClick} aria-label="Go to homepage">
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
-          </div>
-          <a href="/" className={styles.brandName} onClick={handleBrandClick}>CHIREC MUN.</a>
+          </button>
+          <a href="/" className={styles.brandName} onClick={handleHomeClick}>CHIREC MUN.</a>
         </div>
 
         {/* CENTER — links pill */}

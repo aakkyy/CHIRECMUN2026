@@ -37,62 +37,52 @@
   white-space: nowrap;
 }
 
-/* ── 3D LOGO BUTTON ── */
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0)    scale(1);    }
-  50%       { transform: translateY(-4px) scale(1.06); }
-}
-
-@keyframes ringPulse {
-  0%, 100% { opacity: 0.30; transform: scale(1);    }
-  50%       { opacity: 0.70; transform: scale(1.22); }
-}
-
+/* ── LOGO BUTTON ── */
 .logoBtnWrap {
-  position: relative;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   cursor: pointer;
   flex-shrink: 0;
+  border: none;
+  padding: 0;
+  background: #17181f;
   outline: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  will-change: transform;
+  /* raised: dark gap + visible gray ring + drop shadow */
+  box-shadow:
+    0 0 0 3px #0d0d10,
+    0 0 0 5.5px rgba(110,112,122,0.55),
+    0 8px 24px rgba(0,0,0,0.85);
+  transition: box-shadow 0.25s cubic-bezier(0.22,1,0.36,1),
+              transform   0.25s cubic-bezier(0.22,1,0.36,1);
+}
+
+.logoBtnWrap:hover {
+  box-shadow:
+    0 0 0 3px #0d0d10,
+    0 0 0 5.5px rgba(145,147,158,0.72),
+    0 10px 28px rgba(0,0,0,0.80);
+  transform: scale(1.07) translateY(-1px);
+}
+
+.logoBtnWrap:active {
+  box-shadow:
+    0 0 0 3px #0d0d10,
+    0 0 0 5.5px rgba(90,92,100,0.50),
+    0 2px 8px rgba(0,0,0,0.65);
+  transform: scale(0.93) translateY(2px);
+  transition: box-shadow 0.08s ease, transform 0.08s ease;
 }
 
 .logoImg {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   border-radius: 50%;
   display: block;
   background: #17181f;
-  border: none;
-  /* default: raised — dark gap + outer ring + lift shadow + top highlight */
-  box-shadow:
-    0 0 0 2.5px rgba(0,0,0,0.55),
-    0 0 0 4.5px rgba(175,175,175,0.20),
-    0 8px 22px rgba(0,0,0,0.80),
-    inset 0 1px 1px rgba(255,255,255,0.10);
-  transition: box-shadow 0.22s ease;
-}
-
-/* hover: flatter, ring slightly brighter */
-.logoBtnWrap:hover .logoImg {
-  box-shadow:
-    0 0 0 2.5px rgba(0,0,0,0.55),
-    0 0 0 4.5px rgba(175,175,175,0.30),
-    0 3px 10px rgba(0,0,0,0.60),
-    inset 0 2px 5px rgba(0,0,0,0.22);
-}
-
-/* pressed: sunken */
-.logoBtnWrap:active .logoImg {
-  box-shadow:
-    0 0 0 2.5px rgba(0,0,0,0.55),
-    0 0 0 4.5px rgba(140,140,140,0.28),
-    0 1px 4px rgba(0,0,0,0.50),
-    inset 0 3px 7px rgba(0,0,0,0.40);
 }
 
 /* ── CENTER LINKS PILL ── */
