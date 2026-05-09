@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTheme } from '../hooks/useTheme'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
 
@@ -11,9 +12,29 @@ const links = [
   { label: 'FAQs',          href: '/faq'         },
 ]
 
+function SunIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+    </svg>
+  )
+}
+
 export default function Navbar() {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location  = useLocation()
+  const navigate  = useNavigate()
+  const [theme, toggleTheme] = useTheme()
 
   const handleHomeClick = (e) => {
     e.preventDefault()
@@ -42,10 +63,7 @@ export default function Navbar() {
             const isActive = location.pathname === l.href
             return (
               <li key={l.href}>
-                <a
-                  href={l.href}
-                  className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
-                >
+                <a href={l.href} className={`${styles.link} ${isActive ? styles.linkActive : ''}`}>
                   {l.label}
                   {isActive && <span className={styles.dot} />}
                 </a>
@@ -54,8 +72,19 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* RIGHT — CTA */}
-        <a href="/#register" className={styles.cta}>Register Now</a>
+        {/* RIGHT — theme toggle + CTA */}
+        <div className={styles.rightGroup}>
+          <button
+            className={styles.themeToggle}
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            <span key={theme} className={styles.themeIcon}>
+              {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+            </span>
+          </button>
+          <a href="/#register" className={styles.cta}>Register Now</a>
+        </div>
 
       </div>
     </nav>
