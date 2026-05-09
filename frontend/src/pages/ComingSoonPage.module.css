@@ -1,0 +1,47 @@
+.page {
+  min-height: 100vh;
+  background: #020108;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.blob1,
+.blob2 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.headline {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(2.6rem, 8vw, 6.5rem);
+  font-weight: 900;
+  color: #f4f4ef;
+  letter-spacing: 0.04em;
+  margin: 0 0 1.2rem;
+  text-shadow: 0 0 80px rgba(231,76,60,0.35);
+}
+
+.sub {
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(231,76,60,0.58);
+  margin: 0;
+}

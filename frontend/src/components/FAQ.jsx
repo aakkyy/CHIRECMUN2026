@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: 'What forms must be signed prior to the conference?',
-    a: 'The liability and tech release form are mandatory to be filled prior to the conference.',
+    a: 'The liability and tech release form are mandatory to be filled prior to the conference. All delegates are also required to read the code of conduct thoroughly before attending.',
   },
   {
     q: 'Will there be transport provided?',
@@ -24,7 +24,7 @@ const faqs = [
   },
   {
     q: 'What is the dress code that must be followed?',
-    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference (skirts and dresses are not allowed), and traditional clothing on Day 2.',
+    a: 'Delegates must wear formal clothing on Day 1 and Day 3 of the conference. Skirts, dresses, and sleeveless attire are not allowed. Traditional clothing may be worn on Day 2. Please check the guidelines that will be posted later for further details.',
   },
   {
     q: 'Where is the event occurring?',

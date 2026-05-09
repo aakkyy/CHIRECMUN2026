@@ -1,4 +1,4 @@
-/* Floating pill — JS drives the transform, CSS only handles glass/color transitions */
+/* Floating pill nav */
 .nav {
   position: fixed;
   top: 1.2rem;
@@ -33,69 +33,76 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 0.55rem 0.65rem 0.55rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
+/* ── 3D LOGO BUTTON ── */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0)   scale(1);    }
+  50%       { transform: translateY(-4px) scale(1.06); }
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.32; transform: scale(1);    }
+  50%       { opacity: 0.72; transform: scale(1.20); }
+}
+
+.logoBtnWrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
   flex-shrink: 0;
-}
-
-.logoWrap {
-  border-radius: 50%;
-  border: 1.5px solid rgba(192,57,43,0.4);
-  background: rgba(9,9,15,0.6);
-  padding: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: box-shadow 0.3s, border-color 0.3s;
-}
-.brand:hover .logoWrap {
-  border-color: rgba(192,57,43,0.8);
-  box-shadow: 0 0 18px rgba(192,57,43,0.4);
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
 }
 
 .logoImg {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
   border-radius: 50%;
   display: block;
+  border: 1.5px solid rgba(192,57,43,0.52);
+  background: rgba(9,9,15,0.75);
+  box-shadow:
+    0 4px 18px rgba(192,57,43,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.09);
+  animation: logoFloat 2.8s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
 }
 
-.brandText {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
+.logoBtnWrap:hover .logoImg,
+.logoBtnWrap:active .logoImg {
+  animation-play-state: paused;
 }
 
-.name {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 800;
-  font-size: 0.92rem;
-  letter-spacing: 0.04em;
-  color: #f4f4ef;
+.logoRing {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(192,57,43,0.30);
+  animation: ringPulse 2.8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.edition {
-  font-family: 'Lato', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #c0392b;
-  margin-top: 3px;
+.logoBtnWrap:hover .logoRing {
+  animation-play-state: paused;
 }
 
+/* ── NAV LINKS ── */
 .links {
   display: flex;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1.5rem;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .link {
@@ -109,6 +116,7 @@
   transition: color 0.2s;
   padding-bottom: 2px;
   text-decoration: none;
+  white-space: nowrap;
 }
 .link::after {
   content: '';
@@ -121,7 +129,7 @@
 .link:hover { color: #f4f4ef; }
 .link:hover::after { width: 100%; }
 
-/* Active page indicator — frosted glass capsule */
+/* Active page indicator */
 .linkActive {
   color: #f4f4ef !important;
   background: rgba(192,57,43,0.14);
@@ -133,32 +141,10 @@
     0 0 16px rgba(192,57,43,0.22);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: box-shadow 0.3s;
 }
 .linkActive::after { display: none; }
 
-.cta {
-  font-family: 'Lato', sans-serif;
-  font-weight: 800;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 1.3rem;
-  background: #c0392b;
-  color: #fff;
-  border-radius: 999px;
-  border: 2px solid #c0392b;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.cta:hover {
-  background: #e74c3c;
-  border-color: #e74c3c;
-  box-shadow: 0 4px 20px rgba(192,57,43,0.55);
-  transform: translateY(-1px);
-}
-
+/* ── HAMBURGER ── */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -179,6 +165,7 @@
 .hamburger.open span:nth-child(2) { opacity: 0; }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* ── MOBILE MENU ── */
 .mobileMenu {
   position: fixed;
   inset: 0;
@@ -203,15 +190,7 @@
 }
 .mmLink:hover { color: #e74c3c; }
 
-.mmCta {
-  font-size: 1.1rem !important;
-  border: 2px solid #c0392b;
-  color: #e74c3c !important;
-  padding: 0.75rem 2rem;
-  border-radius: 999px;
-}
-
-@media (max-width: 700px) {
+@media (max-width: 780px) {
   .links { display: none; }
   .hamburger { display: flex; }
   .nav { top: 0.8rem; }

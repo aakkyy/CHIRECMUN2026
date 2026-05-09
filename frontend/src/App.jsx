@@ -10,6 +10,7 @@ import CTA from './components/CTA'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FAQPage from './pages/FAQPage'
+import ComingSoonPage from './pages/ComingSoonPage'
 import { useReveal } from './hooks/useReveal'
 
 function HomePage() {
@@ -33,8 +34,12 @@ function HomePage() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/faq" element={<FAQPage />} />
+      <Route path="/"           element={<HomePage />}      />
+      <Route path="/faq"        element={<FAQPage />}       />
+      <Route path="/team"       element={<ComingSoonPage />} />
+      <Route path="/committees" element={<ComingSoonPage />} />
+      <Route path="/guidelines" element={<ComingSoonPage />} />
+      <Route path="/schedule"   element={<ComingSoonPage />} />
     </Routes>
   )
 }

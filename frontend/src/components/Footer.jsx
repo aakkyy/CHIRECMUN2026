@@ -26,7 +26,7 @@ export default function Footer() {
         <div className={styles.brand}>
           <div className={styles.logoRow}>
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
-            <span className={styles.brandName}>CHIREC MUN.</span>
+            <a href="/" className={styles.brandName}>CHIREC MUN.</a>
           </div>
           <p className={styles.desc}>
             Three days of diplomacy,<br />
