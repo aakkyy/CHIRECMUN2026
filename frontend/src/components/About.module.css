@@ -52,24 +52,25 @@
 }
 .textLink:hover { color: #e74c3c; border-color: #e74c3c; }
 
-/* ── OUTER CONTAINER — gradient border like image 5 ── */
+/* ── OUTER CONTAINER — vivid gradient border + ambient glow ── */
 .pillarsContainer {
   position: relative;
   border-radius: 18px;
   padding: 1.5px;
   background: linear-gradient(
     135deg,
-    rgba(231,76,60,0.65) 0%,
-    rgba(40,40,80,0.2) 45%,
-    rgba(56,130,246,0.65) 100%
+    rgba(231,76,60,0.90) 0%,
+    rgba(60,20,80,0.15) 40%,
+    rgba(56,130,246,0.90) 100%
   );
   box-shadow:
-    -12px 0 40px rgba(231,76,60,0.12),
-     12px 0 40px rgba(56,130,246,0.12);
+    -18px 0 55px rgba(231,76,60,0.22),
+     18px 0 55px rgba(56,130,246,0.22),
+     0 0 80px rgba(140,20,140,0.08);
 }
 
 .pillarsInner {
-  background: rgba(8,8,16,0.96);
+  background: rgba(7,7,14,0.97);
   border-radius: 17px;
   padding: 1.1rem;
   display: flex;
@@ -85,22 +86,22 @@
 }
 
 .pillarWrap:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.12) saturate(1.15);
 }
 
-/* Represent — red dominant */
+/* Represent — red dominant, vivid */
 .wrap_red {
-  background: linear-gradient(135deg, rgba(231,76,60,0.75) 0%, rgba(56,130,246,0.22) 100%);
+  background: linear-gradient(135deg, rgba(231,76,60,0.95) 0%, rgba(180,30,20,0.55) 50%, rgba(56,130,246,0.28) 100%);
 }
 
-/* Reason — blue dominant */
+/* Reason — blue dominant, vivid */
 .wrap_blue {
-  background: linear-gradient(135deg, rgba(56,130,246,0.75) 0%, rgba(231,76,60,0.22) 100%);
+  background: linear-gradient(135deg, rgba(56,130,246,0.95) 0%, rgba(20,70,220,0.55) 50%, rgba(231,76,60,0.28) 100%);
 }
 
-/* Resolve — equal mix */
+/* Resolve — equal mix, vivid */
 .wrap_mix {
-  background: linear-gradient(135deg, rgba(231,76,60,0.45) 0%, rgba(56,130,246,0.45) 100%);
+  background: linear-gradient(135deg, rgba(231,76,60,0.65) 0%, rgba(130,40,200,0.5) 50%, rgba(56,130,246,0.65) 100%);
 }
 
 .pillar {
@@ -109,15 +110,33 @@
   align-items: flex-start;
   gap: 1.1rem;
   padding: 1.3rem 1.4rem;
-  background: rgba(11,11,20,0.97);
+  background: rgba(10,10,18,0.98);
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* subtle inner glow matching card variant */
-.wrap_red  .pillar::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 0% 50%, rgba(231,76,60,0.07) 0%, transparent 65%); pointer-events: none; }
-.wrap_blue .pillar::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 0% 50%, rgba(56,130,246,0.07) 0%, transparent 65%); pointer-events: none; }
-.wrap_mix  .pillar::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(150,80,200,0.06) 0%, transparent 65%); pointer-events: none; }
+/* inner ambient glow matching card variant */
+.wrap_red  .pillar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 0% 50%, rgba(231,76,60,0.11) 0%, transparent 60%);
+  pointer-events: none;
+}
+.wrap_blue .pillar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 0% 50%, rgba(56,130,246,0.11) 0%, transparent 60%);
+  pointer-events: none;
+}
+.wrap_mix  .pillar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(160,60,220,0.09) 0%, transparent 60%);
+  pointer-events: none;
+}
 
 /* ── SPARKLE ── */
 .sparkle {
@@ -143,9 +162,24 @@
   z-index: 1;
 }
 
-.icon_red  { background: rgba(192,57,43,0.22); color: #e74c3c; border: 1px solid rgba(231,76,60,0.45); }
-.icon_blue { background: rgba(36,99,235,0.22);  color: #60a5fa; border: 1px solid rgba(56,130,246,0.45); }
-.icon_mix  { background: rgba(120,50,180,0.18); color: rgba(244,244,239,0.85); border: 1px solid rgba(150,80,220,0.35); }
+.icon_red  {
+  background: rgba(192,57,43,0.25);
+  color: #e74c3c;
+  border: 1px solid rgba(231,76,60,0.55);
+  box-shadow: 0 0 14px rgba(231,76,60,0.25);
+}
+.icon_blue {
+  background: rgba(36,99,235,0.25);
+  color: #60a5fa;
+  border: 1px solid rgba(56,130,246,0.55);
+  box-shadow: 0 0 14px rgba(56,130,246,0.25);
+}
+.icon_mix  {
+  background: rgba(120,50,180,0.22);
+  color: rgba(244,244,239,0.88);
+  border: 1px solid rgba(160,70,230,0.42);
+  box-shadow: 0 0 14px rgba(130,50,200,0.2);
+}
 
 .pillarTitle {
   font-family: 'Rubik', sans-serif;

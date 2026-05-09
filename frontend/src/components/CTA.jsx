@@ -3,6 +3,7 @@ import AnimatedBg from './AnimatedBg'
 import { motion } from 'framer-motion'
 import styles from './CTA.module.css'
 import { viewport } from '../lib/motion'
+import BlobButton from './BlobButton'
 
 export default function CTA() {
   const canvasRef = useRef(null)
@@ -67,16 +68,14 @@ export default function CTA() {
           across three days of diplomacy, debate, and discovery.
         </p>
         <div className={styles.actions}>
-          <motion.a href="#" className={styles.btnPrimary}
-            whileHover={{ scale: 1.05, boxShadow: '0 12px 40px rgba(192,57,43,0.55)' }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          >Register as Delegate</motion.a>
-          <motion.a href="#" className={styles.btnOutline}
-            whileHover={{ scale: 1.05, backgroundColor: 'rgba(86,204,242,0.1)' }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          >Download Brochure</motion.a>
+          {/* red button → blue energy blob */}
+          <BlobButton href="#" className={styles.btnPrimary} variant="red">
+            Register as Delegate
+          </BlobButton>
+          {/* blue/transparent button → red energy blob */}
+          <BlobButton href="#" className={styles.btnOutline} variant="blue">
+            Download Brochure
+          </BlobButton>
         </div>
       </motion.div>
     </section>

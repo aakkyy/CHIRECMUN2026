@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
+import BlobButton from './BlobButton'
 
 const CHIREC_LETTERS = [
   { char: 'C', color: '#e74c3c', glow: 'rgba(231,76,60,0.85)'   },  // red
@@ -202,16 +203,14 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className={styles.actions} variants={fadeUp}>
-          <motion.a href="#register" className={styles.btnPrimary}
-            whileHover={{ scale: 1.04, boxShadow: '0 10px 36px rgba(192,57,43,0.55)' }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          >Register as Delegate</motion.a>
-          <motion.a href="#countdown" className={styles.btnGhost}
-            whileHover={{ scale: 1.04, backgroundColor: 'rgba(86,204,242,0.1)' }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          >View Countdown</motion.a>
+          {/* red button → blue energy blob */}
+          <BlobButton href="#register" className={styles.btnPrimary} variant="red">
+            Register as Delegate
+          </BlobButton>
+          {/* blue/transparent button → red energy blob */}
+          <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
+            View Countdown
+          </BlobButton>
         </motion.div>
       </motion.div>
 
