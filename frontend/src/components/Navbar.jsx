@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
@@ -15,60 +15,7 @@ const links = [
 export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const navRef    = useRef(null)
-  const rafRef    = useRef(null)
-  const lastY     = useRef(0)
-  const currentY  = useRef(0)
-  const targetY   = useRef(0)
-  const navHeight = useRef(80)
-  const logoRef   = useRef(null)
-
-  /* ── spring-physics navbar hide/show ── */
-  useEffect(() => {
-    const nav = navRef.current
-    if (!nav) return
-    const SPRING = 0.10
-    const DAMPING = 0.78
-    let velocity = 0
-
-    function tick() {
-      const diff = targetY.current - currentY.current
-      velocity = velocity * DAMPING + diff * SPRING
-      currentY.current += velocity
-      currentY.current = Math.max(-navHeight.current - 20, Math.min(0, currentY.current))
-      nav.style.transform = `translateX(-50%) translateY(${currentY.current}px)`
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    rafRef.current = requestAnimationFrame(tick)
-
-    const onScroll = () => {
-      const y  = window.scrollY
-      const dy = y - lastY.current
-      lastY.current = y
-      if (y < 60) {
-        targetY.current = 0
-      } else if (dy > 0) {
-        targetY.current = Math.max(-navHeight.current - 20, targetY.current - dy * 1.2)
-      } else {
-        targetY.current = Math.min(0, targetY.current - dy * 1.6)
-      }
-      setScrolled(y > 60)
-    }
-
-    navHeight.current = nav.getBoundingClientRect().height || 80
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(rafRef.current)
-    }
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
+  const logoRef  = useRef(null)
 
   /* ── 3D logo handlers ── */
   const onLogoMove = (e) => {
@@ -104,11 +51,11 @@ export default function Navbar() {
   }
 
   return (
-    <>
-      <nav ref={navRef} className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-        <div className={styles.inner}>
+    <nav className={styles.nav}>
+      <div className={styles.inner}>
 
-          {/* 3D animated logo */}
+        {/* LEFT — 3D logo + brand name */}
+        <div className={styles.brand}>
           <div
             ref={logoRef}
             className={styles.logoBtnWrap}
@@ -124,43 +71,31 @@ export default function Navbar() {
             <div className={styles.logoRing} />
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
           </div>
-
-          <ul className={styles.links}>
-            {links.map((l) => {
-              const isActive = location.pathname === l.href
-              return (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              )
-            })}
-          </ul>
-
-          <button
-            className={`${styles.hamburger} ${menuOpen ? styles.open : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span /><span /><span />
-          </button>
+          <a href="/" className={styles.brandName}>CHIREC MUN.</a>
         </div>
-      </nav>
 
-      {menuOpen && (
-        <div className={styles.mobileMenu}>
-          {links.map((l) => (
-            <a key={l.href} href={l.href} className={styles.mmLink}
-               onClick={() => setMenuOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-        </div>
-      )}
-    </>
+        {/* CENTER — links pill */}
+        <ul className={styles.linksPill}>
+          {links.map((l) => {
+            const isActive = location.pathname === l.href
+            return (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
+                >
+                  {l.label}
+                  {isActive && <span className={styles.dot} />}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* RIGHT — CTA */}
+        <a href="/#register" className={styles.cta}>Register Now</a>
+
+      </div>
+    </nav>
   )
 }
