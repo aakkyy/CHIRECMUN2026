@@ -33,7 +33,7 @@ export default function Navbar() {
           <button className={styles.logoBtnWrap} onClick={handleHomeClick} aria-label="Go to homepage">
             <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
           </button>
-          <a href="/" className={styles.brandName} onClick={handleHomeClick}>CHIREC MUN.</a>
+          <a href="/" className={styles.brandName} onClick={handleHomeClick}>CHIREC MUN</a>
         </div>
 
         {/* CENTER — links pill */}

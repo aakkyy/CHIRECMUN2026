@@ -39,12 +39,12 @@
 
 /* ── LOGO BUTTON ── */
 .logoBtnWrap {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   cursor: pointer;
   flex-shrink: 0;
-  border: 2px solid rgba(200,202,214,0.22);
+  border: 2px solid rgba(192,57,43,0.65);
   padding: 0;
   background: #1c1d24;
   outline: none;
@@ -53,26 +53,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* offset shadow = 3D raised look */
-  box-shadow: 4px 4px 0px 0px #0a0a0c;
+  box-shadow:
+    4px 4px 0px 0px #080809,
+    0 6px 20px rgba(0,0,0,0.75);
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-/* halfway pressed */
 .logoBtnWrap:hover {
-  box-shadow: 2px 2px 0px 0px #0a0a0c;
+  box-shadow:
+    2px 2px 0px 0px #080809,
+    0 3px 12px rgba(0,0,0,0.60);
   transform: translate(2px, 2px);
 }
 
-/* fully pressed */
 .logoBtnWrap:active {
   box-shadow: none;
   transform: translate(4px, 4px);
 }
 
 .logoImg {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   border-radius: 50%;
   display: block;
