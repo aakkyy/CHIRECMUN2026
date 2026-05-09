@@ -1,16 +1,16 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useTheme } from '../hooks/useTheme'
 import BlobButton from './BlobButton'
 import styles from './Navbar.module.css'
 import logoImg from '../assets/logo.png'
 
 const links = [
-  { label: 'Home',          href: '/'           },
-  { label: 'Meet The Team', href: '/team'        },
-  { label: 'Committees',    href: '/committees'  },
-  { label: 'Guidelines',    href: '/guidelines'  },
-  { label: 'Schedule',      href: '/schedule'    },
-  { label: 'FAQs',          href: '/faq'         },
+  { label: 'Home',          to: '/'           },
+  { label: 'Meet The Team', to: '/team'        },
+  { label: 'Committees',    to: '/committees'  },
+  { label: 'Guidelines',    to: '/guidelines'  },
+  { label: 'Schedule',      to: '/schedule'    },
+  { label: 'FAQs',          to: '/faq'         },
 ]
 
 function SunIcon() {
@@ -58,16 +58,16 @@ export default function Navbar() {
           <a href="/" className={styles.brandName} onClick={handleHomeClick}>CHIREC MUN</a>
         </div>
 
-        {/* CENTER — links pill */}
+        {/* CENTER — links pill — use React Router Link so basename is respected */}
         <ul className={styles.linksPill}>
           {links.map((l) => {
-            const isActive = location.pathname === l.href
+            const isActive = location.pathname === l.to
             return (
-              <li key={l.href}>
-                <a href={l.href} className={`${styles.link} ${isActive ? styles.linkActive : ''}`}>
+              <li key={l.to}>
+                <Link to={l.to} className={`${styles.link} ${isActive ? styles.linkActive : ''}`}>
                   {l.label}
                   {isActive && <span className={styles.dot} />}
-                </a>
+                </Link>
               </li>
             )
           })}
