@@ -70,13 +70,11 @@ export default function Stats() {
                 className={`${styles.item} ${s.comingSoon ? styles.csItem : ''}`}
                 onClick={() => handleCardClick(i)}
                 animate={isSelected
-                  ? { y: -6, boxShadow: '0 0 0 2px #c0392b, 0 12px 40px rgba(192,57,43,0.28)', scale: 1.04 }
-                  : { y: 0,  boxShadow: '0 0 0 0px rgba(192,57,43,0)',                          scale: 1    }
+                  ? { boxShadow: '0 0 0 2px #c0392b, 0 4px 24px rgba(192,57,43,0.22)', scale: 1 }
+                  : { boxShadow: '0 0 0 0px rgba(192,57,43,0)',                          scale: 1 }
                 }
                 whileHover={isSelected ? {} : {
-                  y: -4,
-                  boxShadow: '0 0 0 1.5px rgba(86,204,242,0.5), 0 8px 28px rgba(86,204,242,0.12)',
-                  scale: 1.03,
+                  boxShadow: '0 0 0 1.5px rgba(86,204,242,0.45), 0 4px 20px rgba(86,204,242,0.10)',
                 }}
                 transition={{ type: 'spring', stiffness: 320, damping: 26 }}
                 style={{ cursor: 'pointer', borderRadius: 10, padding: '0.9rem 1.4rem' }}

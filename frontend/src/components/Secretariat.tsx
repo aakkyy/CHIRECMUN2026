@@ -40,7 +40,7 @@ function AddressCard({ addr, reverse }) {
       whileInView={{ opacity: 1, x: 0 }}
       viewport={viewport}
       transition={{ ...spring }}
-      whileHover={{ y: -4, boxShadow: '0 24px 60px rgba(86,204,242,0.09)', transition: { type: 'spring', stiffness: 300, damping: 24 } }}
+      whileHover={{ boxShadow: '0 8px 40px rgba(86,204,242,0.12)', borderColor: 'rgba(86,204,242,0.18)', transition: { duration: 0.25 } }}
     >
       <div className={styles.photoCol}>
         <div className={`${styles.avatar} ${styles[addr.variant]}`}><span>{addr.initials}</span></div>
