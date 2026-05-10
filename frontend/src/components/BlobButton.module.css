@@ -16,7 +16,7 @@
 /* Animated underline — lives on .outer so overflow:hidden on the button can't clip it */
 .underline {
   position: absolute;
-  bottom: 2px;
+  bottom: 0.9rem;
   left: 14%; right: 14%;
   height: 2px;
   border-radius: 1px;
