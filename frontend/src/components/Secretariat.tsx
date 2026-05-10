@@ -72,7 +72,6 @@ export default function Secretariat() {
   return (
     <section className={styles.section} id="secretariat" style={{ position: 'relative', overflow: 'hidden' }}>
       <BlobBg variant="secretariat" />
-      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(4,3,10,0.72) 0%, rgba(4,3,10,0.65) 100%)', zIndex:0, pointerEvents:'none' }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div className={styles.header}
