@@ -452,26 +452,33 @@ const StarfieldBg = memo(function StarfieldBg() {
   const prevW = useRef(0), prevH = useRef(0)
 
   const PALETTE = [
+    { r:231, g:76,  b:60  },  // red-orange (common)
     { r:192, g:57,  b:43  },  // crimson
-    { r:231, g:76,  b:60  },  // red-orange
-    { r:255, g:120, b:90  },  // salmon
-    { r:220, g:220, b:240 },  // cool white
-    { r:86,  g:204, b:242 },  // cyan accent (rare)
+    { r:255, g:100, b:80  },  // bright salmon
+    { r:86,  g:204, b:242 },  // cyan blue
+    { r:42,  g:160, b:220 },  // deep blue
+    { r:240, g:240, b:255 },  // cold white
+    { r:86,  g:204, b:242 },  // cyan (extra weight)
   ]
 
   function initStars(W: number, H: number) {
-    stars.current = Array.from({ length: 130 }, (_, i) => {
-      const isGlow = i < 18  // first 18 are bright constellation nodes
-      const col = isGlow
-        ? PALETTE[Math.floor(Math.random() * 3)]   // only reds for glow nodes
-        : PALETTE[Math.floor(Math.random() * PALETTE.length)]
+    stars.current = Array.from({ length: 160 }, (_, i) => {
+      // First 12 red glow nodes, next 10 blue glow nodes, rest background
+      const isRedGlow  = i < 12
+      const isBlueGlow = i >= 12 && i < 22
+      const isGlow     = isRedGlow || isBlueGlow
+      const col = isRedGlow
+        ? PALETTE[Math.floor(Math.random() * 3)]
+        : isBlueGlow
+          ? PALETTE[3 + Math.floor(Math.random() * 2)]
+          : PALETTE[Math.floor(Math.random() * PALETTE.length)]
       return {
         x:    Math.random() * W,
         y:    Math.random() * H,
-        vx:   (Math.random() - 0.5) * 0.10,
-        vy:   (Math.random() - 0.5) * 0.07,
-        r:    isGlow ? 1.6 + Math.random() * 1.4 : 0.3 + Math.random() * 1.0,
-        a:    isGlow ? 0.75 + Math.random() * 0.25 : 0.18 + Math.random() * 0.45,
+        vx:   (Math.random() - 0.5) * 0.11,
+        vy:   (Math.random() - 0.5) * 0.08,
+        r:    isGlow ? 1.8 + Math.random() * 1.6 : 0.4 + Math.random() * 1.1,
+        a:    isGlow ? 0.85 + Math.random() * 0.15 : 0.25 + Math.random() * 0.55,
         r2: col.r, g2: col.g, b2: col.b,
         glow: isGlow,
       }
@@ -487,18 +494,21 @@ const StarfieldBg = memo(function StarfieldBg() {
     ctx.fillStyle = '#06050c'
     ctx.fillRect(0, 0, W, H)
 
-    // Nebula glow blobs
+    // Nebula glow blobs — brighter, more red and blue
     const blobs = [
-      { cx: 0.28, cy: 0.45, r: 0.42, col: '140,22,10',  a: 0.09, spd: 0.07 },
-      { cx: 0.72, cy: 0.55, r: 0.36, col: '192,57,43',  a: 0.07, spd: 0.11 },
-      { cx: 0.50, cy: 0.18, r: 0.28, col: '60,20,90',   a: 0.06, spd: 0.09 },
-      { cx: 0.15, cy: 0.80, r: 0.22, col: '100,30,15',  a: 0.05, spd: 0.13 },
+      { cx: 0.22, cy: 0.40, r: 0.50, col: '192,40,20',   a: 0.18, spd: 0.07 },  // deep red left
+      { cx: 0.78, cy: 0.58, r: 0.44, col: '30,100,210',  a: 0.16, spd: 0.11 },  // deep blue right
+      { cx: 0.55, cy: 0.15, r: 0.34, col: '86,204,242',  a: 0.12, spd: 0.09 },  // cyan top
+      { cx: 0.12, cy: 0.78, r: 0.28, col: '231,76,60',   a: 0.13, spd: 0.13 },  // red bottom-left
+      { cx: 0.88, cy: 0.25, r: 0.26, col: '42,130,220',  a: 0.11, spd: 0.08 },  // blue top-right
+      { cx: 0.50, cy: 0.85, r: 0.32, col: '120,20,80',   a: 0.09, spd: 0.10 },  // purple bottom
     ]
     for (const b of blobs) {
-      const pulse = 0.8 + 0.2 * Math.sin(t * b.spd)
+      const pulse = 0.78 + 0.22 * Math.sin(t * b.spd)
       const grd = ctx.createRadialGradient(b.cx*W, b.cy*H, 0, b.cx*W, b.cy*H, b.r * Math.min(W, H))
-      grd.addColorStop(0, `rgba(${b.col},${(b.a * pulse).toFixed(3)})`)
-      grd.addColorStop(1, `rgba(${b.col},0)`)
+      grd.addColorStop(0,   `rgba(${b.col},${(b.a * pulse).toFixed(3)})`)
+      grd.addColorStop(0.5, `rgba(${b.col},${(b.a * 0.35 * pulse).toFixed(3)})`)
+      grd.addColorStop(1,   `rgba(${b.col},0)`)
       ctx.fillStyle = grd
       ctx.fillRect(0, 0, W, H)
     }
@@ -513,38 +523,42 @@ const StarfieldBg = memo(function StarfieldBg() {
       if (s.y > H + 8) s.y = -8
     }
 
-    // Constellation lines between glow nodes
+    // Constellation lines — red between red nodes, blue between blue nodes
     const glows = ss.filter(s => s.glow)
-    const maxDist = Math.min(W, H) * 0.30
+    const maxDist = Math.min(W, H) * 0.32
     for (let i = 0; i < glows.length; i++) {
       for (let j = i + 1; j < glows.length; j++) {
         const a = glows[i], b = glows[j]
+        // Only connect same-family nodes (both red or both blue)
+        const aIsRed = a.r2 > 150 && a.b2 < 100
+        const bIsRed = b.r2 > 150 && b.b2 < 100
+        if (aIsRed !== bIsRed) continue
         const dx = a.x - b.x, dy = a.y - b.y
         const dist = Math.sqrt(dx*dx + dy*dy)
         if (dist > maxDist) continue
-        const pulse = 0.6 + 0.4 * Math.sin(t * 0.8 + i * 0.5 + j * 0.3)
-        const alpha = (1 - dist / maxDist) * 0.22 * pulse
+        const pulse = 0.55 + 0.45 * Math.sin(t * 0.9 + i * 0.5 + j * 0.3)
+        const alpha = (1 - dist / maxDist) * 0.38 * pulse
+        const lineCol = aIsRed ? '220,65,45' : '86,190,240'
         ctx.beginPath()
-        ctx.moveTo(a.x, a.y)
-        ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(3)})`
-        ctx.lineWidth = 0.7
+        ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y)
+        ctx.strokeStyle = `rgba(${lineCol},${alpha.toFixed(3)})`
+        ctx.lineWidth = 0.9
         ctx.stroke()
       }
     }
 
     // Draw all stars
     for (const s of ss) {
-      const pulse = 0.78 + 0.22 * Math.sin(t * 0.9 + s.x * 0.015 + s.y * 0.012)
+      const pulse = 0.72 + 0.28 * Math.sin(t * 0.9 + s.x * 0.015 + s.y * 0.012)
 
       if (s.glow) {
         // Outer halo
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.07 * pulse).toFixed(3)})`
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 7, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.10 * pulse).toFixed(3)})`
         ctx.fill()
         // Inner halo
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 2.8, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.20 * pulse).toFixed(3)})`
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.28 * pulse).toFixed(3)})`
         ctx.fill()
       }
 
