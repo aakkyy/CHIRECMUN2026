@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import BlobBg from './BlobBg'
 import styles from './About.module.css'
 import { slideLeft, viewport } from '../lib/motion'
@@ -52,14 +53,17 @@ export default function About() {
               More than a conference, it is a launchpad. Delegates leave with
               confidence, clarity, and a global perspective that sets them apart.
             </p>
-            <motion.a href="#secretariat" className={styles.textLink}
+            <motion.div
               whileHover={{ x: 4 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              style={{ display: 'inline-flex' }}
             >
-              Meet the Secretariat
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </motion.a>
+              <Link to="/team" className={styles.textLink}>
+                Meet the Secretariat
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </motion.div>
           </motion.div>
 
           {/* RIGHT — gradient-bordered container like image 5 */}

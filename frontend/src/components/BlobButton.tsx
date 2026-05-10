@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import type { ReactNode, Ref } from 'react'
+import { Link } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import styles from './BlobButton.module.css'
 
 type BlobVariant = 'red' | 'blue'
@@ -19,10 +20,11 @@ export default function BlobButton({
   className = '',
   variant: _variant = 'red',
 }: BlobButtonProps) {
+  const isInternal = href && href.startsWith('/')
   const inner = href ? (
-    <a href={href} className={`${styles.inner} ${className}`} onClick={onClick}>
-      {children}
-    </a>
+    isInternal
+      ? <Link to={href} className={`${styles.inner} ${className}`} onClick={onClick}>{children}</Link>
+      : <a href={href} className={`${styles.inner} ${className}`} onClick={onClick}>{children}</a>
   ) : (
     <button className={`${styles.inner} ${className}`} onClick={onClick}>
       {children}

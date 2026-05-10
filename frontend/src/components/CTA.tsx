@@ -27,8 +27,8 @@ export default function CTA() {
           <BlobButton href="#" className={styles.btnPrimary} variant="red">
             Register as Delegate
           </BlobButton>
-          <BlobButton href="#" className={styles.btnOutline} variant="blue">
-            Download Brochure
+          <BlobButton href="/committees" className={styles.btnOutline} variant="blue">
+            View Committees
           </BlobButton>
         </div>
       </motion.div>
