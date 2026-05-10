@@ -371,12 +371,14 @@ function ConstellationBg() {
         const alpha = (1 - Math.sqrt(dist2) / maxDist) * 0.30
         const pulse = 0.7 + 0.3 * Math.sin(t * 1.5 + i * 0.3 + j * 0.2)
         // Blend the two node colors manually
-        const { r, g, b } = { r: (a.col.r + b.col.r) >> 1, g: (a.col.g + b.col.g) >> 1, b: (a.col.b + b.col.b) >> 1 }
+        const cr = (a.col.r + b.col.r) >> 1
+        const cg = (a.col.g + b.col.g) >> 1
+        const cb = (a.col.b + b.col.b) >> 1
 
         ctx.beginPath()
         ctx.moveTo(a.x, a.y)
         ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = `rgba(${r},${g},${b},${(alpha * pulse).toFixed(3)})`
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${(alpha * pulse).toFixed(3)})`
         ctx.lineWidth = 0.8
         ctx.stroke()
       }
