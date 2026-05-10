@@ -122,15 +122,31 @@
   justify-content: flex-end;
 }
 
+.btnOuter {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.btnUnderline {
+  position: absolute;
+  bottom: 2px;
+  left: 14%; right: 14%;
+  height: 2px;
+  border-radius: 1px;
+  pointer-events: none;
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  box-shadow: 0 0 8px rgba(231,76,60,0.85), 0 0 20px rgba(192,57,43,0.55);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 10;
+}
+.btnOuter:hover .btnUnderline { transform: scaleX(1); }
+
 .btn {
   position: relative; overflow: hidden;
-  background-color: rgba(22,7,4,0.82);
-  background-image:
-    linear-gradient(to right, #e74c3c, #c0392b),
-    linear-gradient(160deg, rgba(10,3,2,0.10) 0%, rgba(0,0,0,0.18) 100%);
-  background-position: left 2.2rem bottom 0.55rem, center;
-  background-size: 0% 2px, 100% 100%;
-  background-repeat: no-repeat, no-repeat;
+  background: linear-gradient(160deg, rgba(22,7,4,0.82) 0%, rgba(14,4,2,0.78) 100%);
   color: rgba(255,255,255,0.90);
   font-family: 'Geist', sans-serif; font-weight: 700; font-size: 0.78rem;
   letter-spacing: 0.09em; text-transform: uppercase;
@@ -138,7 +154,7 @@
   border: 1px solid rgba(192,57,43,0.22);
   border-radius: 999px; cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 2px 6px rgba(0,0,0,0.42);
-  transition: background-size 0.38s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+  transition: background 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
 }
 .btn::after {
   content: ''; position: absolute; top: 0; left: 0;
@@ -146,7 +162,7 @@
   background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.13) 50%, transparent 80%);
   transform: translateX(-160%) skewX(-18deg); transition: none; pointer-events: none;
 }
-.btn:hover { background-color: rgba(38,12,7,0.92); background-size: calc(100% - 4.4rem) 2px, 100% 100%; border-color: rgba(192,57,43,0.38); box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 14px rgba(0,0,0,0.48), 0 0 24px rgba(192,57,43,0.11); }
+.btn:hover { background: linear-gradient(160deg, rgba(38,12,7,0.92) 0%, rgba(24,7,4,0.88) 100%); border-color: rgba(192,57,43,0.38); box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 14px rgba(0,0,0,0.48), 0 0 24px rgba(192,57,43,0.11); }
 .btn:hover::after { transform: translateX(380%) skewX(-18deg); transition: transform 0.52s ease; }
 .btn:active { box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); transition-duration: 0.08s; }
 

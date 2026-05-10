@@ -31,6 +31,10 @@ export default function BlobButton({
     </button>
   )
 
+  const underlineCls = _variant === 'blue'
+    ? `${styles.underline} ${styles.underlineBlue}`
+    : `${styles.underline} ${styles.underlineRed}`
+
   return (
     <motion.div
       className={styles.outer}
@@ -38,6 +42,7 @@ export default function BlobButton({
       transition={{ type: 'spring', stiffness: 420, damping: 22, mass: 0.8 }}
     >
       {inner}
+      <span className={underlineCls} aria-hidden="true" />
     </motion.div>
   )
 }

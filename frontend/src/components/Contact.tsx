@@ -114,17 +114,19 @@ export default function Contact() {
                       {error}
                     </p>
                   )}
-                  <motion.button
-                    type="submit"
-                    className={styles.btn}
-                    disabled={submitting}
-                    style={{ opacity: submitting ? 0.6 : 1 }}
-                    whileHover={!submitting ? { boxShadow: '0 4px 24px rgba(86,204,242,0.28)' } : {}}
-                    whileTap={!submitting ? { scale: 0.97 } : {}}
-                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-                  >
-                    {submitting ? 'Sending…' : 'Send'}
-                  </motion.button>
+                  <div className={styles.btnOuter}>
+                    <motion.button
+                      type="submit"
+                      className={styles.btn}
+                      disabled={submitting}
+                      style={{ opacity: submitting ? 0.6 : 1 }}
+                      whileTap={!submitting ? { scale: 0.97 } : {}}
+                      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                    >
+                      {submitting ? 'Sending…' : 'Send'}
+                    </motion.button>
+                    <span className={styles.btnUnderline} aria-hidden="true" />
+                  </div>
                 </motion.div>
               </form>
             )}

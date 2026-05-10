@@ -12,3 +12,29 @@
   text-decoration: none;
   border: none;
 }
+
+/* Animated underline — lives on .outer so overflow:hidden on the button can't clip it */
+.underline {
+  position: absolute;
+  bottom: 2px;
+  left: 14%; right: 14%;
+  height: 2px;
+  border-radius: 1px;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 10;
+}
+.outer:hover .underline {
+  transform: scaleX(1);
+}
+
+.underlineRed {
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  box-shadow: 0 0 8px rgba(231,76,60,0.85), 0 0 20px rgba(192,57,43,0.55);
+}
+.underlineBlue {
+  background: linear-gradient(to right, #56ccf2, #2aafe0);
+  box-shadow: 0 0 8px rgba(86,204,242,0.85), 0 0 20px rgba(42,175,224,0.55);
+}

@@ -388,8 +388,10 @@ const ConstellationBg = memo(function ConstellationBg() {
     // Move nodes
     for (const n of ns) {
       n.x += n.vx; n.y += n.vy
-      if (n.x < 0 || n.x > W) n.vx *= -1
-      if (n.y < 0 || n.y > H) n.vy *= -1
+      if (n.x < -10) n.x = W + 10
+      if (n.x > W + 10) n.x = -10
+      if (n.y < -10) n.y = H + 10
+      if (n.y > H + 10) n.y = -10
     }
 
     // Draw connections — flat color, no gradient object per line
