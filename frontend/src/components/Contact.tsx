@@ -119,7 +119,7 @@ export default function Contact() {
                     className={styles.btn}
                     disabled={submitting}
                     style={{ opacity: submitting ? 0.6 : 1 }}
-                    whileHover={!submitting ? { scale: 1.04, boxShadow: '0 8px 28px rgba(86,204,242,0.35)' } : {}}
+                    whileHover={!submitting ? { boxShadow: '0 4px 24px rgba(86,204,242,0.28)' } : {}}
                     whileTap={!submitting ? { scale: 0.97 } : {}}
                     transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                   >

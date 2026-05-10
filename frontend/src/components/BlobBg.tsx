@@ -27,15 +27,19 @@ function rgba({ r, g, b }: { r: number; g: number; b: number }, a: number) {
 }
 
 // ── shared canvas hook ────────────────────────────────────────
+// Pauses drawing automatically when the canvas is off-screen or
+// the browser tab is hidden — the single biggest perf win.
 function useCanvasLoop(
   draw: (ctx: CanvasRenderingContext2D, W: number, H: number, t: number) => void,
 ) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  const t   = useRef(0)
+  const ref       = useRef<HTMLCanvasElement>(null)
+  const t         = useRef(0)
+  const visible   = useRef(false)
 
   useEffect(() => {
+    const c = ref.current; if (!c) return
+
     function resize() {
-      const c = ref.current; if (!c) return
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       c.width  = c.offsetWidth  * dpr
       c.height = c.offsetHeight * dpr
@@ -44,10 +48,27 @@ function useCanvasLoop(
     }
     resize()
     window.addEventListener('resize', resize)
-    return () => window.removeEventListener('resize', resize)
+
+    // Pause when scrolled out of view
+    const obs = new IntersectionObserver(
+      ([e]) => { visible.current = e.isIntersecting },
+      { threshold: 0 },
+    )
+    obs.observe(c)
+
+    // Pause when tab is hidden
+    const onVis = () => { if (document.hidden) visible.current = false }
+    document.addEventListener('visibilitychange', onVis)
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      obs.disconnect()
+      document.removeEventListener('visibilitychange', onVis)
+    }
   }, [])
 
   useAnimationFrame((_, dt) => {
+    if (!visible.current) return                      // skip entirely when off-screen
     const c = ref.current; if (!c) return
     const ctx = c.getContext('2d'); if (!ctx) return
     if (!c.width || !c.height) return
@@ -189,8 +210,8 @@ const AsteroidBeltBg = memo(function AsteroidBeltBg() {
   function init(W: number, H: number) {
     const halfLen = Math.hypot(W, H)
     const beltW   = Math.min(W, H) * 0.55
-    rocks.current   = Array.from({ length: 80 }, () => makeRock(halfLen, beltW, true))
-    bgStars.current = Array.from({ length: 160 }, () => ({
+    rocks.current   = Array.from({ length: 60 }, () => makeRock(halfLen, beltW, true))
+    bgStars.current = Array.from({ length: 110 }, () => ({
       x: Math.random() * W, y: Math.random() * H,
       r: 0.2 + Math.random() * 0.8,
       base: 0.1 + Math.random() * 0.55,
@@ -345,7 +366,7 @@ const ConstellationBg = memo(function ConstellationBg() {
 
   function initNodes(W: number, H: number) {
     const cols = [RED, RED, BLUE, BLUE, PURP]
-    nodes.current = Array.from({ length: 55 }, () => ({
+    nodes.current = Array.from({ length: 45 }, () => ({
       x:   Math.random() * W,
       y:   Math.random() * H,
       vx:  (Math.random() - 0.5) * 0.28,
