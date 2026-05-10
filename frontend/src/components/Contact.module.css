@@ -140,7 +140,19 @@
   background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.13) 50%, transparent 80%);
   transform: translateX(-160%) skewX(-18deg); transition: none; pointer-events: none;
 }
+.btn::before {
+  content: ''; position: absolute;
+  bottom: 0.57rem; left: 2.2rem; right: 2.2rem;
+  height: 1px;
+  background: rgba(231,76,60,1);
+  box-shadow: 0 0 6px rgba(192,57,43,1), 0 0 14px rgba(192,57,43,0.7), 0 0 28px rgba(192,57,43,0.4);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
 .btn:hover { background: linear-gradient(160deg, rgba(44,14,10,0.92) 0%, rgba(26,8,6,0.86) 100%); border-color: rgba(192,57,43,0.38); box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 4px 14px rgba(0,0,0,0.48), 0 0 24px rgba(192,57,43,0.11); }
+.btn:hover::before { transform: scaleX(1); }
 .btn:hover::after { transform: translateX(380%) skewX(-18deg); transition: transform 0.52s ease; }
 .btn:active { box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); transition-duration: 0.08s; }
 
