@@ -129,67 +129,51 @@ function NebulaBg() {
 
 // ─────────────────────────────────────────────────────────────
 // ASTEROID BELT — Countdown
-// A diagonal belt of rocky asteroids drifting across deep space.
-// Red, blue and grey asteroids. Only a slice of the belt visible.
-// Stars in background. Belt moves bottom-left to top-right.
+// Belt-space coords: each rock has a fixed `perp` and an `along`
+// that advances then wraps — perfectly continuous, zero teleport.
 // ─────────────────────────────────────────────────────────────
 
-// Belt direction: moving toward top-right (~-25° from horizontal)
-const BELT_ANG   = -Math.PI * 0.14   // travel angle
-const BELT_COS   = Math.cos(BELT_ANG)
-const BELT_SIN   = Math.sin(BELT_ANG)
-// Perpendicular to belt (to scatter asteroids across the band width)
-const PERP_COS   = Math.cos(BELT_ANG + Math.PI / 2)
-const PERP_SIN   = Math.sin(BELT_ANG + Math.PI / 2)
+const BELT_ANG = -Math.PI * 0.14
+const BELT_COS = Math.cos(BELT_ANG)
+const BELT_SIN = Math.sin(BELT_ANG)
+const PERP_COS = Math.cos(BELT_ANG + Math.PI / 2)
+const PERP_SIN = Math.sin(BELT_ANG + Math.PI / 2)
 
 const ROCK_COLORS = [
-  // Reds
   [175, 52, 35], [155, 40, 26], [195, 68, 44],
-  // Blues
   [58, 98, 188], [46, 82, 162], [72, 115, 205],
-  // Greys
   [112, 108, 104], [88, 84, 80], [132, 128, 122],
 ]
 
 interface Rock {
-  // belt-space coords (along belt, perpendicular offset)
-  along: number; perp: number
-  // world
-  x: number; y: number
-  r: number; rot: number; rotSpd: number; spd: number
-  col: number[]; alpha: number
-  verts: Array<[number, number]>  // pre-computed polygon points
+  along:  number   // px from canvas centre along belt axis — advances each frame
+  perp:   number   // px perpendicular — FIXED per rock lifetime
+  speed:  number   // px/s
+  r:      number
+  rot:    number
+  rotSpd: number
+  col:    number[]
+  alpha:  number
+  verts:  Array<[number, number]>
 }
 
-function spawnRock(W: number, H: number, along?: number): Rock {
-  const r      = 2.8 + Math.random() * 13
-  const spd    = 18 + Math.random() * 22              // px/s, smaller bias
-  const beltW  = Math.min(W, H) * 0.52               // visible belt width
-  const perp   = (Math.random() - 0.5) * beltW
-  const al     = along ?? Math.random()               // 0–1 position along belt
-
-  // Map to world coords: belt centre runs diagonally through middle of canvas
-  const cx = W * 0.5, cy = H * 0.5
-  const halfLen = Math.hypot(W, H)
-  const tx = al * 2 - 1                              // -1 to 1 along belt
-  const x  = cx + BELT_COS * tx * halfLen + PERP_COS * perp
-  const y  = cy + BELT_SIN * tx * halfLen + PERP_SIN * perp
-
-  const nPts = 6 + Math.floor(Math.random() * 5)
+function makeRock(halfLen: number, beltW: number, randomAlong = true): Rock {
+  const r     = 2.5 + Math.random() * 13
+  const speed = 22 + Math.random() * 30
+  const nPts  = 6 + Math.floor(Math.random() * 5)
   const verts: Array<[number, number]> = Array.from({ length: nPts }, (_, i) => {
-    const ang = (i / nPts) * Math.PI * 2 + (Math.random() - 0.5) * 0.6
+    const ang = (i / nPts) * Math.PI * 2 + (Math.random() - 0.5) * 0.65
     const rad = r * (0.55 + Math.random() * 0.55)
     return [Math.cos(ang) * rad, Math.sin(ang) * rad]
   })
-
   return {
-    along: al, perp,
-    x, y, r,
+    along:  randomAlong ? (Math.random() * 2 - 1) * halfLen : -halfLen * 1.06,
+    perp:   (Math.random() - 0.5) * beltW,
+    speed, r,
     rot:    Math.random() * Math.PI * 2,
-    rotSpd: (Math.random() - 0.5) * 0.012,
-    spd,
-    col:   ROCK_COLORS[Math.floor(Math.random() * ROCK_COLORS.length)],
-    alpha: 0.45 + Math.random() * 0.45,
+    rotSpd: (Math.random() - 0.5) * 0.014,
+    col:    ROCK_COLORS[Math.floor(Math.random() * ROCK_COLORS.length)],
+    alpha:  0.45 + Math.random() * 0.45,
     verts,
   }
 }
@@ -203,7 +187,9 @@ const AsteroidBeltBg = memo(function AsteroidBeltBg() {
   const prevH   = useRef(0)
 
   function init(W: number, H: number) {
-    rocks.current = Array.from({ length: 75 }, () => spawnRock(W, H))
+    const halfLen = Math.hypot(W, H)
+    const beltW   = Math.min(W, H) * 0.55
+    rocks.current   = Array.from({ length: 80 }, () => makeRock(halfLen, beltW, true))
     bgStars.current = Array.from({ length: 160 }, () => ({
       x: Math.random() * W, y: Math.random() * H,
       r: 0.2 + Math.random() * 0.8,
@@ -213,67 +199,67 @@ const AsteroidBeltBg = memo(function AsteroidBeltBg() {
   }
 
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW.current || H !== prevH.current) { init(W, H); prevW.current = W; prevH.current = H }
-    const dt = 0.016
+    if (W !== prevW.current || H !== prevH.current) {
+      init(W, H); prevW.current = W; prevH.current = H
+    }
+    const dt      = 0.016
+    const halfLen = Math.hypot(W, H)
+    const beltW   = Math.min(W, H) * 0.55
+    const cx = W / 2, cy = H / 2
 
     ctx.clearRect(0, 0, W, H)
 
-    // ── Faint nebula warmth behind belt ──
+    // ── Faint warm nebula wash ──
     const ng = ctx.createLinearGradient(0, H, W, 0)
-    ng.addColorStop(0,   'rgba(80,18,8,0.18)')
-    ng.addColorStop(0.5, 'rgba(100,22,10,0.08)')
-    ng.addColorStop(1,   'rgba(60,14,6,0.04)')
-    ctx.fillStyle = ng
-    ctx.fillRect(0, 0, W, H)
+    ng.addColorStop(0,   'rgba(80,18,8,0.16)')
+    ng.addColorStop(0.5, 'rgba(100,22,10,0.07)')
+    ng.addColorStop(1,   'rgba(60,14,6,0.03)')
+    ctx.fillStyle = ng; ctx.fillRect(0, 0, W, H)
 
     // ── Background stars ──
     for (const s of bgStars.current) {
       const a = s.base * (0.5 + 0.5 * Math.sin(t * 0.8 + s.phase))
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255,240,225,${a.toFixed(3)})`
-      ctx.fill()
+      ctx.fillStyle = `rgba(255,240,225,${a.toFixed(3)})`; ctx.fill()
     }
 
     // ── Asteroids ──
     for (const rock of rocks.current) {
-      // Move along belt direction
-      rock.x += BELT_COS * rock.spd * dt
-      rock.y += BELT_SIN * rock.spd * dt
-      rock.rot += rock.rotSpd
+      // Advance along belt
+      rock.along += rock.speed * dt
+      rock.rot   += rock.rotSpd
 
-      // Wrap: when out of canvas, re-enter from the opposite side
-      const pad = rock.r * 3
-      if (rock.x > W + pad || rock.x < -pad || rock.y > H + pad || rock.y < -pad) {
-        // Re-spawn entering from bottom-left edge of belt
-        const fresh = spawnRock(W, H, 0.02)
-        Object.assign(rock, fresh)
+      // Seamless wrap: exit leading edge → re-enter trailing edge,
+      // new random perp so the pattern never looks identical
+      if (rock.along > halfLen * 1.06) {
+        rock.along = -halfLen * 1.06
+        rock.perp  = (Math.random() - 0.5) * beltW
       }
 
+      // Belt-space → world
+      const x = cx + BELT_COS * rock.along + PERP_COS * rock.perp
+      const y = cy + BELT_SIN * rock.along + PERP_SIN * rock.perp
+
       ctx.save()
-      ctx.translate(rock.x, rock.y)
+      ctx.translate(x, y)
       ctx.rotate(rock.rot)
 
-      // Rocky body
       ctx.beginPath()
       rock.verts.forEach(([px, py], i) => i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py))
       ctx.closePath()
 
       const [cr, cg, cb] = rock.col
       ctx.fillStyle   = `rgba(${cr},${cg},${cb},${rock.alpha})`
-      ctx.strokeStyle = `rgba(${Math.max(0,cr-30)},${Math.max(0,cg-30)},${Math.max(0,cb-30)},${rock.alpha * 0.5})`
+      ctx.strokeStyle = `rgba(${Math.max(0,cr-30)},${Math.max(0,cg-30)},${Math.max(0,cb-30)},${(rock.alpha*0.45).toFixed(3)})`
       ctx.lineWidth   = 0.6
-      ctx.fill()
-      ctx.stroke()
+      ctx.fill(); ctx.stroke()
 
-      // Highlight sliver (top-left face lit by distant star)
+      // Lit edge
       ctx.beginPath()
-      if (rock.verts.length > 1) {
-        ctx.moveTo(rock.verts[0][0], rock.verts[0][1])
-        ctx.lineTo(rock.verts[1][0], rock.verts[1][1])
-      }
-      ctx.strokeStyle = `rgba(255,240,220,${rock.alpha * 0.25})`
-      ctx.lineWidth   = 0.8
-      ctx.stroke()
+      ctx.moveTo(rock.verts[0][0], rock.verts[0][1])
+      ctx.lineTo(rock.verts[1][0], rock.verts[1][1])
+      ctx.strokeStyle = `rgba(255,238,210,${(rock.alpha * 0.22).toFixed(3)})`
+      ctx.lineWidth   = 0.9; ctx.stroke()
 
       ctx.restore()
     }
