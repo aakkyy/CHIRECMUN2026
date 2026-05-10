@@ -14,7 +14,7 @@
  */
 
 import { useAnimationFrame, motion } from 'framer-motion'
-import { useEffect, useRef, type CSSProperties } from 'react'
+import { useEffect, useRef, memo, type CSSProperties } from 'react'
 
 const BG   = '#020108'
 const RED  = { r: 192, g: 57,  b: 43  }
@@ -196,10 +196,11 @@ function spawnRock(W: number, H: number, along?: number): Rock {
 
 interface BGStar { x: number; y: number; r: number; base: number; phase: number }
 
-function AsteroidBeltBg() {
-  const rocks  = useRef<Rock[]>([])
+const AsteroidBeltBg = memo(function AsteroidBeltBg() {
+  const rocks   = useRef<Rock[]>([])
   const bgStars = useRef<BGStar[]>([])
-  let prevW = 0, prevH = 0
+  const prevW   = useRef(0)
+  const prevH   = useRef(0)
 
   function init(W: number, H: number) {
     rocks.current = Array.from({ length: 75 }, () => spawnRock(W, H))
@@ -212,7 +213,7 @@ function AsteroidBeltBg() {
   }
 
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW || H !== prevH) { init(W, H); prevW = W; prevH = H }
+    if (W !== prevW.current || H !== prevH.current) { init(W, H); prevW.current = W; prevH.current = H }
     const dt = 0.016
 
     ctx.clearRect(0, 0, W, H)
@@ -279,7 +280,7 @@ function AsteroidBeltBg() {
   })
 
   return <canvas ref={ref} style={canvasStyle} aria-hidden="true" />
-}
+})
 
 // ─────────────────────────────────────────────────────────────
 // AURORA WAVES — CTA
@@ -351,8 +352,10 @@ function AuroraBg() {
 // ─────────────────────────────────────────────────────────────
 interface Node { x: number; y: number; vx: number; vy: number; r: number; col: { r: number; g: number; b: number } }
 
-function ConstellationBg() {
+const ConstellationBg = memo(function ConstellationBg() {
   const nodes = useRef<Node[]>([])
+  const prevW = useRef(0)
+  const prevH = useRef(0)
 
   function initNodes(W: number, H: number) {
     const cols = [RED, RED, BLUE, BLUE, PURP]
@@ -366,10 +369,8 @@ function ConstellationBg() {
     }))
   }
 
-  let prevW = 0, prevH = 0
-
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW || H !== prevH) { initNodes(W, H); prevW = W; prevH = H }
+    if (W !== prevW.current || H !== prevH.current) { initNodes(W, H); prevW.current = W; prevH.current = H }
 
     ctx.fillStyle = BG
     ctx.fillRect(0, 0, W, H)
@@ -425,7 +426,7 @@ function ConstellationBg() {
   })
 
   return <canvas ref={ref} style={canvasStyle} aria-hidden="true" />
-}
+})
 
 // ─────────────────────────────────────────────────────────────
 const canvasStyle: CSSProperties = {
