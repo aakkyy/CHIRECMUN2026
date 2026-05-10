@@ -22,21 +22,21 @@ function getTimeLeft() {
 function Block({ value, label, delay }) {
   return (
     <motion.div
-      className={styles.block}
-      initial={{ opacity: 0, y: 30 }}
+      className={styles.unit}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewport}
-      transition={{ type: 'spring', stiffness: 88, damping: 22, delay }}
+      transition={{ duration: 0.5, ease: [0.22,1,0.36,1], delay }}
     >
-      <div className={styles.numBox}>
+      <div className={styles.numWrap}>
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
             key={value}
             className={styles.num}
-            initial={{ y: -56, opacity: 0, filter: 'blur(4px)' }}
-            animate={{ y: 0,   opacity: 1, filter: 'blur(0px)' }}
-            exit={{   y: 56,  opacity: 0, filter: 'blur(4px)' }}
-            transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0,   opacity: 1 }}
+            exit={{   y: 40,  opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
             {value}
           </motion.span>
@@ -72,23 +72,13 @@ export default function Countdown() {
           viewport={viewport} transition={{ duration: 0.7, ease: [0.22,1,0.36,1], delay: 0.08 }}
         >The Conference Begins In</motion.h2>
 
-        <div className={styles.grid}>
-          <Block value={time.d} label="Days"    delay={0}   />
-          <motion.span className={styles.colon}
-            initial={{ opacity: 0 }} whileInView={{ opacity: 0.65 }}
-            viewport={viewport} transition={{ delay: 0.1 }}
-          >:</motion.span>
-          <Block value={time.h} label="Hours"   delay={0.1} />
-          <motion.span className={styles.colon}
-            initial={{ opacity: 0 }} whileInView={{ opacity: 0.65 }}
-            viewport={viewport} transition={{ delay: 0.2 }}
-          >:</motion.span>
-          <Block value={time.m} label="Minutes" delay={0.2} />
-          <motion.span className={styles.colon}
-            initial={{ opacity: 0 }} whileInView={{ opacity: 0.65 }}
-            viewport={viewport} transition={{ delay: 0.3 }}
-          >:</motion.span>
-          <Block value={time.s} label="Seconds" delay={0.3} />
+        <div className={styles.timerWrap}>
+          <div className={styles.timerBar}>
+            <Block value={time.d} label="Days"    delay={0}    />
+            <Block value={time.h} label="Hours"   delay={0.08} />
+            <Block value={time.m} label="Minutes" delay={0.16} />
+            <Block value={time.s} label="Seconds" delay={0.24} />
+          </div>
         </div>
 
         <motion.p className={styles.sub}
