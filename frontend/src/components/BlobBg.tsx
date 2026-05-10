@@ -1,10 +1,16 @@
 /**
- * BlobBg — cinematic canvas animations per section
+ * BlobBg — section background animations
  *
- *  nebula  (About)     → flow field: particles follow a smooth vector field, leaving luminous trails
- *  red     (Countdown) → galaxy spiral: two rotating arms of glowing particles
- *  cta     (CTA)       → aurora waves: stacked filled sine waves morphing in real time
- *  contact (Contact)   → constellation: soft floating nodes connected by pulsing lines
+ *  nebula  (About)     → soft drifting gradient orbs
+ *  red     (Countdown) → cinematic radial pulse rings + orbiting particles
+ *  cta     (CTA)       → aurora sine-wave bands
+ *  contact (Contact)   → constellation node network
+ *
+ * Performance notes:
+ *  - NebulaBg: blur capped at 60px, no willChange (blur already composites)
+ *  - ConstellationBg: 55 nodes (vs 80), flat color lines (no per-line gradient)
+ *  - AuroraBg: 6px step (vs 4px), gradient objects reused across frame
+ *  - RadialBg (canvas): pulse rings + orbiting dots, zero DOM elements
  */
 
 import { useAnimationFrame, motion } from 'framer-motion'
@@ -19,13 +25,6 @@ const PURP = { r: 120, g: 55,  b: 210 }
 function rgba({ r, g, b }: { r: number; g: number; b: number }, a: number) {
   return `rgba(${r},${g},${b},${a})`
 }
-function lerpColor(
-  a: { r: number; g: number; b: number },
-  b: { r: number; g: number; b: number },
-  t: number,
-) {
-  return { r: a.r + (b.r - a.r) * t, g: a.g + (b.g - a.g) * t, b: a.b + (b.b - a.b) * t }
-}
 
 // ── shared canvas hook ────────────────────────────────────────
 function useCanvasLoop(
@@ -37,8 +36,11 @@ function useCanvasLoop(
   useEffect(() => {
     function resize() {
       const c = ref.current; if (!c) return
-      c.width  = c.offsetWidth
-      c.height = c.offsetHeight
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      c.width  = c.offsetWidth  * dpr
+      c.height = c.offsetHeight * dpr
+      const ctx = c.getContext('2d')
+      if (ctx) ctx.scale(dpr, dpr)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -49,8 +51,11 @@ function useCanvasLoop(
     const c = ref.current; if (!c) return
     const ctx = c.getContext('2d'); if (!ctx) return
     if (!c.width || !c.height) return
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    const W = c.width / dpr
+    const H = c.height / dpr
     t.current += Math.min(dt, 50) * 0.001
-    draw(ctx, c.width, c.height, t.current)
+    draw(ctx, W, H, t.current)
   })
 
   return ref
@@ -58,16 +63,15 @@ function useCanvasLoop(
 
 // ─────────────────────────────────────────────────────────────
 // SOFT GRADIENT MESH — About
-// Four large slow-drifting gradient orbs with morphing shapes.
-// Very subtle — designed to not compete with the text and cards.
-// Pure Framer Motion divs, no canvas.
+// Four large slow-drifting gradient orbs. No willChange —
+// blur already forces GPU compositing on its own layer.
 // ─────────────────────────────────────────────────────────────
 function NebulaBg() {
   const orbs = [
     {
       style: { left: '-8%', top: '-20%', width: '55%', height: '55%' },
-      color: `radial-gradient(circle at 40% 40%, ${rgba(RED, 0.22)} 0%, transparent 68%)`,
-      blur: 90,
+      color: `radial-gradient(circle at 40% 40%, ${rgba(RED, 0.20)} 0%, transparent 68%)`,
+      blur: 60,
       animate: {
         x: [0, 55, 80, 30, 0], y: [0, 40, 90, 50, 0],
         borderRadius: ['60% 40% 55% 45%/50% 60% 40% 50%', '40% 60% 45% 55%/60% 40% 55% 45%', '55% 45% 60% 40%/45% 55% 50% 50%', '60% 40% 55% 45%/50% 60% 40% 50%'],
@@ -76,8 +80,8 @@ function NebulaBg() {
     },
     {
       style: { left: '50%', top: '-5%', width: '52%', height: '52%' },
-      color: `radial-gradient(circle at 55% 55%, ${rgba(BLUE, 0.16)} 0%, transparent 65%)`,
-      blur: 100,
+      color: `radial-gradient(circle at 55% 55%, ${rgba(BLUE, 0.14)} 0%, transparent 65%)`,
+      blur: 65,
       animate: {
         x: [0, -60, -30, -70, 0], y: [0, 50, 100, 30, 0],
         borderRadius: ['45% 55% 50% 50%/55% 45% 60% 40%', '60% 40% 55% 45%/40% 60% 45% 55%', '50% 50% 40% 60%/60% 40% 50% 50%', '45% 55% 50% 50%/55% 45% 60% 40%'],
@@ -86,8 +90,8 @@ function NebulaBg() {
     },
     {
       style: { left: '20%', top: '45%', width: '44%', height: '44%' },
-      color: `radial-gradient(circle at 45% 50%, ${rgba(PURP, 0.13)} 0%, transparent 65%)`,
-      blur: 85,
+      color: `radial-gradient(circle at 45% 50%, ${rgba(PURP, 0.11)} 0%, transparent 65%)`,
+      blur: 55,
       animate: {
         x: [0, 50, 10, 60, 0], y: [0, -40, -80, -20, 0],
         scale: [1, 1.06, 0.97, 1.04, 1],
@@ -96,8 +100,8 @@ function NebulaBg() {
     },
     {
       style: { left: '60%', top: '50%', width: '40%', height: '40%' },
-      color: `radial-gradient(circle at 50% 40%, ${rgba(RED, 0.15)} 0%, transparent 65%)`,
-      blur: 80,
+      color: `radial-gradient(circle at 50% 40%, ${rgba(RED, 0.13)} 0%, transparent 65%)`,
+      blur: 55,
       animate: {
         x: [0, -45, -10, -55, 0], y: [0, -35, -65, -15, 0],
       },
@@ -114,7 +118,6 @@ function NebulaBg() {
             position: 'absolute', ...o.style,
             background: o.color,
             filter: `blur(${o.blur}px)`,
-            willChange: 'transform',
           }}
           animate={o.animate}
           transition={{ duration: o.duration, delay: o.delay, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
@@ -125,95 +128,138 @@ function NebulaBg() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// RADIAL DEPTH — Countdown
-// Concentric slow-breathing rings + a deep ambient glow.
-// Designed to frame the timer, not fight it. Very restrained.
-// Pure Framer Motion — no canvas, no particles.
+// RADIAL PULSE — Countdown
+// Canvas-based. Pulse rings expand outward from center,
+// orbiting particles trace the rings, deep ambient glow.
+// Cinematic and zero DOM overhead.
 // ─────────────────────────────────────────────────────────────
+interface Pulse { r: number; maxR: number; alpha: number; speed: number }
+interface Orb   { angle: number; speed: number; ringR: number; size: number; col: typeof RED }
+
 function RadialBg() {
-  // Ambient glow layers behind everything
-  const glows = [
-    { size: '110%', color: rgba(RED, 0.12), blur: 80, duration: 8,  scale: [1, 1.08, 1]   },
-    { size: '70%',  color: rgba(RED, 0.16), blur: 60, duration: 11, scale: [1, 1.12, 1]   },
-    { size: '38%',  color: rgba(REDB, 0.14), blur: 45, duration: 7, scale: [1, 1.18, 1]   },
-  ]
+  const pulses = useRef<Pulse[]>([])
+  const orbs   = useRef<Orb[]>([])
+  let nextPulse = useRef(0)
 
-  // Concentric rings that breathe in and out
-  const rings = [
-    { size: '88%',  border: rgba(RED, 0.10), duration: 14, delay: 0,   scale: [1, 1.04, 1] },
-    { size: '65%',  border: rgba(RED, 0.14), duration: 10, delay: 1.5, scale: [1, 1.06, 1] },
-    { size: '44%',  border: rgba(RED, 0.18), duration: 8,  delay: 0.8, scale: [1, 1.08, 1] },
-    { size: '26%',  border: rgba(REDB, 0.22), duration: 6, delay: 2,   scale: [1, 1.10, 1] },
-    { size: '12%',  border: rgba(REDB, 0.30), duration: 5, delay: 0.4, scale: [1, 1.14, 1] },
-  ]
+  const ref = useCanvasLoop((ctx, W, H, t) => {
+    ctx.clearRect(0, 0, W, H)
 
-  const centreStyle: CSSProperties = {
-    position: 'absolute', top: '50%', left: '50%',
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '50%',
-  }
+    const cx = W / 2
+    const cy = H / 2
+    const maxR = Math.min(W, H) * 0.54
 
-  return (
-    <div aria-hidden="true" style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+    // ── Init orbiting particles once ──
+    if (orbs.current.length === 0) {
+      const ringRadii = [0.22, 0.42]
+      for (const rFrac of ringRadii) {
+        const count = rFrac < 0.3 ? 8 : 12
+        for (let i = 0; i < count; i++) {
+          orbs.current.push({
+            angle: (i / count) * Math.PI * 2,
+            speed: (rFrac < 0.3 ? 0.28 : 0.16) * (Math.random() > 0.5 ? 1 : -1),
+            ringR: rFrac,
+            size:  rFrac < 0.3 ? 2.2 : 1.6,
+            col:   rFrac < 0.3 ? REDB : RED,
+          })
+        }
+      }
+    }
 
-      {/* Ambient depth glows */}
-      {glows.map((g, i) => (
-        <motion.div
-          key={`g${i}`}
-          style={{
-            ...centreStyle,
-            width: g.size, height: g.size,
-            background: `radial-gradient(circle, ${g.color} 0%, transparent 70%)`,
-            filter: `blur(${g.blur}px)`,
-          }}
-          animate={{ scale: g.scale, opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: g.duration, repeat: Infinity, ease: 'easeInOut', delay: i * 2 }}
-        />
-      ))}
+    // ── Ambient deep glow ──
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.9)
+    glow.addColorStop(0,   rgba(RED,  0.22))
+    glow.addColorStop(0.4, rgba(RED,  0.10))
+    glow.addColorStop(0.75, rgba(RED, 0.03))
+    glow.addColorStop(1,   rgba(RED,  0))
+    ctx.fillStyle = glow
+    ctx.beginPath(); ctx.arc(cx, cy, maxR * 0.9, 0, Math.PI * 2); ctx.fill()
 
-      {/* Concentric rings */}
-      {rings.map((r, i) => (
-        <motion.div
-          key={`r${i}`}
-          style={{
-            ...centreStyle,
-            width: r.size, height: r.size,
-            border: `1px solid ${r.border}`,
-            boxShadow: `0 0 12px 2px ${r.border}, inset 0 0 12px 2px ${r.border}`,
-          }}
-          animate={{ scale: r.scale, opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: r.duration, delay: r.delay, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
+    // ── Static concentric rings (faint) ──
+    const staticRings = [0.20, 0.36, 0.54, 0.72, 0.90]
+    for (let i = 0; i < staticRings.length; i++) {
+      const r = staticRings[i] * maxR
+      const pulse = 0.5 + 0.5 * Math.sin(t * 1.4 + i * 0.9)
+      const alpha = 0.06 + 0.08 * pulse
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ctx.strokeStyle = rgba(RED, alpha)
+      ctx.lineWidth = 1
+      ctx.stroke()
+    }
 
-      {/* Corner accent blobs — very soft */}
-      {[
-        { left: '0%',  top: '0%',  color: rgba(RED, 0.10) },
-        { left: '65%', top: '0%',  color: rgba(RED, 0.08) },
-        { left: '0%',  top: '55%', color: rgba(RED, 0.08) },
-        { left: '65%', top: '55%', color: rgba(RED, 0.10) },
-      ].map((a, i) => (
-        <motion.div
-          key={`a${i}`}
-          style={{
-            position: 'absolute', ...a,
-            width: '35%', height: '45%',
-            borderRadius: '50%',
-            background: `radial-gradient(circle, ${a.color} 0%, transparent 70%)`,
-            filter: 'blur(55px)',
-          }}
-          animate={{ opacity: [0.4, 0.8, 0.4], scale: [0.95, 1.05, 0.95] }}
-          transition={{ duration: 7 + i * 1.5, repeat: Infinity, ease: 'easeInOut', delay: i }}
-        />
-      ))}
-    </div>
-  )
+    // ── Rotating arc segments on two rings ──
+    const arcRings = [
+      { rFrac: 0.36, segments: 6, arcLen: 0.38, rotSpeed: 0.12,  alpha: 0.35, width: 1.5 },
+      { rFrac: 0.54, segments: 4, arcLen: 0.50, rotSpeed: -0.08, alpha: 0.28, width: 1.2 },
+      { rFrac: 0.72, segments: 8, arcLen: 0.22, rotSpeed: 0.06,  alpha: 0.20, width: 1.0 },
+    ]
+    for (const ar of arcRings) {
+      const r = ar.rFrac * maxR
+      const gapPerSeg = (Math.PI * 2) / ar.segments
+      const offset = t * ar.rotSpeed
+      for (let s = 0; s < ar.segments; s++) {
+        const start = offset + s * gapPerSeg
+        const end   = start + ar.arcLen
+        ctx.beginPath(); ctx.arc(cx, cy, r, start, end)
+        ctx.strokeStyle = rgba(REDB, ar.alpha)
+        ctx.lineWidth = ar.width
+        ctx.stroke()
+      }
+    }
+
+    // ── Emit new pulse every 2.2s ──
+    if (t > nextPulse.current) {
+      pulses.current.push({ r: 0, maxR: maxR * 1.05, alpha: 0.55, speed: maxR * 0.38 })
+      nextPulse.current = t + 2.2
+    }
+
+    // ── Draw + age pulse rings ──
+    for (let i = pulses.current.length - 1; i >= 0; i--) {
+      const p = pulses.current[i]
+      p.r += p.speed * 0.016
+      p.alpha = 0.55 * (1 - p.r / p.maxR)
+      if (p.alpha <= 0.005) { pulses.current.splice(i, 1); continue }
+      ctx.beginPath(); ctx.arc(cx, cy, p.r, 0, Math.PI * 2)
+      ctx.strokeStyle = rgba(RED, p.alpha)
+      ctx.lineWidth   = 2.5 * (1 - p.r / p.maxR) + 0.5
+      ctx.stroke()
+    }
+
+    // ── Orbiting particles ──
+    for (const orb of orbs.current) {
+      orb.angle += orb.speed * 0.016
+      const r   = orb.ringR * maxR
+      const px  = cx + Math.cos(orb.angle) * r
+      const py  = cy + Math.sin(orb.angle) * r
+      const pulse = 0.7 + 0.3 * Math.sin(t * 3 + orb.angle * 4)
+
+      // Halo
+      const hg = ctx.createRadialGradient(px, py, 0, px, py, orb.size * 5)
+      hg.addColorStop(0, rgba(orb.col, 0.35 * pulse))
+      hg.addColorStop(1, rgba(orb.col, 0))
+      ctx.fillStyle = hg
+      ctx.beginPath(); ctx.arc(px, py, orb.size * 5, 0, Math.PI * 2); ctx.fill()
+
+      // Core
+      ctx.beginPath(); ctx.arc(px, py, orb.size, 0, Math.PI * 2)
+      ctx.fillStyle = rgba(orb.col, 0.9 * pulse)
+      ctx.fill()
+    }
+
+    // ── Bright core glow ──
+    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.12)
+    core.addColorStop(0,   rgba(REDB, 0.55))
+    core.addColorStop(0.5, rgba(RED,  0.20))
+    core.addColorStop(1,   rgba(RED,  0))
+    ctx.fillStyle = core
+    ctx.beginPath(); ctx.arc(cx, cy, maxR * 0.12, 0, Math.PI * 2); ctx.fill()
+  })
+
+  return <canvas ref={ref} style={canvasStyle} aria-hidden="true" />
 }
 
 // ─────────────────────────────────────────────────────────────
 // AURORA WAVES — CTA
-// Stacked filled sine-wave bands that morph over time.
-// Each band is a filled path so it looks volumetric, not just a line.
+// Stacked filled sine-wave bands. 6px step for perf.
 // ─────────────────────────────────────────────────────────────
 function AuroraBg() {
   const ref = useCanvasLoop((ctx, W, H, t) => {
@@ -229,28 +275,27 @@ function AuroraBg() {
       { yBase: 0.85, amp: 0.06, freq: 0.0038, speed: 0.20, col: RED,  alpha: 0.16, thickness: 0.12, phase: 4.2  },
     ]
 
-    for (const w of waves) {
-      const y0 = w.yBase * H
-      const amp = w.amp * H
-      const thick = w.thickness * H
-      const ph = w.phase + t * w.speed
+    const STEP = 6  // was 4px — 33% fewer lineTo calls
 
-      // Build top edge of band
+    for (const w of waves) {
+      const y0    = w.yBase * H
+      const amp   = w.amp * H
+      const thick = w.thickness * H
+      const ph    = w.phase + t * w.speed
+
       ctx.beginPath()
-      for (let x = 0; x <= W; x += 4) {
+      for (let x = 0; x <= W; x += STEP) {
         const y = y0 + amp * Math.sin(x * w.freq + ph)
                      + amp * 0.4 * Math.sin(x * w.freq * 2.3 + ph * 1.4 + 0.8)
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
       }
-      // Close path with band thickness (bottom edge = slightly offset wave)
-      for (let x = W; x >= 0; x -= 4) {
+      for (let x = W; x >= 0; x -= STEP) {
         const y = y0 + thick + amp * 0.7 * Math.sin(x * w.freq + ph + 0.4)
                               + amp * 0.25 * Math.sin(x * w.freq * 2.1 + ph * 1.2)
         ctx.lineTo(x, y)
       }
       ctx.closePath()
 
-      // Vertical gradient fill: bright centre of band → transparent edges
       const grad = ctx.createLinearGradient(0, y0 - amp, 0, y0 + thick + amp)
       grad.addColorStop(0,   rgba(w.col, 0))
       grad.addColorStop(0.3, rgba(w.col, w.alpha * 0.5))
@@ -260,15 +305,14 @@ function AuroraBg() {
       ctx.fillStyle = grad
       ctx.fill()
 
-      // Bright glowing top edge line
       ctx.beginPath()
-      for (let x = 0; x <= W; x += 4) {
+      for (let x = 0; x <= W; x += STEP) {
         const y = y0 + amp * Math.sin(x * w.freq + ph)
                      + amp * 0.4 * Math.sin(x * w.freq * 2.3 + ph * 1.4 + 0.8)
         x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
       }
       ctx.strokeStyle = rgba(w.col, w.alpha * 1.8)
-      ctx.lineWidth = 1.5
+      ctx.lineWidth   = 1.5
       ctx.stroke()
     }
   })
@@ -278,8 +322,8 @@ function AuroraBg() {
 
 // ─────────────────────────────────────────────────────────────
 // CONSTELLATION — Contact
-// Floating nodes connected by glowing lines when close.
-// Very calm, elegant, professional.
+// 55 nodes (down from 80), flat-color lines (no per-line gradient),
+// simple arc halos (no createRadialGradient per node).
 // ─────────────────────────────────────────────────────────────
 interface Node { x: number; y: number; vx: number; vy: number; r: number; col: { r: number; g: number; b: number } }
 
@@ -288,17 +332,18 @@ function ConstellationBg() {
 
   function initNodes(W: number, H: number) {
     const cols = [RED, RED, BLUE, BLUE, PURP]
-    nodes.current = Array.from({ length: 80 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.28,
-      vy: (Math.random() - 0.5) * 0.18,
-      r: 1.2 + Math.random() * 1.8,
+    nodes.current = Array.from({ length: 55 }, () => ({
+      x:   Math.random() * W,
+      y:   Math.random() * H,
+      vx:  (Math.random() - 0.5) * 0.28,
+      vy:  (Math.random() - 0.5) * 0.18,
+      r:   1.2 + Math.random() * 1.8,
       col: cols[Math.floor(Math.random() * cols.length)],
     }))
   }
 
   let prevW = 0, prevH = 0
+
   const ref = useCanvasLoop((ctx, W, H, t) => {
     if (W !== prevW || H !== prevH) { initNodes(W, H); prevW = W; prevH = H }
 
@@ -306,52 +351,49 @@ function ConstellationBg() {
     ctx.fillRect(0, 0, W, H)
 
     const maxDist = Math.min(W, H) * 0.22
+    const ns = nodes.current
 
     // Move nodes
-    for (const n of nodes.current) {
+    for (const n of ns) {
       n.x += n.vx; n.y += n.vy
       if (n.x < 0 || n.x > W) n.vx *= -1
       if (n.y < 0 || n.y > H) n.vy *= -1
     }
 
-    // Draw connections
-    for (let i = 0; i < nodes.current.length; i++) {
-      for (let j = i + 1; j < nodes.current.length; j++) {
-        const a = nodes.current[i], b = nodes.current[j]
+    // Draw connections — flat color, no gradient object per line
+    for (let i = 0; i < ns.length; i++) {
+      for (let j = i + 1; j < ns.length; j++) {
+        const a = ns[i], b = ns[j]
         const dx = a.x - b.x, dy = a.y - b.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist > maxDist) continue
+        const dist2 = dx * dx + dy * dy
+        if (dist2 > maxDist * maxDist) continue
 
-        const alpha = (1 - dist / maxDist) * 0.35
+        const alpha = (1 - Math.sqrt(dist2) / maxDist) * 0.30
         const pulse = 0.7 + 0.3 * Math.sin(t * 1.5 + i * 0.3 + j * 0.2)
-
-        const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y)
-        grad.addColorStop(0, rgba(a.col, alpha * pulse))
-        grad.addColorStop(1, rgba(b.col, alpha * pulse))
+        // Blend the two node colors manually
+        const { r, g, b } = { r: (a.col.r + b.col.r) >> 1, g: (a.col.g + b.col.g) >> 1, b: (a.col.b + b.col.b) >> 1 }
 
         ctx.beginPath()
         ctx.moveTo(a.x, a.y)
         ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = grad
+        ctx.strokeStyle = `rgba(${r},${g},${b},${(alpha * pulse).toFixed(3)})`
         ctx.lineWidth = 0.8
         ctx.stroke()
       }
     }
 
-    // Draw nodes + soft glow
-    for (const n of nodes.current) {
+    // Draw nodes — simple arc halo, no createRadialGradient
+    for (const n of ns) {
       const pulse = 0.75 + 0.25 * Math.sin(t * 1.2 + n.x * 0.01)
 
-      // Outer halo
-      const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5)
-      g.addColorStop(0, rgba(n.col, 0.20 * pulse))
-      g.addColorStop(1, rgba(n.col, 0))
-      ctx.fillStyle = g
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2); ctx.fill()
+      // Soft halo — just a large semi-transparent filled circle
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 4.5, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(${n.col.r},${n.col.g},${n.col.b},${(0.12 * pulse).toFixed(3)})`
+      ctx.fill()
 
       // Core dot
       ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-      ctx.fillStyle = rgba(n.col, 0.85 * pulse)
+      ctx.fillStyle = `rgba(${n.col.r},${n.col.g},${n.col.b},${(0.85 * pulse).toFixed(3)})`
       ctx.fill()
     }
   })
