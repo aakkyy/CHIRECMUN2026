@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import styles from './Countdown.module.css'
-import AnimatedBg from './AnimatedBg'
+import BlobBg from './BlobBg'
 import { viewport } from '../lib/motion'
 
 const CONFERENCE = new Date('2026-07-31T08:00:00+05:30')
@@ -58,7 +58,7 @@ export default function Countdown() {
   return (
     <section className={`section ${styles.section}`} id="countdown" style={{ position: 'relative', overflow: 'hidden' }}>
       <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(4,6,10,0.62) 0%, rgba(4,6,10,0.55) 100%)',zIndex:0,pointerEvents:'none'}} />
-      <AnimatedBg variant="red" />
+      <BlobBg variant="red" />
       <div className={styles.bgText} aria-hidden="true">2026</div>
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>

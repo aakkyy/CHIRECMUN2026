@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AnimatedBg from './AnimatedBg'
+import BlobBg from './BlobBg'
 import { motion } from 'framer-motion'
 import styles from './Contact.module.css'
 import { slideLeft, slideRight, stagger, itemVariant, viewport } from '../lib/motion'
@@ -7,21 +7,34 @@ import { slideLeft, slideRight, stagger, itemVariant, viewport } from '../lib/mo
 export default function Contact() {
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    const { firstName, lastName, email, message } = form
-    const body = encodeURIComponent(`Name: ${firstName} ${lastName}\n\n${message}`)
-    const subject = encodeURIComponent('CHIREC MUN 2026 Enquiry')
-    window.location.href = `mailto:contact.mun@chirec.ac.in?subject=${subject}&body=${body}`
-    setSent(true)
+    setSubmitting(true)
+    setError('')
+    try {
+      const res = await fetch('/api/contact/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Something went wrong.')
+      setSent(true)
+    } catch (err: any) {
+      setError(err.message || 'Failed to send. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
     <section className={`section ${styles.section}`} id="contact" style={{position:'relative',overflow:'hidden'}}>
-      <AnimatedBg variant="streams" color="86,204,242" color2="120,55,210" />
+      <BlobBg variant="contact" />
       <div className="container" style={{position:"relative",zIndex:1}}>
         <div className={styles.grid}>
 
@@ -96,11 +109,22 @@ export default function Contact() {
                   <textarea name="message" value={form.message} onChange={handle} className={`${styles.input} ${styles.textarea}`} rows={5} />
                 </motion.div>
                 <motion.div className={styles.formFooter} variants={itemVariant}>
-                  <motion.button type="submit" className={styles.btn}
-                    whileHover={{ scale: 1.04, boxShadow: '0 8px 28px rgba(86,204,242,0.35)' }}
-                    whileTap={{ scale: 0.97 }}
+                  {error && (
+                    <p style={{ color: '#e74c3c', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
+                      {error}
+                    </p>
+                  )}
+                  <motion.button
+                    type="submit"
+                    className={styles.btn}
+                    disabled={submitting}
+                    style={{ opacity: submitting ? 0.6 : 1 }}
+                    whileHover={!submitting ? { scale: 1.04, boxShadow: '0 8px 28px rgba(86,204,242,0.35)' } : {}}
+                    whileTap={!submitting ? { scale: 0.97 } : {}}
                     transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-                  >Send</motion.button>
+                  >
+                    {submitting ? 'Sending…' : 'Send'}
+                  </motion.button>
                 </motion.div>
               </form>
             )}

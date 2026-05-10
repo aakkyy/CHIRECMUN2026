@@ -1,0 +1,11 @@
+/* Sits between the dark background and the star canvas.
+   mix-blend-mode: screen lets the pillar and fog add light
+   to the scene without obscuring the stars behind it.        */
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}

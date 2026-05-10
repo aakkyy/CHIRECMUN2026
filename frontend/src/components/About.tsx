@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import AnimatedBg from './AnimatedBg'
+import BlobBg from './BlobBg'
 import styles from './About.module.css'
 import { slideLeft, viewport } from '../lib/motion'
 
@@ -30,7 +30,7 @@ const pillars = [
 export default function About() {
   return (
     <section className={`section ${styles.section}`} id="about" style={{ position: 'relative', overflow: 'hidden' }}>
-      <AnimatedBg variant="nebula" color="86,204,242" color2="120,55,210" />
+      <BlobBg variant="nebula" />
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className={styles.grid}>
 

@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
 import BlobButton from './BlobButton'
+import CinematicAtmosphere from './CinematicAtmosphere'
 
 const CHIREC_LETTERS = [
   { char: 'C', color: '#e74c3c', glow: 'rgba(231,76,60,0.85)'   },  // red
@@ -127,6 +128,7 @@ export default function Hero() {
   return (
     <section ref={heroRef} className={styles.hero} id="hero">
       <canvas ref={canvasRef} className={styles.canvas} />
+      <CinematicAtmosphere />
       <div className={styles.vignette} />
 
       <motion.div

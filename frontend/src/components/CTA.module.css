@@ -60,59 +60,103 @@
   display: inline-flex;
   align-items: center;
   padding: 1rem 2.6rem;
-  background: linear-gradient(135deg, rgba(192,57,43,0.72) 0%, rgba(160,35,25,0.55) 100%);
-  backdrop-filter: blur(18px) saturate(200%);
-  -webkit-backdrop-filter: blur(18px) saturate(200%);
-  color: #fff;
+  background: linear-gradient(
+    160deg,
+    rgba(32, 10, 8, 0.86) 0%,
+    rgba(20, 6, 4, 0.80) 100%
+  );
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  color: rgba(255, 255, 255, 0.92);
   font-family: 'Geist', sans-serif;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   border-radius: 999px;
-  border: 1px solid rgba(231,76,60,0.55);
+  border: 1px solid rgba(192, 57, 43, 0.24);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.18),
-    inset 0 -1px 0 rgba(0,0,0,0.15),
-    0 6px 28px rgba(192,57,43,0.38);
-  transition: background .3s, box-shadow .3s, transform .2s;
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 2px 8px rgba(0, 0, 0, 0.5);
+  will-change: transform, box-shadow;
+  transition:
+    background 0.38s ease,
+    border-color 0.38s ease,
+    box-shadow 0.45s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btnPrimary:hover {
-  background: linear-gradient(135deg, rgba(231,76,60,0.85) 0%, rgba(192,57,43,0.68) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(48, 14, 10, 0.92) 0%,
+    rgba(30, 9, 6, 0.86) 100%
+  );
+  border-color: rgba(192, 57, 43, 0.40);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.22),
-    inset 0 -1px 0 rgba(0,0,0,0.15),
-    0 12px 44px rgba(192,57,43,0.55);
-  transform: translateY(-3px);
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 4px 18px rgba(0, 0, 0, 0.55),
+    0 0 32px rgba(192, 57, 43, 0.14),
+    0 0 72px rgba(160, 35, 25, 0.07);
+}
+.btnPrimary:active {
+  transform: translateY(1px) scale(0.984);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.32),
+    0 1px 4px rgba(0, 0, 0, 0.45);
+  transition-duration: 0.09s;
 }
 
 .btnOutline {
   display: inline-flex;
   align-items: center;
   padding: 1rem 2.6rem;
-  background: linear-gradient(135deg, rgba(244,244,239,0.06) 0%, rgba(244,244,239,0.03) 100%);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  color: rgba(244,244,239,0.88);
+  background: linear-gradient(
+    160deg,
+    rgba(244, 244, 239, 0.04) 0%,
+    rgba(244, 244, 239, 0.02) 100%
+  );
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  color: rgba(244, 244, 239, 0.72);
   font-family: 'Geist', sans-serif;
   font-weight: 700;
   font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   border-radius: 999px;
-  border: 1px solid rgba(244,244,239,0.22);
+  border: 1px solid rgba(244, 244, 239, 0.13);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.08),
-    0 6px 24px rgba(0,0,0,0.2);
-  transition: background .3s, border-color .3s, box-shadow .3s, transform .2s;
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+  will-change: transform, box-shadow;
+  transition:
+    background 0.38s ease,
+    border-color 0.38s ease,
+    box-shadow 0.45s ease,
+    color 0.3s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btnOutline:hover {
-  background: linear-gradient(135deg, rgba(244,244,239,0.12) 0%, rgba(244,244,239,0.07) 100%);
-  border-color: rgba(244,244,239,0.45);
+  background: linear-gradient(
+    160deg,
+    rgba(244, 244, 239, 0.07) 0%,
+    rgba(244, 244, 239, 0.04) 100%
+  );
+  border-color: rgba(244, 244, 239, 0.26);
+  color: rgba(244, 244, 239, 0.90);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 rgba(0,0,0,0.08),
-    0 10px 36px rgba(0,0,0,0.3);
-  transform: translateY(-3px);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.45),
+    0 0 28px rgba(244, 244, 239, 0.04);
+}
+.btnOutline:active {
+  transform: translateY(1px) scale(0.984);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.28),
+    0 1px 3px rgba(0, 0, 0, 0.35);
+  transition-duration: 0.09s;
 }

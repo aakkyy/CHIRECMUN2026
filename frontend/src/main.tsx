@@ -17,7 +17,7 @@ if (!root) throw new Error('Root element not found')
 createRoot(root).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/static/react">
+      <BrowserRouter basename="/">
         <App />
       </BrowserRouter>
     </QueryClientProvider>
