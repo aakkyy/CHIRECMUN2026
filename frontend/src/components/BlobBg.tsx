@@ -128,70 +128,153 @@ function NebulaBg() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// WARM SPACE — Countdown
-// Deep space star field with warm drifting nebula glow.
-// Subtle, covers the full section, space-themed, warm palette.
+// ASTEROID BELT — Countdown
+// A diagonal belt of rocky asteroids drifting across deep space.
+// Red, blue and grey asteroids. Only a slice of the belt visible.
+// Stars in background. Belt moves bottom-left to top-right.
 // ─────────────────────────────────────────────────────────────
-interface Star { x: number; y: number; r: number; base: number; phase: number; warm: boolean }
 
-function WarmSpaceBg() {
-  const stars = useRef<Star[]>([])
+// Belt direction: moving toward top-right (~-25° from horizontal)
+const BELT_ANG   = -Math.PI * 0.14   // travel angle
+const BELT_COS   = Math.cos(BELT_ANG)
+const BELT_SIN   = Math.sin(BELT_ANG)
+// Perpendicular to belt (to scatter asteroids across the band width)
+const PERP_COS   = Math.cos(BELT_ANG + Math.PI / 2)
+const PERP_SIN   = Math.sin(BELT_ANG + Math.PI / 2)
+
+const ROCK_COLORS = [
+  // Reds
+  [175, 52, 35], [155, 40, 26], [195, 68, 44],
+  // Blues
+  [58, 98, 188], [46, 82, 162], [72, 115, 205],
+  // Greys
+  [112, 108, 104], [88, 84, 80], [132, 128, 122],
+]
+
+interface Rock {
+  // belt-space coords (along belt, perpendicular offset)
+  along: number; perp: number
+  // world
+  x: number; y: number
+  r: number; rot: number; rotSpd: number; spd: number
+  col: number[]; alpha: number
+  verts: Array<[number, number]>  // pre-computed polygon points
+}
+
+function spawnRock(W: number, H: number, along?: number): Rock {
+  const r      = 2.8 + Math.random() * 13
+  const spd    = 18 + Math.random() * 22              // px/s, smaller bias
+  const beltW  = Math.min(W, H) * 0.52               // visible belt width
+  const perp   = (Math.random() - 0.5) * beltW
+  const al     = along ?? Math.random()               // 0–1 position along belt
+
+  // Map to world coords: belt centre runs diagonally through middle of canvas
+  const cx = W * 0.5, cy = H * 0.5
+  const halfLen = Math.hypot(W, H)
+  const tx = al * 2 - 1                              // -1 to 1 along belt
+  const x  = cx + BELT_COS * tx * halfLen + PERP_COS * perp
+  const y  = cy + BELT_SIN * tx * halfLen + PERP_SIN * perp
+
+  const nPts = 6 + Math.floor(Math.random() * 5)
+  const verts: Array<[number, number]> = Array.from({ length: nPts }, (_, i) => {
+    const ang = (i / nPts) * Math.PI * 2 + (Math.random() - 0.5) * 0.6
+    const rad = r * (0.55 + Math.random() * 0.55)
+    return [Math.cos(ang) * rad, Math.sin(ang) * rad]
+  })
+
+  return {
+    along: al, perp,
+    x, y, r,
+    rot:    Math.random() * Math.PI * 2,
+    rotSpd: (Math.random() - 0.5) * 0.012,
+    spd,
+    col:   ROCK_COLORS[Math.floor(Math.random() * ROCK_COLORS.length)],
+    alpha: 0.45 + Math.random() * 0.45,
+    verts,
+  }
+}
+
+interface BGStar { x: number; y: number; r: number; base: number; phase: number }
+
+function AsteroidBeltBg() {
+  const rocks  = useRef<Rock[]>([])
+  const bgStars = useRef<BGStar[]>([])
   let prevW = 0, prevH = 0
 
-  function initStars(W: number, H: number) {
-    stars.current = Array.from({ length: 200 }, () => ({
-      x:     Math.random() * W,
-      y:     Math.random() * H,
-      r:     0.25 + Math.random() * 0.9,
-      base:  0.12 + Math.random() * 0.6,
+  function init(W: number, H: number) {
+    rocks.current = Array.from({ length: 75 }, () => spawnRock(W, H))
+    bgStars.current = Array.from({ length: 160 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: 0.2 + Math.random() * 0.8,
+      base: 0.1 + Math.random() * 0.55,
       phase: Math.random() * Math.PI * 2,
-      warm:  Math.random() > 0.6,
     }))
   }
 
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW || H !== prevH) { initStars(W, H); prevW = W; prevH = H }
+    if (W !== prevW || H !== prevH) { init(W, H); prevW = W; prevH = H }
+    const dt = 0.016
 
     ctx.clearRect(0, 0, W, H)
 
-    // ── Nebula layer 1: large warm centred glow ──
-    const cx = W * 0.5, cy = H * 0.5
-    const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.65)
-    g1.addColorStop(0,    'rgba(175,48,28,0.18)')
-    g1.addColorStop(0.45, 'rgba(140,32,18,0.07)')
-    g1.addColorStop(1,    'rgba(90,14,6,0)')
-    ctx.fillStyle = g1
+    // ── Faint nebula warmth behind belt ──
+    const ng = ctx.createLinearGradient(0, H, W, 0)
+    ng.addColorStop(0,   'rgba(80,18,8,0.18)')
+    ng.addColorStop(0.5, 'rgba(100,22,10,0.08)')
+    ng.addColorStop(1,   'rgba(60,14,6,0.04)')
+    ctx.fillStyle = ng
     ctx.fillRect(0, 0, W, H)
 
-    // ── Nebula layer 2: drifting amber left ──
-    const ax = W * 0.22 + Math.sin(t * 0.07) * W * 0.07
-    const ay = H * 0.48 + Math.cos(t * 0.05) * H * 0.09
-    const g2 = ctx.createRadialGradient(ax, ay, 0, ax, ay, W * 0.38)
-    g2.addColorStop(0,   'rgba(200,75,22,0.10)')
-    g2.addColorStop(0.5, 'rgba(160,45,12,0.04)')
-    g2.addColorStop(1,   'rgba(120,25,8,0)')
-    ctx.fillStyle = g2
-    ctx.fillRect(0, 0, W, H)
-
-    // ── Nebula layer 3: drifting right ──
-    const bx = W * 0.78 + Math.cos(t * 0.06) * W * 0.06
-    const by = H * 0.52 + Math.sin(t * 0.08) * H * 0.08
-    const g3 = ctx.createRadialGradient(bx, by, 0, bx, by, W * 0.32)
-    g3.addColorStop(0,   'rgba(155,38,20,0.09)')
-    g3.addColorStop(1,   'rgba(100,18,8,0)')
-    ctx.fillStyle = g3
-    ctx.fillRect(0, 0, W, H)
-
-    // ── Stars ──
-    for (const s of stars.current) {
-      const twinkle = 0.55 + 0.45 * Math.sin(t * 0.9 + s.phase)
-      const alpha   = s.base * twinkle
-      ctx.beginPath()
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
-      ctx.fillStyle = s.warm
-        ? `rgba(255,215,170,${alpha.toFixed(3)})`
-        : `rgba(255,245,235,${alpha.toFixed(3)})`
+    // ── Background stars ──
+    for (const s of bgStars.current) {
+      const a = s.base * (0.5 + 0.5 * Math.sin(t * 0.8 + s.phase))
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,240,225,${a.toFixed(3)})`
       ctx.fill()
+    }
+
+    // ── Asteroids ──
+    for (const rock of rocks.current) {
+      // Move along belt direction
+      rock.x += BELT_COS * rock.spd * dt
+      rock.y += BELT_SIN * rock.spd * dt
+      rock.rot += rock.rotSpd
+
+      // Wrap: when out of canvas, re-enter from the opposite side
+      const pad = rock.r * 3
+      if (rock.x > W + pad || rock.x < -pad || rock.y > H + pad || rock.y < -pad) {
+        // Re-spawn entering from bottom-left edge of belt
+        const fresh = spawnRock(W, H, 0.02)
+        Object.assign(rock, fresh)
+      }
+
+      ctx.save()
+      ctx.translate(rock.x, rock.y)
+      ctx.rotate(rock.rot)
+
+      // Rocky body
+      ctx.beginPath()
+      rock.verts.forEach(([px, py], i) => i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py))
+      ctx.closePath()
+
+      const [cr, cg, cb] = rock.col
+      ctx.fillStyle   = `rgba(${cr},${cg},${cb},${rock.alpha})`
+      ctx.strokeStyle = `rgba(${Math.max(0,cr-30)},${Math.max(0,cg-30)},${Math.max(0,cb-30)},${rock.alpha * 0.5})`
+      ctx.lineWidth   = 0.6
+      ctx.fill()
+      ctx.stroke()
+
+      // Highlight sliver (top-left face lit by distant star)
+      ctx.beginPath()
+      if (rock.verts.length > 1) {
+        ctx.moveTo(rock.verts[0][0], rock.verts[0][1])
+        ctx.lineTo(rock.verts[1][0], rock.verts[1][1])
+      }
+      ctx.strokeStyle = `rgba(255,240,220,${rock.alpha * 0.25})`
+      ctx.lineWidth   = 0.8
+      ctx.stroke()
+
+      ctx.restore()
     }
   })
 
@@ -355,7 +438,7 @@ const canvasStyle: CSSProperties = {
 interface BlobBgProps { variant?: 'nebula' | 'red' | 'cta' | 'contact' }
 
 export default function BlobBg({ variant = 'nebula' }: BlobBgProps) {
-  if (variant === 'red')     return <WarmSpaceBg />
+  if (variant === 'red')     return <AsteroidBeltBg />
   if (variant === 'cta')     return <AuroraBg />
   if (variant === 'contact') return <ConstellationBg />
   return <NebulaBg />
