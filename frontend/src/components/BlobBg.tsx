@@ -128,130 +128,71 @@ function NebulaBg() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// RADIAL PULSE — Countdown
-// Canvas-based. Pulse rings expand outward from center,
-// orbiting particles trace the rings, deep ambient glow.
-// Cinematic and zero DOM overhead.
+// WARM SPACE — Countdown
+// Deep space star field with warm drifting nebula glow.
+// Subtle, covers the full section, space-themed, warm palette.
 // ─────────────────────────────────────────────────────────────
-interface Pulse { r: number; maxR: number; alpha: number; speed: number }
-interface Orb   { angle: number; speed: number; ringR: number; size: number; col: typeof RED }
+interface Star { x: number; y: number; r: number; base: number; phase: number; warm: boolean }
 
-function RadialBg() {
-  const pulses = useRef<Pulse[]>([])
-  const orbs   = useRef<Orb[]>([])
-  let nextPulse = useRef(0)
+function WarmSpaceBg() {
+  const stars = useRef<Star[]>([])
+  let prevW = 0, prevH = 0
+
+  function initStars(W: number, H: number) {
+    stars.current = Array.from({ length: 200 }, () => ({
+      x:     Math.random() * W,
+      y:     Math.random() * H,
+      r:     0.25 + Math.random() * 0.9,
+      base:  0.12 + Math.random() * 0.6,
+      phase: Math.random() * Math.PI * 2,
+      warm:  Math.random() > 0.6,
+    }))
+  }
 
   const ref = useCanvasLoop((ctx, W, H, t) => {
+    if (W !== prevW || H !== prevH) { initStars(W, H); prevW = W; prevH = H }
+
     ctx.clearRect(0, 0, W, H)
 
-    const cx = W / 2
-    const cy = H / 2
-    const maxR = Math.min(W, H) * 0.54
+    // ── Nebula layer 1: large warm centred glow ──
+    const cx = W * 0.5, cy = H * 0.5
+    const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.65)
+    g1.addColorStop(0,    'rgba(175,48,28,0.18)')
+    g1.addColorStop(0.45, 'rgba(140,32,18,0.07)')
+    g1.addColorStop(1,    'rgba(90,14,6,0)')
+    ctx.fillStyle = g1
+    ctx.fillRect(0, 0, W, H)
 
-    // ── Init orbiting particles once ──
-    if (orbs.current.length === 0) {
-      const ringRadii = [0.22, 0.42]
-      for (const rFrac of ringRadii) {
-        const count = rFrac < 0.3 ? 8 : 12
-        for (let i = 0; i < count; i++) {
-          orbs.current.push({
-            angle: (i / count) * Math.PI * 2,
-            speed: (rFrac < 0.3 ? 0.28 : 0.16) * (Math.random() > 0.5 ? 1 : -1),
-            ringR: rFrac,
-            size:  rFrac < 0.3 ? 2.2 : 1.6,
-            col:   rFrac < 0.3 ? REDB : RED,
-          })
-        }
-      }
-    }
+    // ── Nebula layer 2: drifting amber left ──
+    const ax = W * 0.22 + Math.sin(t * 0.07) * W * 0.07
+    const ay = H * 0.48 + Math.cos(t * 0.05) * H * 0.09
+    const g2 = ctx.createRadialGradient(ax, ay, 0, ax, ay, W * 0.38)
+    g2.addColorStop(0,   'rgba(200,75,22,0.10)')
+    g2.addColorStop(0.5, 'rgba(160,45,12,0.04)')
+    g2.addColorStop(1,   'rgba(120,25,8,0)')
+    ctx.fillStyle = g2
+    ctx.fillRect(0, 0, W, H)
 
-    // ── Ambient deep glow ──
-    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.9)
-    glow.addColorStop(0,   rgba(RED,  0.22))
-    glow.addColorStop(0.4, rgba(RED,  0.10))
-    glow.addColorStop(0.75, rgba(RED, 0.03))
-    glow.addColorStop(1,   rgba(RED,  0))
-    ctx.fillStyle = glow
-    ctx.beginPath(); ctx.arc(cx, cy, maxR * 0.9, 0, Math.PI * 2); ctx.fill()
+    // ── Nebula layer 3: drifting right ──
+    const bx = W * 0.78 + Math.cos(t * 0.06) * W * 0.06
+    const by = H * 0.52 + Math.sin(t * 0.08) * H * 0.08
+    const g3 = ctx.createRadialGradient(bx, by, 0, bx, by, W * 0.32)
+    g3.addColorStop(0,   'rgba(155,38,20,0.09)')
+    g3.addColorStop(1,   'rgba(100,18,8,0)')
+    ctx.fillStyle = g3
+    ctx.fillRect(0, 0, W, H)
 
-    // ── Static concentric rings (faint) ──
-    const staticRings = [0.20, 0.36, 0.54, 0.72, 0.90]
-    for (let i = 0; i < staticRings.length; i++) {
-      const r = staticRings[i] * maxR
-      const pulse = 0.5 + 0.5 * Math.sin(t * 1.4 + i * 0.9)
-      const alpha = 0.06 + 0.08 * pulse
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
-      ctx.strokeStyle = rgba(RED, alpha)
-      ctx.lineWidth = 1
-      ctx.stroke()
-    }
-
-    // ── Rotating arc segments on two rings ──
-    const arcRings = [
-      { rFrac: 0.36, segments: 6, arcLen: 0.38, rotSpeed: 0.12,  alpha: 0.35, width: 1.5 },
-      { rFrac: 0.54, segments: 4, arcLen: 0.50, rotSpeed: -0.08, alpha: 0.28, width: 1.2 },
-      { rFrac: 0.72, segments: 8, arcLen: 0.22, rotSpeed: 0.06,  alpha: 0.20, width: 1.0 },
-    ]
-    for (const ar of arcRings) {
-      const r = ar.rFrac * maxR
-      const gapPerSeg = (Math.PI * 2) / ar.segments
-      const offset = t * ar.rotSpeed
-      for (let s = 0; s < ar.segments; s++) {
-        const start = offset + s * gapPerSeg
-        const end   = start + ar.arcLen
-        ctx.beginPath(); ctx.arc(cx, cy, r, start, end)
-        ctx.strokeStyle = rgba(REDB, ar.alpha)
-        ctx.lineWidth = ar.width
-        ctx.stroke()
-      }
-    }
-
-    // ── Emit new pulse every 2.2s ──
-    if (t > nextPulse.current) {
-      pulses.current.push({ r: 0, maxR: maxR * 1.05, alpha: 0.55, speed: maxR * 0.38 })
-      nextPulse.current = t + 2.2
-    }
-
-    // ── Draw + age pulse rings ──
-    for (let i = pulses.current.length - 1; i >= 0; i--) {
-      const p = pulses.current[i]
-      p.r += p.speed * 0.016
-      p.alpha = 0.55 * (1 - p.r / p.maxR)
-      if (p.alpha <= 0.005) { pulses.current.splice(i, 1); continue }
-      ctx.beginPath(); ctx.arc(cx, cy, p.r, 0, Math.PI * 2)
-      ctx.strokeStyle = rgba(RED, p.alpha)
-      ctx.lineWidth   = 2.5 * (1 - p.r / p.maxR) + 0.5
-      ctx.stroke()
-    }
-
-    // ── Orbiting particles ──
-    for (const orb of orbs.current) {
-      orb.angle += orb.speed * 0.016
-      const r   = orb.ringR * maxR
-      const px  = cx + Math.cos(orb.angle) * r
-      const py  = cy + Math.sin(orb.angle) * r
-      const pulse = 0.7 + 0.3 * Math.sin(t * 3 + orb.angle * 4)
-
-      // Halo
-      const hg = ctx.createRadialGradient(px, py, 0, px, py, orb.size * 5)
-      hg.addColorStop(0, rgba(orb.col, 0.35 * pulse))
-      hg.addColorStop(1, rgba(orb.col, 0))
-      ctx.fillStyle = hg
-      ctx.beginPath(); ctx.arc(px, py, orb.size * 5, 0, Math.PI * 2); ctx.fill()
-
-      // Core
-      ctx.beginPath(); ctx.arc(px, py, orb.size, 0, Math.PI * 2)
-      ctx.fillStyle = rgba(orb.col, 0.9 * pulse)
+    // ── Stars ──
+    for (const s of stars.current) {
+      const twinkle = 0.55 + 0.45 * Math.sin(t * 0.9 + s.phase)
+      const alpha   = s.base * twinkle
+      ctx.beginPath()
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+      ctx.fillStyle = s.warm
+        ? `rgba(255,215,170,${alpha.toFixed(3)})`
+        : `rgba(255,245,235,${alpha.toFixed(3)})`
       ctx.fill()
     }
-
-    // ── Bright core glow ──
-    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.12)
-    core.addColorStop(0,   rgba(REDB, 0.55))
-    core.addColorStop(0.5, rgba(RED,  0.20))
-    core.addColorStop(1,   rgba(RED,  0))
-    ctx.fillStyle = core
-    ctx.beginPath(); ctx.arc(cx, cy, maxR * 0.12, 0, Math.PI * 2); ctx.fill()
   })
 
   return <canvas ref={ref} style={canvasStyle} aria-hidden="true" />
@@ -414,7 +355,7 @@ const canvasStyle: CSSProperties = {
 interface BlobBgProps { variant?: 'nebula' | 'red' | 'cta' | 'contact' }
 
 export default function BlobBg({ variant = 'nebula' }: BlobBgProps) {
-  if (variant === 'red')     return <RadialBg />
+  if (variant === 'red')     return <WarmSpaceBg />
   if (variant === 'cta')     return <AuroraBg />
   if (variant === 'contact') return <ConstellationBg />
   return <NebulaBg />
