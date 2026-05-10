@@ -53,8 +53,6 @@ function AddressCard({ addr, reverse }) {
 
       {/* Letter panel */}
       <div className={styles.contentSide}>
-        <p className={styles.eyebrowCard}>Letter from the</p>
-        <h3 className={styles.cardTitle}>Co-Secretary General</h3>
         <div className={styles.body}>
           {addr.body.map((para, i) => (
             <p key={i} className={i === 0 ? styles.salutation : ''}>{para}</p>
