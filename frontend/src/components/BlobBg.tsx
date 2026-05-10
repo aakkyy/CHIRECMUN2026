@@ -552,14 +552,70 @@ const StarfieldBg = memo(function StarfieldBg() {
       const pulse = 0.72 + 0.28 * Math.sin(t * 0.9 + s.x * 0.015 + s.y * 0.012)
 
       if (s.glow) {
-        // Outer halo
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 7, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.10 * pulse).toFixed(3)})`
+        // ── 4-point diffraction spikes (main cross) ──
+        const spikeLen  = s.r * 14 * pulse
+        const spikeLen2 = s.r * 7  * pulse
+
+        ctx.save()
+        ctx.globalAlpha = 0.7 * pulse
+
+        // Horizontal + vertical spikes
+        for (let ang = 0; ang < 2; ang++) {
+          const angle = (ang / 2) * Math.PI
+          const cx = Math.cos(angle), cy = Math.sin(angle)
+          const lg = ctx.createLinearGradient(
+            s.x - cx * spikeLen, s.y - cy * spikeLen,
+            s.x + cx * spikeLen, s.y + cy * spikeLen,
+          )
+          lg.addColorStop(0,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
+          lg.addColorStop(0.44, `rgba(${s.r2},${s.g2},${s.b2},0.75)`)
+          lg.addColorStop(0.50, `rgba(255,255,255,1)`)
+          lg.addColorStop(0.56, `rgba(${s.r2},${s.g2},${s.b2},0.75)`)
+          lg.addColorStop(1,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
+          ctx.beginPath()
+          ctx.moveTo(s.x - cx * spikeLen, s.y - cy * spikeLen)
+          ctx.lineTo(s.x + cx * spikeLen, s.y + cy * spikeLen)
+          ctx.strokeStyle = lg
+          ctx.lineWidth = 1.3
+          ctx.stroke()
+        }
+
+        // Diagonal secondary spikes (shorter, softer)
+        for (let ang = 0; ang < 2; ang++) {
+          const angle = (ang / 2) * Math.PI + Math.PI / 4
+          const cx = Math.cos(angle), cy = Math.sin(angle)
+          const lg = ctx.createLinearGradient(
+            s.x - cx * spikeLen2, s.y - cy * spikeLen2,
+            s.x + cx * spikeLen2, s.y + cy * spikeLen2,
+          )
+          lg.addColorStop(0,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
+          lg.addColorStop(0.50, `rgba(${s.r2},${s.g2},${s.b2},0.45)`)
+          lg.addColorStop(1,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
+          ctx.beginPath()
+          ctx.moveTo(s.x - cx * spikeLen2, s.y - cy * spikeLen2)
+          ctx.lineTo(s.x + cx * spikeLen2, s.y + cy * spikeLen2)
+          ctx.strokeStyle = lg
+          ctx.lineWidth = 0.65
+          ctx.stroke()
+        }
+
+        ctx.restore()
+
+        // Tiny soft glow around core
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 2.2, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.18 * pulse).toFixed(3)})`
         ctx.fill()
-        // Inner halo
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.28 * pulse).toFixed(3)})`
-        ctx.fill()
+
+      } else if (s.r > 0.85 && s.a > 0.45) {
+        // Brighter background stars get a tiny 2-line cross
+        const tinySpike = s.r * 3.5
+        ctx.save()
+        ctx.globalAlpha = s.a * pulse * 0.5
+        ctx.strokeStyle = `rgba(${s.r2},${s.g2},${s.b2},1)`
+        ctx.lineWidth = 0.5
+        ctx.beginPath(); ctx.moveTo(s.x - tinySpike, s.y); ctx.lineTo(s.x + tinySpike, s.y); ctx.stroke()
+        ctx.beginPath(); ctx.moveTo(s.x, s.y - tinySpike); ctx.lineTo(s.x, s.y + tinySpike); ctx.stroke()
+        ctx.restore()
       }
 
       // Core dot
