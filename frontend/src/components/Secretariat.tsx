@@ -6,7 +6,7 @@ import AnimatedBg from './AnimatedBg'
 const addresses = [
   {
     initials: 'DA', name: 'Dev Agarwal', role: 'Co-Secretary General',
-    conf: 'CHIREC MUN 2026', variant: 'sky', greeting: 'Regards',
+    conf: 'CHIREC MUN 2026', greeting: 'Regards',
     body: [
       'Dear Delegates,',
       'It is my privilege to welcome you to the 14th Edition of CHIREC Model United Nations.',
@@ -19,7 +19,7 @@ const addresses = [
   },
   {
     initials: 'AA', name: 'Anusha Anchlia', role: 'Co-Secretary General',
-    conf: 'CHIREC MUN 2026', variant: 'red', greeting: 'Warm regards',
+    conf: 'CHIREC MUN 2026', greeting: 'Warm regards',
     body: [
       'Dear Delegates,',
       'It is with immense pride and great pleasure that I welcome you to the 14th Edition of CHIREC Model United Nations.',
@@ -36,19 +36,23 @@ function AddressCard({ addr, reverse }) {
   return (
     <motion.div
       className={`${styles.card} ${reverse ? styles.reverse : ''}`}
-      initial={{ opacity: 0, x: reverse ? 60 : -60 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={viewport}
       transition={{ ...spring }}
-      whileHover={{ boxShadow: '0 8px 40px rgba(86,204,242,0.12)', borderColor: 'rgba(86,204,242,0.18)', transition: { duration: 0.25 } }}
     >
-      <div className={styles.photoCol}>
-        <div className={`${styles.avatar} ${styles[addr.variant]}`}><span>{addr.initials}</span></div>
-        <p className={styles.avatarName}>{addr.name}</p>
-        <p className={styles.avatarRole}>{addr.role}</p>
-        <p className={styles.avatarConf}>{addr.conf}</p>
+      {/* Photo / Avatar panel */}
+      <div className={styles.photoSide}>
+        <div className={styles.avatarWrap}>
+          <div className={styles.avatar}><span>{addr.initials}</span></div>
+        </div>
+        <p className={styles.personName}>{addr.name}</p>
+        <p className={styles.personRole}>{addr.role}</p>
+        <p className={styles.personConf}>{addr.conf}</p>
       </div>
-      <div className={styles.textCol}>
+
+      {/* Letter panel */}
+      <div className={styles.contentSide}>
         <p className={styles.eyebrowCard}>Letter from the</p>
         <h3 className={styles.cardTitle}>Co-Secretary General</h3>
         <div className={styles.body}>
@@ -68,26 +72,27 @@ function AddressCard({ addr, reverse }) {
 
 export default function Secretariat() {
   return (
-    <section className={`section ${styles.section}`} id="secretariat" style={{position:'relative',overflow:'hidden'}}>
-      <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(4,3,8,0.65) 0%, rgba(4,3,8,0.58) 100%)',zIndex:0,pointerEvents:'none'}} />
+    <section className={styles.section} id="secretariat" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(4,3,8,0.65) 0%, rgba(4,3,8,0.58) 100%)', zIndex:0, pointerEvents:'none' }} />
       <AnimatedBg variant="blue" />
-      <div className="container" style={{position:"relative",zIndex:1}}>
-        <motion.p className={styles.eyebrow}
+
+      {/* Header stays centred */}
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        <motion.div className={styles.header}
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewport} transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
-        >A Word from the Top</motion.p>
-        <motion.h2 className={styles.title}
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport} transition={{ duration: 0.7, ease: [0.22,1,0.36,1], delay: 0.07 }}
-        >Addresses by the Co-Secretary Generals</motion.h2>
-        <motion.p className={styles.sub}
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-          viewport={viewport} transition={{ delay: 0.15, duration: 0.6 }}
-        >Hear directly from the leaders shaping this year's conference.</motion.p>
+        >
+          <p className={styles.eyebrow}>A Word from the Top</p>
+          <h2 className={styles.title}>Addresses by the Co-Secretary Generals</h2>
+          <p className={styles.sub}>Hear directly from the leaders shaping this year's conference.</p>
+        </motion.div>
+      </div>
 
-        <div className={styles.stack}>
-          {addresses.map((a, i) => <AddressCard key={a.name} addr={a} reverse={i % 2 !== 0} />)}
-        </div>
+      {/* Cards are full-width — outside container */}
+      <div className={styles.stack} style={{ position: 'relative', zIndex: 1 }}>
+        {addresses.map((a, i) => (
+          <AddressCard key={a.name} addr={a} reverse={i % 2 !== 0} />
+        ))}
       </div>
     </section>
   )
