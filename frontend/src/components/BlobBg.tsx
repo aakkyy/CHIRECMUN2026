@@ -438,6 +438,157 @@ const ConstellationBg = memo(function ConstellationBg() {
 })
 
 // ─────────────────────────────────────────────────────────────
+// StarfieldBg — secretariat section
+// Drifting star field + red nebula pulses + constellation lines + shooting stars
+// ─────────────────────────────────────────────────────────────
+const StarfieldBg = memo(function StarfieldBg() {
+  type Star = { x: number; y: number; vx: number; vy: number; r: number; a: number; r2: number; g2: number; b2: number; glow: boolean }
+  type Meteor = { x: number; y: number; vx: number; vy: number; len: number; life: number; maxLife: number; active: boolean }
+
+  const stars   = useRef<Star[]>([])
+  const meteors = useRef<Meteor[]>([{ x:0,y:0,vx:0,vy:0,len:0,life:0,maxLife:0,active:false },
+                                     { x:0,y:0,vx:0,vy:0,len:0,life:0,maxLife:0,active:false },
+                                     { x:0,y:0,vx:0,vy:0,len:0,life:0,maxLife:0,active:false }])
+  const prevW = useRef(0), prevH = useRef(0)
+
+  const PALETTE = [
+    { r:192, g:57,  b:43  },  // crimson
+    { r:231, g:76,  b:60  },  // red-orange
+    { r:255, g:120, b:90  },  // salmon
+    { r:220, g:220, b:240 },  // cool white
+    { r:86,  g:204, b:242 },  // cyan accent (rare)
+  ]
+
+  function initStars(W: number, H: number) {
+    stars.current = Array.from({ length: 130 }, (_, i) => {
+      const isGlow = i < 18  // first 18 are bright constellation nodes
+      const col = isGlow
+        ? PALETTE[Math.floor(Math.random() * 3)]   // only reds for glow nodes
+        : PALETTE[Math.floor(Math.random() * PALETTE.length)]
+      return {
+        x:    Math.random() * W,
+        y:    Math.random() * H,
+        vx:   (Math.random() - 0.5) * 0.10,
+        vy:   (Math.random() - 0.5) * 0.07,
+        r:    isGlow ? 1.6 + Math.random() * 1.4 : 0.3 + Math.random() * 1.0,
+        a:    isGlow ? 0.75 + Math.random() * 0.25 : 0.18 + Math.random() * 0.45,
+        r2: col.r, g2: col.g, b2: col.b,
+        glow: isGlow,
+      }
+    })
+  }
+
+  const ref = useCanvasLoop((ctx, W, H, t) => {
+    if (W !== prevW.current || H !== prevH.current) {
+      initStars(W, H); prevW.current = W; prevH.current = H
+    }
+
+    // Background
+    ctx.fillStyle = '#06050c'
+    ctx.fillRect(0, 0, W, H)
+
+    // Nebula glow blobs
+    const blobs = [
+      { cx: 0.28, cy: 0.45, r: 0.42, col: '140,22,10',  a: 0.09, spd: 0.07 },
+      { cx: 0.72, cy: 0.55, r: 0.36, col: '192,57,43',  a: 0.07, spd: 0.11 },
+      { cx: 0.50, cy: 0.18, r: 0.28, col: '60,20,90',   a: 0.06, spd: 0.09 },
+      { cx: 0.15, cy: 0.80, r: 0.22, col: '100,30,15',  a: 0.05, spd: 0.13 },
+    ]
+    for (const b of blobs) {
+      const pulse = 0.8 + 0.2 * Math.sin(t * b.spd)
+      const grd = ctx.createRadialGradient(b.cx*W, b.cy*H, 0, b.cx*W, b.cy*H, b.r * Math.min(W, H))
+      grd.addColorStop(0, `rgba(${b.col},${(b.a * pulse).toFixed(3)})`)
+      grd.addColorStop(1, `rgba(${b.col},0)`)
+      ctx.fillStyle = grd
+      ctx.fillRect(0, 0, W, H)
+    }
+
+    // Move stars (wrap)
+    const ss = stars.current
+    for (const s of ss) {
+      s.x += s.vx; s.y += s.vy
+      if (s.x < -8) s.x = W + 8
+      if (s.x > W + 8) s.x = -8
+      if (s.y < -8) s.y = H + 8
+      if (s.y > H + 8) s.y = -8
+    }
+
+    // Constellation lines between glow nodes
+    const glows = ss.filter(s => s.glow)
+    const maxDist = Math.min(W, H) * 0.30
+    for (let i = 0; i < glows.length; i++) {
+      for (let j = i + 1; j < glows.length; j++) {
+        const a = glows[i], b = glows[j]
+        const dx = a.x - b.x, dy = a.y - b.y
+        const dist = Math.sqrt(dx*dx + dy*dy)
+        if (dist > maxDist) continue
+        const pulse = 0.6 + 0.4 * Math.sin(t * 0.8 + i * 0.5 + j * 0.3)
+        const alpha = (1 - dist / maxDist) * 0.22 * pulse
+        ctx.beginPath()
+        ctx.moveTo(a.x, a.y)
+        ctx.lineTo(b.x, b.y)
+        ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(3)})`
+        ctx.lineWidth = 0.7
+        ctx.stroke()
+      }
+    }
+
+    // Draw all stars
+    for (const s of ss) {
+      const pulse = 0.78 + 0.22 * Math.sin(t * 0.9 + s.x * 0.015 + s.y * 0.012)
+
+      if (s.glow) {
+        // Outer halo
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.07 * pulse).toFixed(3)})`
+        ctx.fill()
+        // Inner halo
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 2.8, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(0.20 * pulse).toFixed(3)})`
+        ctx.fill()
+      }
+
+      // Core dot
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(${s.r2},${s.g2},${s.b2},${(s.a * pulse).toFixed(3)})`
+      ctx.fill()
+    }
+
+    // Shooting stars
+    if (Math.random() < 0.004) {
+      const m = meteors.current.find(m => !m.active)
+      if (m) {
+        m.x = Math.random() * W; m.y = 0
+        const speed = 4 + Math.random() * 5
+        const angle = (Math.PI / 6) + Math.random() * (Math.PI / 6)
+        m.vx = Math.cos(angle) * speed
+        m.vy = Math.sin(angle) * speed
+        m.len = 55 + Math.random() * 75
+        m.maxLife = 35 + Math.random() * 25
+        m.life = m.maxLife
+        m.active = true
+      }
+    }
+    for (const m of meteors.current) {
+      if (!m.active) continue
+      m.x += m.vx; m.y += m.vy; m.life--
+      if (m.life <= 0 || m.x > W + 60 || m.y > H + 60) { m.active = false; continue }
+      const mag = Math.sqrt(m.vx*m.vx + m.vy*m.vy)
+      const tx = m.x - (m.vx/mag) * m.len
+      const ty = m.y - (m.vy/mag) * m.len
+      const alpha = (m.life / m.maxLife) * 0.75
+      const grd = ctx.createLinearGradient(tx, ty, m.x, m.y)
+      grd.addColorStop(0, 'rgba(255,255,255,0)')
+      grd.addColorStop(1, `rgba(255,240,235,${alpha.toFixed(3)})`)
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(m.x, m.y)
+      ctx.strokeStyle = grd; ctx.lineWidth = 1.4; ctx.stroke()
+    }
+  })
+
+  return <canvas ref={ref} style={canvasStyle} aria-hidden="true" />
+})
+
+// ─────────────────────────────────────────────────────────────
 const canvasStyle: CSSProperties = {
   position: 'absolute', inset: 0,
   width: '100%', height: '100%',
@@ -445,11 +596,12 @@ const canvasStyle: CSSProperties = {
 }
 
 // ─────────────────────────────────────────────────────────────
-interface BlobBgProps { variant?: 'nebula' | 'red' | 'cta' | 'contact' }
+interface BlobBgProps { variant?: 'nebula' | 'red' | 'cta' | 'contact' | 'secretariat' }
 
 export default function BlobBg({ variant = 'nebula' }: BlobBgProps) {
-  if (variant === 'red')     return <AsteroidBeltBg />
-  if (variant === 'cta')     return <AuroraBg />
-  if (variant === 'contact') return <ConstellationBg />
+  if (variant === 'red')          return <AsteroidBeltBg />
+  if (variant === 'cta')          return <AuroraBg />
+  if (variant === 'contact')      return <ConstellationBg />
+  if (variant === 'secretariat')  return <StarfieldBg />
   return <NebulaBg />
 }

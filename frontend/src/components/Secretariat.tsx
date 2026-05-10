@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import styles from './Secretariat.module.css'
 import { viewport, spring } from '../lib/motion'
-import AnimatedBg from './AnimatedBg'
+import BlobBg from './BlobBg'
 
 const addresses = [
   {
@@ -71,7 +71,7 @@ function AddressCard({ addr, reverse }) {
 export default function Secretariat() {
   return (
     <section className={styles.section} id="secretariat" style={{ position: 'relative', overflow: 'hidden' }}>
-      <AnimatedBg variant="blue" />
+      <BlobBg variant="secretariat" />
       <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(4,3,10,0.72) 0%, rgba(4,3,10,0.65) 100%)', zIndex:0, pointerEvents:'none' }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
