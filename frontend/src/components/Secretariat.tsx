@@ -41,18 +41,18 @@ function AddressCard({ addr, reverse }) {
       viewport={viewport}
       transition={{ ...spring }}
     >
-      {/* Photo / Avatar panel */}
-      <div className={styles.photoSide}>
-        <div className={styles.avatarWrap}>
-          <div className={styles.avatar}><span>{addr.initials}</span></div>
+      {/* Photo column — top-aligned */}
+      <div className={styles.photoCol}>
+        <div className={styles.avatar}>
+          <span>{addr.initials}</span>
         </div>
         <p className={styles.personName}>{addr.name}</p>
         <p className={styles.personRole}>{addr.role}</p>
         <p className={styles.personConf}>{addr.conf}</p>
       </div>
 
-      {/* Letter panel */}
-      <div className={styles.contentSide}>
+      {/* Text column — starts at same level as avatar top */}
+      <div className={styles.textCol}>
         <div className={styles.body}>
           {addr.body.map((para, i) => (
             <p key={i} className={i === 0 ? styles.salutation : ''}>{para}</p>
@@ -71,10 +71,9 @@ function AddressCard({ addr, reverse }) {
 export default function Secretariat() {
   return (
     <section className={styles.section} id="secretariat" style={{ position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(4,3,8,0.65) 0%, rgba(4,3,8,0.58) 100%)', zIndex:0, pointerEvents:'none' }} />
       <AnimatedBg variant="blue" />
+      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(4,3,10,0.72) 0%, rgba(4,3,10,0.65) 100%)', zIndex:0, pointerEvents:'none' }} />
 
-      {/* Header stays centred */}
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div className={styles.header}
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
@@ -84,13 +83,12 @@ export default function Secretariat() {
           <h2 className={styles.title}>Addresses by the Co-Secretary Generals</h2>
           <p className={styles.sub}>Hear directly from the leaders shaping this year's conference.</p>
         </motion.div>
-      </div>
 
-      {/* Cards are full-width — outside container */}
-      <div className={styles.stack} style={{ position: 'relative', zIndex: 1 }}>
-        {addresses.map((a, i) => (
-          <AddressCard key={a.name} addr={a} reverse={i % 2 !== 0} />
-        ))}
+        <div className={styles.stack}>
+          {addresses.map((a, i) => (
+            <AddressCard key={a.name} addr={a} reverse={i % 2 !== 0} />
+          ))}
+        </div>
       </div>
     </section>
   )
