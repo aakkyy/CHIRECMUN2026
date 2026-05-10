@@ -7,118 +7,108 @@
   text-align: center;
 }
 
-.bgText {
-  position: absolute;
-  bottom: -0.1em;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Rubik', sans-serif;
-  font-size: clamp(7rem, 20vw, 16rem);
-  font-weight: 900;
-  color: rgba(192,57,43,0.07);
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  letter-spacing: 0.06em;
-}
-
 .eyebrow {
   font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: #c0392b;
+  color: rgba(192,57,43,0.8);
   margin-bottom: 0.75rem;
 }
 
 .title {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-  font-weight: 800;
-  color: #f4f4ef;
-  margin-bottom: 3.5rem;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 300;
+  color: rgba(244,244,239,0.55);
+  letter-spacing: 0.06em;
+  margin-bottom: 4rem;
 }
 
-.timerWrap {
+/* Timer row */
+.grid {
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  margin-bottom: 2.5rem;
+  gap: 0;
+  margin-bottom: 3.5rem;
   position: relative;
   z-index: 1;
-}
-
-.timerBar {
-  display: inline-flex;
-  align-items: stretch;
-  background: rgba(8,3,2,0.58);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(192,57,43,0.18);
-  border-radius: 20px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 8px 56px rgba(0,0,0,0.55),
-    0 0 80px rgba(192,57,43,0.07);
 }
 
 .unit {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2.2rem 2.8rem;
-  gap: 0.7rem;
+  padding: 0 3.5rem;
   position: relative;
 }
 
-.unit + .unit {
-  border-left: 1px solid rgba(192,57,43,0.14);
+.unit + .unit::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8%;
+  bottom: 30%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(192,57,43,0.25) 30%,
+    rgba(192,57,43,0.25) 70%,
+    transparent
+  );
 }
 
 .numWrap {
-  position: relative;
   overflow: hidden;
-  height: clamp(3.2rem, 7vw, 5.2rem);
+  height: clamp(5rem, 11vw, 8.5rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.5ch;
+  min-width: 2.4ch;
 }
 
 .num {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(3rem, 7vw, 5rem);
+  font-size: clamp(4.5rem, 10vw, 7.5rem);
   font-weight: 900;
+  color: #f4f4ef;
   line-height: 1;
-  display: block;
-  letter-spacing: 0.03em;
-  background: linear-gradient(180deg, #f4f4ef 20%, rgba(192,57,43,0.75) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 60px rgba(192,57,43,0.2);
+}
+
+.accent {
+  width: 28px;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(to right, #e74c3c, #c0392b);
+  box-shadow: 0 0 10px rgba(231,76,60,0.65), 0 0 22px rgba(192,57,43,0.35);
+  margin: 0.75rem 0 0.65rem;
 }
 
 .label {
   font-family: 'Geist', sans-serif;
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(192,57,43,0.7);
+  color: rgba(244,244,239,0.3);
 }
 
 .sub {
   font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  color: rgba(244,244,239,0.38);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: rgba(244,244,239,0.3);
   position: relative;
   z-index: 1;
 }
 
-@media (max-width: 600px) {
-  .unit        { padding: 1.5rem 1.4rem; gap: 0.5rem; }
-  .timerBar    { border-radius: 14px; }
+@media (max-width: 640px) {
+  .unit         { padding: 0 1.6rem; }
+  .title        { margin-bottom: 2.5rem; font-size: 1.1rem; }
 }
-

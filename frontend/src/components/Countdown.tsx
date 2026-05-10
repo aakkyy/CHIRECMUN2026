@@ -23,25 +23,26 @@ function Block({ value, label, delay }) {
   return (
     <motion.div
       className={styles.unit}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewport}
-      transition={{ duration: 0.5, ease: [0.22,1,0.36,1], delay }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
     >
       <div className={styles.numWrap}>
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
             key={value}
             className={styles.num}
-            initial={{ y: -40, opacity: 0 }}
+            initial={{ y: -48, opacity: 0 }}
             animate={{ y: 0,   opacity: 1 }}
-            exit={{   y: 40,  opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            exit={{   y: 48,  opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
           >
             {value}
           </motion.span>
         </AnimatePresence>
       </div>
+      <div className={styles.accent} />
       <span className={styles.label}>{label}</span>
     </motion.div>
   )
@@ -59,26 +60,23 @@ export default function Countdown() {
     <section className={`section ${styles.section}`} id="countdown" style={{ position: 'relative', overflow: 'hidden' }}>
       <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(4,6,10,0.62) 0%, rgba(4,6,10,0.55) 100%)',zIndex:0,pointerEvents:'none'}} />
       <BlobBg variant="red" />
-      <div className={styles.bgText} aria-hidden="true">2026</div>
 
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.p className={styles.eyebrow}
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewport} transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
         >Mark Your Calendars</motion.p>
 
         <motion.h2 className={styles.title}
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewport} transition={{ duration: 0.7, ease: [0.22,1,0.36,1], delay: 0.08 }}
         >The Conference Begins In</motion.h2>
 
-        <div className={styles.timerWrap}>
-          <div className={styles.timerBar}>
-            <Block value={time.d} label="Days"    delay={0}    />
-            <Block value={time.h} label="Hours"   delay={0.08} />
-            <Block value={time.m} label="Minutes" delay={0.16} />
-            <Block value={time.s} label="Seconds" delay={0.24} />
-          </div>
+        <div className={styles.grid}>
+          <Block value={time.d} label="Days"    delay={0}    />
+          <Block value={time.h} label="Hours"   delay={0.08} />
+          <Block value={time.m} label="Minutes" delay={0.16} />
+          <Block value={time.s} label="Seconds" delay={0.24} />
         </div>
 
         <motion.p className={styles.sub}
