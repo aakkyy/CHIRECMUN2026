@@ -418,18 +418,34 @@ const ConstellationBg = memo(function ConstellationBg() {
       }
     }
 
-    // Draw nodes — simple arc halo, no createRadialGradient
+    // Draw nodes as 4-point star polygons
     for (const n of ns) {
-      const pulse = 0.75 + 0.25 * Math.sin(t * 1.2 + n.x * 0.01)
+      const pulse     = 0.75 + 0.25 * Math.sin(t * 1.2 + n.x * 0.01)
+      const outerR    = n.r * 4.5 * pulse
+      const innerR    = outerR * 0.38
+      const { r, g, b } = n.col
 
-      // Soft halo — just a large semi-transparent filled circle
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 4.5, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${n.col.r},${n.col.g},${n.col.b},${(0.12 * pulse).toFixed(3)})`
+      // Soft glow behind the star
+      ctx.beginPath(); ctx.arc(n.x, n.y, outerR * 1.6, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(${r},${g},${b},${(0.08 * pulse).toFixed(3)})`
       ctx.fill()
 
-      // Core dot
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${n.col.r},${n.col.g},${n.col.b},${(0.85 * pulse).toFixed(3)})`
+      // 4-point star polygon
+      ctx.beginPath()
+      for (let i = 0; i < 8; i++) {
+        const angle = (i * Math.PI) / 4 - Math.PI / 2
+        const rad   = i % 2 === 0 ? outerR : innerR
+        const px    = n.x + rad * Math.cos(angle)
+        const py    = n.y + rad * Math.sin(angle)
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+      }
+      ctx.closePath()
+      ctx.fillStyle = `rgba(${r},${g},${b},${(0.82 * pulse).toFixed(3)})`
+      ctx.fill()
+
+      // Bright white hot core at center
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 0.7, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,255,255,${(0.70 * pulse).toFixed(3)})`
       ctx.fill()
     }
   })
