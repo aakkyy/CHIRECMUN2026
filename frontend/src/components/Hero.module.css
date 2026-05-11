@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #020209;
+  background: var(--theme-hero-bg);
 }
 
 .canvas {
@@ -87,7 +87,7 @@
   display: inline-block;
   font-size: clamp(3.8rem, 11vw, 7.5rem);
   font-weight: 900;
-  color: #f4f4ef;
+  color: var(--theme-text);
   letter-spacing: 0.07em;
   text-shadow: 0 0 80px rgba(192,57,43,0.3);
 }
@@ -95,7 +95,7 @@
 .mun {
   font-size: clamp(0.85rem, 2vw, 1.3rem);
   font-weight: 300;
-  color: rgba(244,244,239,0.7);
+  color: var(--theme-text-65);
   letter-spacing: 0.38em;
   text-transform: uppercase;
 }
@@ -103,7 +103,7 @@
 .year {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 900;
-  color: #c0392b;
+  color: var(--red);
   letter-spacing: 0.12em;
   text-shadow: 0 0 40px rgba(192,57,43,0.55);
 }
@@ -114,7 +114,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #e74c3c;
+  color: var(--red-h);
   text-shadow: 0 0 30px rgba(192,57,43,0.45);
 }
 
@@ -124,10 +124,10 @@
   gap: 7px;
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
-  color: rgba(244,244,239,0.45);
+  color: var(--theme-text-45);
   letter-spacing: 0.05em;
 }
-.location svg { color: #c0392b; flex-shrink: 0; }
+.location svg { color: var(--red); flex-shrink: 0; }
 
 .actions {
   display: flex;
