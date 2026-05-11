@@ -421,13 +421,13 @@ const ConstellationBg = memo(function ConstellationBg() {
     // Draw nodes as 4-point star polygons
     for (const n of ns) {
       const pulse     = 0.75 + 0.25 * Math.sin(t * 1.2 + n.x * 0.01)
-      const outerR    = n.r * 4.5 * pulse
+      const outerR    = n.r * 3.0 * pulse
       const innerR    = outerR * 0.38
       const { r, g, b } = n.col
 
-      // Soft glow behind the star
-      ctx.beginPath(); ctx.arc(n.x, n.y, outerR * 1.6, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${r},${g},${b},${(0.08 * pulse).toFixed(3)})`
+      // Very soft glow behind the star
+      ctx.beginPath(); ctx.arc(n.x, n.y, outerR * 1.8, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(${r},${g},${b},${(0.04 * pulse).toFixed(3)})`
       ctx.fill()
 
       // 4-point star polygon
@@ -440,12 +440,12 @@ const ConstellationBg = memo(function ConstellationBg() {
         i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
       }
       ctx.closePath()
-      ctx.fillStyle = `rgba(${r},${g},${b},${(0.82 * pulse).toFixed(3)})`
+      ctx.fillStyle = `rgba(${r},${g},${b},${(0.45 * pulse).toFixed(3)})`
       ctx.fill()
 
-      // Bright white hot core at center
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 0.7, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255,255,255,${(0.70 * pulse).toFixed(3)})`
+      // Subtle white core
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 0.6, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,255,255,${(0.40 * pulse).toFixed(3)})`
       ctx.fill()
     }
   })
