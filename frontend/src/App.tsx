@@ -10,6 +10,7 @@ import CTA from './components/CTA'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FAQPage from './pages/FAQPage'
+import GuidelinesPage from './pages/GuidelinesPage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import { useReveal } from './hooks/useReveal'
 
@@ -38,7 +39,7 @@ export default function App() {
       <Route path="/faq"        element={<FAQPage />}       />
       <Route path="/team"       element={<ComingSoonPage />} />
       <Route path="/committees" element={<ComingSoonPage />} />
-      <Route path="/guidelines" element={<ComingSoonPage />} />
+      <Route path="/guidelines" element={<GuidelinesPage />} />
       <Route path="/schedule"   element={<ComingSoonPage />} />
     </Routes>
   )
