@@ -2,10 +2,13 @@ import { motion } from 'framer-motion'
 import styles from './Secretariat.module.css'
 import { viewport, spring } from '../lib/motion'
 import BlobBg from './BlobBg'
+import devImg from '@assets/dev.jpg'
+import anushaImg from '@assets/anusha.jpg'
 
 const addresses = [
   {
     initials: 'DA', name: 'Dev Agarwal', role: 'Co-Secretary General',
+    photo: devImg,
     conf: 'CHIREC MUN 2026', greeting: 'Regards',
     body: [
       'Dear Delegates,',
@@ -19,6 +22,7 @@ const addresses = [
   },
   {
     initials: 'AA', name: 'Anusha Anchlia', role: 'Co-Secretary General',
+    photo: anushaImg,
     conf: 'CHIREC MUN 2026', greeting: 'Warm regards',
     body: [
       'Dear Delegates,',
@@ -44,7 +48,7 @@ function AddressCard({ addr, reverse }) {
       {/* Photo column — top-aligned */}
       <div className={styles.photoCol}>
         <div className={styles.avatar}>
-          <span>{addr.initials}</span>
+          <img src={addr.photo} alt={addr.name} className={styles.avatarImg} />
         </div>
         <p className={styles.personName}>{addr.name}</p>
         <p className={styles.personRole}>{addr.role}</p>
