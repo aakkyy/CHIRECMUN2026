@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './GuidelinesPage.module.css'
-import AnimatedBg from '../components/AnimatedBg'
+import GuidelinesBg from '../components/GuidelinesBg'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
 
@@ -129,7 +129,7 @@ export default function GuidelinesPage() {
 
   return (
     <div className={styles.page}>
-      <AnimatedBg variant="cosmic" />
+      <GuidelinesBg />
       <div className={styles.vignette} />
 
       {/* Small animated orbs — only these move */}
