@@ -1,5 +1,5 @@
 .footer {
-  background: var(--theme-footer-bg);
+  background: #111013;
   padding: 0;
 }
 
@@ -40,17 +40,17 @@
   font-family: 'Rubik', sans-serif;
   font-size: 1.45rem;
   font-weight: 800;
-  color: var(--theme-text);
+  color: #f4f4ef;
   letter-spacing: -0.01em;
   text-decoration: none;
   transition: color 0.2s;
 }
-.brandName:hover { color: var(--red-h); }
+.brandName:hover { color: #e74c3c; }
 
 .desc {
   font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
-  color: var(--theme-text-38);
+  color: rgba(244,244,239,0.38);
   line-height: 1.9;
   max-width: 300px;
 }
@@ -121,16 +121,16 @@
 .link {
   font-family: 'Geist', sans-serif;
   font-size: 1.05rem;
-  color: var(--theme-text-40);
+  color: rgba(244,244,239,0.42);
   text-decoration: none;
   transition: color 0.2s;
   letter-spacing: 0.01em;
 }
-.link:hover { color: var(--red-h); }
+.link:hover { color: #e74c3c; }
 
 /* ── BOTTOM BAR ── */
 .bar {
-  border-top: 1px solid var(--theme-border);
+  border-top: 1px solid rgba(255,255,255,0.07);
   max-width: 1160px;
   margin: 0 auto;
   padding: 1.6rem 3rem;
@@ -143,11 +143,11 @@
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--theme-text-18);
+  color: rgba(244,244,239,0.18);
 }
 
 .devLink {
-  color: var(--theme-text-22);
+  color: rgba(244,244,239,0.28);
   text-decoration: none;
   transition: color 0.2s;
 }

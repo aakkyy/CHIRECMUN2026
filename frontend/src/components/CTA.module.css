@@ -1,10 +1,10 @@
 .section {
-  background: var(--theme-cta-bg);
+  background: linear-gradient(135deg, #0e0405 0%, #1c0707 45%, #120810 100%);
   padding: 110px 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid var(--theme-card-border);
+  border-top: 1px solid rgba(192,57,43,0.22);
 }
 
 .canvas {
@@ -35,7 +35,7 @@
   font-family: 'Rubik', sans-serif;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
-  color: var(--theme-text);
+  color: #f4f4ef;
   line-height: 1.2;
   margin-bottom: 1.1rem;
 }
@@ -43,7 +43,7 @@
 .sub {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: var(--theme-text-50);
+  color: rgba(244,244,239,0.52);
   line-height: 1.75;
   margin-bottom: 2.4rem;
 }
@@ -94,15 +94,15 @@
   display: inline-flex;
   align-items: center;
   padding: 1rem 2.6rem;
-  background: var(--theme-input-bg);
-  color: var(--theme-text-dim);
+  background: rgba(244,244,239,0.04);
+  color: rgba(244,244,239,0.72);
   font-family: 'Geist', sans-serif;
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   border-radius: 999px;
-  border: 1px solid var(--theme-border);
+  border: 1px solid rgba(244,244,239,0.13);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 6px rgba(0,0,0,0.35);
   transition: background 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease, color 0.28s ease;
 }
@@ -116,6 +116,6 @@
   transition: none;
   pointer-events: none;
 }
-.btnOutline:hover { background: var(--theme-pill-bg); border-color: var(--theme-pill-border); color: var(--theme-text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.45); }
+.btnOutline:hover { background: rgba(244,244,239,0.08); border-color: rgba(244,244,239,0.26); color: rgba(244,244,239,0.92); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 4px 16px rgba(0,0,0,0.45); }
 .btnOutline:hover::after { transform: translateX(380%) skewX(-18deg); transition: transform 0.52s ease; }
 .btnOutline:active { box-shadow: inset 0 2px 5px rgba(0,0,0,0.28); transition-duration: 0.08s; }

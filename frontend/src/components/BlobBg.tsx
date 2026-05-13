@@ -16,8 +16,7 @@
 import { useAnimationFrame, motion } from 'framer-motion'
 import { useEffect, useRef, memo, type CSSProperties } from 'react'
 
-const BG_DARK  = '#020108'
-const BG_LIGHT = '#f2ede8'
+const BG   = '#020108'
 const RED  = { r: 192, g: 57,  b: 43  }
 const REDB = { r: 231, g: 76,  b: 60  }
 const BLUE = { r: 86,  g: 204, b: 242 }
@@ -25,10 +24,6 @@ const PURP = { r: 120, g: 55,  b: 210 }
 
 function rgba({ r, g, b }: { r: number; g: number; b: number }, a: number) {
   return `rgba(${r},${g},${b},${a})`
-}
-
-function getIsLight(): boolean {
-  return document.documentElement.dataset.theme === 'light'
 }
 
 // ── shared canvas hook ────────────────────────────────────────
@@ -300,8 +295,7 @@ const AsteroidBeltBg = memo(function AsteroidBeltBg() {
 // ─────────────────────────────────────────────────────────────
 function AuroraBg() {
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    const isLight = getIsLight()
-    ctx.fillStyle = isLight ? '#ede4da' : BG_DARK
+    ctx.fillStyle = BG
     ctx.fillRect(0, 0, W, H)
 
     const waves = [
@@ -385,8 +379,7 @@ const ConstellationBg = memo(function ConstellationBg() {
   const ref = useCanvasLoop((ctx, W, H, t) => {
     if (W !== prevW.current || H !== prevH.current) { initNodes(W, H); prevW.current = W; prevH.current = H }
 
-    const isLight = getIsLight()
-    ctx.fillStyle = isLight ? BG_LIGHT : BG_DARK
+    ctx.fillStyle = BG
     ctx.fillRect(0, 0, W, H)
 
     const maxDist = Math.min(W, H) * 0.22
@@ -514,8 +507,7 @@ const StarfieldBg = memo(function StarfieldBg() {
     }
 
     // Background
-    const isLight = getIsLight()
-    ctx.fillStyle = isLight ? '#e9e1d8' : '#06050c'
+    ctx.fillStyle = '#06050c'
     ctx.fillRect(0, 0, W, H)
 
     // Nebula glow blobs — brighter, more red and blue
@@ -591,10 +583,9 @@ const StarfieldBg = memo(function StarfieldBg() {
             s.x - cx * spikeLen, s.y - cy * spikeLen,
             s.x + cx * spikeLen, s.y + cy * spikeLen,
           )
-          const coreCol = isLight ? `${s.r2},${s.g2},${s.b2}` : '255,255,255'
           lg.addColorStop(0,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
           lg.addColorStop(0.44, `rgba(${s.r2},${s.g2},${s.b2},0.75)`)
-          lg.addColorStop(0.50, `rgba(${coreCol},1)`)
+          lg.addColorStop(0.50, `rgba(255,255,255,1)`)
           lg.addColorStop(0.56, `rgba(${s.r2},${s.g2},${s.b2},0.75)`)
           lg.addColorStop(1,    `rgba(${s.r2},${s.g2},${s.b2},0)`)
           ctx.beginPath()

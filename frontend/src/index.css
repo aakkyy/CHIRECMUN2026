@@ -29,65 +29,25 @@
   --r:        10px;
   --r-sm:     6px;
   /* theme-aware */
-  --theme-bg:          #020108;
-  --theme-bg-alt:      #06050c;
-  --theme-bg-deep:     #0c0402;
-  --theme-footer-bg:   #111013;
-  --theme-surface:     rgba(14,14,24,0.85);
-  --theme-card-bg:     rgba(6,5,12,0.50);
-  --theme-card-border: rgba(192,57,43,0.22);
-  --theme-input-bg:    rgba(255,255,255,0.04);
-  --theme-input-text:  #f4f4ef;
-  --theme-text:        #f4f4ef;
-  --theme-text-dim:    rgba(244,244,239,0.55);
-  --theme-text-65:     rgba(244,244,239,0.65);
-  --theme-text-55:     rgba(244,244,239,0.55);
-  --theme-text-50:     rgba(244,244,239,0.50);
-  --theme-text-45:     rgba(244,244,239,0.45);
-  --theme-text-40:     rgba(244,244,239,0.40);
-  --theme-text-38:     rgba(244,244,239,0.38);
-  --theme-text-30:     rgba(244,244,239,0.30);
-  --theme-text-22:     rgba(244,244,239,0.22);
-  --theme-text-18:     rgba(244,244,239,0.18);
-  --theme-border:      rgba(255,255,255,0.07);
-  --theme-border-red:  rgba(192,57,43,0.15);
-  --theme-nav-bg:      transparent;
-  --theme-pill-bg:     rgba(18,20,30,0.78);
+  --theme-bg:        #020108;
+  --theme-surface:   rgba(14,14,24,0.85);
+  --theme-text:      #f4f4ef;
+  --theme-text-dim:  rgba(244,244,239,0.55);
+  --theme-border:    rgba(255,255,255,0.07);
+  --theme-nav-bg:    transparent;
+  --theme-pill-bg:   rgba(18,20,30,0.78);
   --theme-pill-border: rgba(255,255,255,0.08);
-  --theme-hero-bg:     #020209;
-  --theme-cta-bg:      linear-gradient(135deg, #0e0405 0%, #1c0707 45%, #120810 100%);
-  --theme-cta-vignette: rgba(4,6,10,0.62);
 }
 
 [data-theme="light"] {
-  --theme-bg:          #f2ede8;
-  --theme-bg-alt:      #e9e1d8;
-  --theme-bg-deep:     #ede4da;
-  --theme-footer-bg:   #d8cfc5;
-  --theme-surface:     rgba(242,237,232,0.92);
-  --theme-card-bg:     rgba(255,251,247,0.78);
-  --theme-card-border: rgba(192,57,43,0.20);
-  --theme-input-bg:    rgba(0,0,0,0.05);
-  --theme-input-text:  #18121a;
-  --theme-text:        #18121a;
-  --theme-text-dim:    rgba(24,18,26,0.58);
-  --theme-text-65:     rgba(24,18,26,0.72);
-  --theme-text-55:     rgba(24,18,26,0.62);
-  --theme-text-50:     rgba(24,18,26,0.58);
-  --theme-text-45:     rgba(24,18,26,0.55);
-  --theme-text-40:     rgba(24,18,26,0.50);
-  --theme-text-38:     rgba(24,18,26,0.48);
-  --theme-text-30:     rgba(24,18,26,0.40);
-  --theme-text-22:     rgba(24,18,26,0.32);
-  --theme-text-18:     rgba(24,18,26,0.26);
-  --theme-border:      rgba(0,0,0,0.08);
-  --theme-border-red:  rgba(192,57,43,0.15);
-  --theme-nav-bg:      transparent;
-  --theme-pill-bg:     rgba(225,218,210,0.82);
+  --theme-bg:        #f2ede8;
+  --theme-surface:   rgba(242,237,232,0.92);
+  --theme-text:      #18121a;
+  --theme-text-dim:  rgba(24,18,26,0.58);
+  --theme-border:    rgba(0,0,0,0.08);
+  --theme-nav-bg:    transparent;
+  --theme-pill-bg:   rgba(225,218,210,0.82);
   --theme-pill-border: rgba(0,0,0,0.10);
-  --theme-hero-bg:     #f2ede8;
-  --theme-cta-bg:      linear-gradient(135deg, #f0e5df 0%, #eadcd4 45%, #ecdde0 100%);
-  --theme-cta-vignette: rgba(242,237,232,0.55);
 }
 
 /* smooth theme transition on everything */

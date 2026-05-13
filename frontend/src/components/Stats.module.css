@@ -1,7 +1,7 @@
 .strip {
-  background: var(--theme-bg-alt);
-  border-top: 1px solid var(--theme-card-border);
-  border-bottom: 1px solid var(--theme-card-border);
+  background: #0e0e18;
+  border-top: 1px solid rgba(192,57,43,0.2);
+  border-bottom: 1px solid rgba(192,57,43,0.2);
   padding: 2.2rem 0;
 }
 
@@ -94,7 +94,7 @@
   font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--theme-text-40);
+  color: rgba(244,244,239,0.4);
   margin-top: 2px;
 }
 
@@ -146,5 +146,5 @@
   font-weight: 700;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--theme-text-40);
+  color: rgba(244,244,239,0.4);
 }

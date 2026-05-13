@@ -1,5 +1,5 @@
 .section {
-  background: var(--theme-bg);
+  background: #09090f;
 }
 
 .eyebrow {
@@ -17,7 +17,7 @@
   font-family: 'Rubik', sans-serif;
   font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 800;
-  color: var(--theme-text);
+  color: #f4f4ef;
   text-align: center;
   margin-bottom: 0.75rem;
 }
@@ -25,7 +25,7 @@
 .sub {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: var(--theme-text-40);
+  color: rgba(244,244,239,0.42);
   text-align: center;
   margin-bottom: 2.5rem;
 }
@@ -47,16 +47,12 @@
   filter: invert(90%) hue-rotate(180deg);
 }
 
-:global([data-theme="light"]) .map {
-  filter: none;
-}
-
 .details {
   display: flex;
   align-items: center;
   gap: 2rem;
-  background: var(--theme-card-bg);
-  border: 1px solid var(--theme-border);
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(86,204,242,0.1);
   border-radius: 12px;
   padding: 1.5rem 2rem;
   flex-wrap: wrap;
@@ -81,14 +77,14 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--theme-text-38);
+  color: rgba(244,244,239,0.35);
   margin-bottom: 4px;
 }
 
 .detailValue {
   font-family: 'Inter', sans-serif;
   font-size: 0.88rem;
-  color: var(--theme-text-65);
+  color: rgba(244,244,239,0.78);
   line-height: 1.5;
 }
 
