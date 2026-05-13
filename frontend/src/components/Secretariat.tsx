@@ -57,7 +57,6 @@ function AddressCard({ addr, reverse }) {
 
       {/* Text column */}
       <div className={styles.textCol}>
-        <h3 className={styles.letterTitle}>Letter from the<br />Co-Secretary General</h3>
         <div className={styles.body}>
           {addr.body.map((para, i) => (
             <p key={i} className={i === 0 ? styles.salutation : ''}>{para}</p>
