@@ -1,7 +1,7 @@
 /* ── PAGE SHELL ── */
 .page {
   min-height: 100vh;
-  background: #06060f;
+  background: #020108;
   position: relative;
   overflow-x: hidden;
 }
@@ -11,7 +11,68 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 0%, rgba(4,3,12,0.78) 100%);
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(192,57,43,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 38% at 85% 75%, rgba(28,115,215,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 90% 80% at 50% 50%, transparent 30%, rgba(2,1,8,0.82) 100%);
+}
+
+/* ── FLOATING ORBS (only animated elements) ── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+.orbRed1 {
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(192,57,43,0.18) 0%, transparent 70%);
+  top: 12%; left: 8%;
+  animation: floatA 14s ease-in-out infinite;
+}
+
+.orbBlue1 {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(28,115,215,0.14) 0%, transparent 70%);
+  top: 20%; right: 6%;
+  animation: floatB 18s ease-in-out infinite;
+}
+
+.orbRed2 {
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%);
+  bottom: 25%; right: 12%;
+  animation: floatC 20s ease-in-out infinite;
+}
+
+.orbBlue2 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(60,160,255,0.10) 0%, transparent 70%);
+  bottom: 15%; left: 10%;
+  animation: floatD 16s ease-in-out infinite;
+}
+
+@keyframes floatA {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(18px, -22px); }
+  66%       { transform: translate(-12px, 14px); }
+}
+@keyframes floatB {
+  0%, 100% { transform: translate(0, 0); }
+  40%       { transform: translate(-20px, 16px); }
+  70%       { transform: translate(14px, -10px); }
+}
+@keyframes floatC {
+  0%, 100% { transform: translate(0, 0); }
+  30%       { transform: translate(-16px, -18px); }
+  65%       { transform: translate(20px, 10px); }
+}
+@keyframes floatD {
+  0%, 100% { transform: translate(0, 0); }
+  45%       { transform: translate(22px, -14px); }
+  75%       { transform: translate(-10px, 20px); }
 }
 
 /* ── HERO ── */

@@ -19,7 +19,7 @@ const sections = [
     items: [
       'All participants must sign the Liability Release Form and Tech Release Form before the conference begins.',
       'Participants under 18 must also have a parent or guardian sign the undertaking.',
-      'Check-in begins at the venue on Day 1, July 31st, 2026. Please arrive on time.',
+      'Registration begins at the venue on Day 1, July 31st, 2026. Please arrive on time.',
       'Missing more than 2 committee sessions makes you ineligible for certificates and awards.',
       'All registration details must be accurate.',
     ],
@@ -129,8 +129,14 @@ export default function GuidelinesPage() {
 
   return (
     <div className={styles.page}>
-      <AnimatedBg variant="streams" />
+      <AnimatedBg variant="cosmic" />
       <div className={styles.vignette} />
+
+      {/* Small animated orbs — only these move */}
+      <div className={`${styles.orb} ${styles.orbRed1}`} />
+      <div className={`${styles.orb} ${styles.orbBlue1}`} />
+      <div className={`${styles.orb} ${styles.orbRed2}`} />
+      <div className={`${styles.orb} ${styles.orbBlue2}`} />
 
       <Navbar />
 
