@@ -1,4 +1,5 @@
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import BlobButton from './BlobButton'
 import styles from './Navbar.module.css'
 import logoImg from '@assets/logo.png'
@@ -9,8 +10,8 @@ const links: NavLink[] = [
   { label: 'Home',          to: '/'           },
   { label: 'Meet The Team', to: '/team'        },
   { label: 'Committees',    to: '/committees'  },
-  { label: 'Guidelines',    to: '/guidelines'  },
   { label: 'Schedule',      to: '/schedule'    },
+  { label: 'Guidelines',    to: '/guidelines'  },
   { label: 'FAQs',          to: '/faq'         },
 ]
 
@@ -44,10 +45,21 @@ export default function Navbar() {
           {links.map((l) => {
             const isActive = location.pathname === l.to
             return (
-              <li key={l.to}>
-                <Link to={l.to} className={`${styles.link} ${isActive ? styles.linkActive : ''}`}>
-                  {l.label}
-                  {isActive && <span className={styles.dot} />}
+              <li key={l.to} className={styles.linkItem}>
+                <Link
+                  to={l.to}
+                  className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
+                >
+                  {/* sliding background pill */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="navActivePill"
+                      className={styles.activePill}
+                      transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                    />
+                  )}
+                  {/* label sits above the pill */}
+                  <span className={styles.linkLabel}>{l.label}</span>
                 </Link>
               </li>
             )
