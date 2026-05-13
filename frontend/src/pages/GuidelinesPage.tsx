@@ -41,7 +41,7 @@ const sections = [
     title: 'Diplomatic Standards',
     items: [
       'Maintain respect and courtesy toward all participants, guests, and staff at all times.',
-      'No insults, jokes, or derogatory remarks about another person\'s culture, race, religion, gender, or sexual orientation.',
+      "No insults, jokes, or derogatory remarks about another person's culture, race, religion, gender, or sexual orientation.",
       'Constructive debate only. Personal attacks, aggressive confrontations, and offensive language are strictly prohibited.',
       'Plagiarism in position papers or resolutions will result in immediate disqualification.',
       'Any form of violence, stalking, physical harassment, or sexual harassment will be referred to the Complaints Committee immediately.',
@@ -54,17 +54,46 @@ const sections = [
       'Breaches of this Code of Conduct can be reported to a Complaints Officer at any time during the conference.',
       'The Complaints Committee, comprising the Co-Secretaries General, Director General, and Faculty Coordinators, handles serious violations.',
       'Consequences range from a formal warning to suspension, expulsion from CHIREC MUN 2026, or a ban from future conferences.',
-      'The Complaints Committee\'s decision is final. Appeals are not permitted, though re-admission may be applied for 6 months after the decision.',
+      "The Complaints Committee's decision is final. Appeals are not permitted, though re-admission may be applied for 6 months after the decision.",
     ],
   },
 ]
+
+const cardVariants = {
+  hidden: (fromLeft: boolean) => ({
+    opacity: 0,
+    x: fromLeft ? -60 : 60,
+    y: 20,
+  }),
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+}
+
+const listVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.15 },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -16 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+}
+
+const titleWords = ['Delegate', 'Rules', '&', 'Regulations']
 
 export default function GuidelinesPage() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div className={styles.page}>
-      <AnimatedBg variant="red" />
+      <AnimatedBg variant="streams" />
+      <div className={styles.vignette} />
 
       <Navbar />
 
@@ -79,13 +108,13 @@ export default function GuidelinesPage() {
         </motion.p>
 
         <h1 className={styles.title}>
-          {['Code', 'of', 'Conduct'].map((word, i) => (
+          {titleWords.map((word, i) => (
             <motion.span
-              key={word}
+              key={word + i}
               className={styles.titleWord}
-              initial={{ opacity: 0, y: 52, rotateX: -22 }}
+              initial={{ opacity: 0, y: 60, rotateX: -28 }}
               animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ type: 'spring', stiffness: 88, damping: 16, delay: 0.1 + i * 0.13 }}
+              transition={{ type: 'spring', stiffness: 82, damping: 15, delay: 0.08 + i * 0.12 }}
             >
               {word}
             </motion.span>
@@ -94,44 +123,65 @@ export default function GuidelinesPage() {
 
         <motion.p
           className={styles.sub}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.52, duration: 0.6 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
         >
           All participants must read and agree to abide by the following guidelines.
         </motion.p>
+
+        {/* animated divider */}
+        <motion.div
+          className={styles.divider}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.75, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        />
       </div>
 
       <div className={styles.content}>
-        {sections.map((section, si) => (
-          <motion.div
-            key={section.title}
-            className={styles.card}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: si * 0.06 }}
-          >
-            <h2 className={styles.sectionTitle}>{section.title}</h2>
-            <ul className={styles.list}>
-              {section.items.map((item, ii) => (
-                <li key={ii} className={styles.item}>
-                  <span className={styles.bullet} />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        ))}
+        {sections.map((section, si) => {
+          const fromLeft = si % 2 === 0
+          return (
+            <motion.div
+              key={section.title}
+              className={styles.card}
+              custom={fromLeft}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+            >
+              <div className={styles.cardAccent} />
+              <h2 className={styles.sectionTitle}>{section.title}</h2>
+              <motion.ul
+                className={styles.list}
+                variants={listVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-40px' }}
+              >
+                {section.items.map((item, ii) => (
+                  <motion.li key={ii} className={styles.item} variants={itemVariants}>
+                    <span className={styles.bullet} />
+                    <span>{item}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
+          )
+        })}
 
         <motion.p
           className={styles.footer}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          As representatives of nations in a formal diplomatic setting, all participants are expected to maintain professionalism and adhere to these guidelines at all times. Failure to comply may result in disciplinary action or removal from the conference.
+          As representatives of nations in a formal diplomatic setting, all participants are expected
+          to maintain professionalism and adhere to these guidelines at all times. Failure to comply
+          may result in disciplinary action or removal from the conference.
         </motion.p>
       </div>
 
