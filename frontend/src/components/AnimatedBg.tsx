@@ -401,14 +401,16 @@ export default function AnimatedBg({ variant = 'cosmic' }) {
         const amp   = H * 0.09
         const freq  = 0.0028 + (l % 5) * 0.0007
         const phase = l * 0.64 + t * 0.18
-        const alpha = 0.08 + 0.05 * Math.sin(t * 0.42 + l)
+        const alpha = 0.30 + 0.16 * Math.sin(t * 0.42 + l)
         ctx.beginPath()
         for (let x = 0; x <= W; x += 4) {
           const y = yBase + amp * Math.sin(x * freq + phase) + amp * 0.3 * Math.sin(x * freq * 2.4 + phase * 1.6)
           x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
         }
+        ctx.strokeStyle = `rgba(${col},${alpha * 0.35})`
+        ctx.lineWidth = 4; ctx.stroke()
         ctx.strokeStyle = `rgba(${col},${alpha})`
-        ctx.lineWidth = 1.2; ctx.stroke()
+        ctx.lineWidth = 1.6; ctx.stroke()
       }
     }
 

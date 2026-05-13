@@ -6,16 +6,15 @@
   overflow-x: hidden;
 }
 
-/* dark vignette over the streams so text stays readable */
 .vignette {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 0%, rgba(4,3,12,0.72) 100%);
+  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 0%, rgba(4,3,12,0.78) 100%);
 }
 
-/* ── HERO TEXT ── */
+/* ── HERO ── */
 .hero {
   position: relative;
   z-index: 1;
@@ -54,118 +53,135 @@
 .sub {
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
-  color: rgba(231, 76, 60, 0.55);
+  color: rgba(231,76,60,0.52);
   letter-spacing: 0.04em;
   max-width: 480px;
   margin: 0 auto 2rem;
 }
 
-/* animated red divider line */
 .divider {
   width: 80px;
   height: 2px;
-  background: linear-gradient(to right, transparent, rgba(231,76,60,0.8), transparent);
+  background: linear-gradient(to right, transparent, rgba(231,76,60,0.75), transparent);
   margin: 0 auto;
   transform-origin: center;
 }
 
-/* ── CONTENT AREA ── */
+/* ── CONTENT ── */
 .content {
   position: relative;
   z-index: 1;
-  max-width: 840px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 2.5rem 2rem 6rem;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 0;
 }
 
-/* ── SECTION CARD ── */
+/* ── CARD — 2-column grid ── */
 .card {
-  position: relative;
-  background: linear-gradient(
-    135deg,
-    rgba(14, 3, 6, 0.90) 0%,
-    rgba(8, 2, 16, 0.88) 100%
-  );
-  border: 1px solid rgba(192, 57, 43, 0.14);
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 0 1.4rem;
+  padding: 0 0 2.8rem;
+}
+
+/* ── ICON COLUMN ── */
+.iconCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3px;
+}
+
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(192,57,43,0.10);
+  border: 1px solid rgba(192,57,43,0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 18px rgba(192,57,43,0.12);
+}
+
+.iconLine {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(192,57,43,0.35), rgba(192,57,43,0.06));
+  margin-top: 8px;
+  min-height: 24px;
+}
+
+/* ── CARD BODY ── */
+.cardBody {
+  background: linear-gradient(135deg, rgba(14,3,6,0.88) 0%, rgba(8,2,16,0.84) 100%);
+  border: 1px solid rgba(192,57,43,0.13);
   border-radius: 4px 18px 18px 4px;
-  padding: 2rem 2.4rem 2rem 2.8rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: 1.6rem 2rem 1.6rem 1.8rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.5),
-    0 1px 0 rgba(255,255,255,0.03) inset;
-  overflow: hidden;
+    0 8px 40px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.03);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.card:hover {
-  border-color: rgba(231, 76, 60, 0.30);
+.cardBody:hover {
+  border-color: rgba(231,76,60,0.26);
   box-shadow:
-    0 12px 50px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(231,76,60,0.08) inset,
-    0 16px 40px rgba(192, 57, 43, 0.10);
-}
-
-/* left accent bar — sits on top of padding */
-.cardAccent {
-  position: absolute;
-  left: 0;
-  top: 12%;
-  bottom: 12%;
-  width: 3px;
-  border-radius: 0 2px 2px 0;
-  background: linear-gradient(to bottom, transparent, rgba(231,76,60,0.8), transparent);
+    0 12px 50px rgba(0,0,0,0.5),
+    0 0 40px rgba(192,57,43,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 /* ── SECTION HEADING ── */
 .sectionTitle {
   font-family: 'Rubik', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #e74c3c;
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.1rem;
 }
 
-/* ── BULLET LIST ── */
+/* ── LIST ── */
 .list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.72rem;
 }
 
 .item {
   display: flex;
   align-items: flex-start;
-  gap: 0.9rem;
+  gap: 0.75rem;
   font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(244, 244, 239, 0.60);
+  font-size: 0.88rem;
+  color: rgba(244,244,239,0.58);
   line-height: 1.78;
 }
 
-.bullet {
+/* ── PLANET BULLET ── */
+.planet {
   flex-shrink: 0;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(231, 76, 60, 0.65);
-  margin-top: 0.58em;
-  box-shadow: 0 0 6px rgba(231, 76, 60, 0.4);
+  width: 18px;
+  height: 18px;
+  margin-top: 0.22em;
 }
 
-/* ── CLOSING STATEMENT ── */
+/* ── FOOTER ── */
 .footer {
   font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  color: rgba(231, 76, 60, 0.30);
+  font-size: 0.86rem;
+  color: rgba(231,76,60,0.28);
   font-style: italic;
   line-height: 1.9;
   text-align: center;
@@ -178,15 +194,21 @@
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
   .card {
-    padding: 1.5rem 1.6rem 1.5rem 2rem;
+    grid-template-columns: 36px 1fr;
+    gap: 0 1rem;
+  }
+
+  .iconCircle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .cardBody {
+    padding: 1.2rem 1.4rem;
     border-radius: 4px 12px 12px 4px;
   }
 
-  .sectionTitle {
-    font-size: 0.72rem;
-  }
-
   .item {
-    font-size: 0.85rem;
+    font-size: 0.83rem;
   }
 }
