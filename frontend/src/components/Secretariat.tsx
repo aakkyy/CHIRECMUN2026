@@ -45,7 +45,7 @@ function AddressCard({ addr, reverse }) {
       viewport={viewport}
       transition={{ ...spring }}
     >
-      {/* Photo column — top-aligned */}
+      {/* Photo column */}
       <div className={styles.photoCol}>
         <div className={styles.avatar}>
           <img src={addr.photo} alt={addr.name} className={styles.avatarImg} />
@@ -55,8 +55,9 @@ function AddressCard({ addr, reverse }) {
         <p className={styles.personConf}>{addr.conf}</p>
       </div>
 
-      {/* Text column — starts at same level as avatar top */}
+      {/* Text column */}
       <div className={styles.textCol}>
+        <h3 className={styles.letterTitle}>Letter from the<br />Co-Secretary General</h3>
         <div className={styles.body}>
           {addr.body.map((para, i) => (
             <p key={i} className={i === 0 ? styles.salutation : ''}>{para}</p>
