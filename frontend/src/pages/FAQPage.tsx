@@ -78,7 +78,7 @@ export default function FAQPage() {
 
   return (
     <div className={styles.page}>
-      <AuraBg />
+      <AuraBg variant="bands" />
 
       <Navbar />
 

@@ -10,7 +10,7 @@ export default function ComingSoonPage() {
 
   return (
     <div className={styles.page}>
-      <AuraBg />
+      <AuraBg variant="waves" />
       <Navbar />
       <div className={styles.center}>
         <motion.p
