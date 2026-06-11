@@ -116,64 +116,67 @@ function drawRibbons(ctx: CanvasRenderingContext2D, W: number, H: number, t: num
   }
 }
 
-// ── BANDS — horizontal aurora band mesh ───────────────────────
+// ── BANDS — filled aurora gradient bands (NO mesh lines) ─────
+// Each band is a solid sinusoidal stripe rendered as a filled path
+// with a vertical gradient, aurora-style
 function drawBands(ctx: CanvasRenderingContext2D, W: number, H: number, t: number) {
-  // 5 wide horizontal ribbon "bands" — each is a parametric strip
-  const bands = [
-    { yFrac:0.12, halfH:0.10, speed:0.18, amp:0.035, phase:0.0, alpha:0.48, nLines:16, nCross:20 },
-    { yFrac:0.32, halfH:0.11, speed:0.22, amp:0.040, phase:2.2, alpha:0.52, nLines:18, nCross:22 },
-    { yFrac:0.54, halfH:0.10, speed:0.16, amp:0.038, phase:4.4, alpha:0.50, nLines:16, nCross:20 },
-    { yFrac:0.74, halfH:0.09, speed:0.20, amp:0.032, phase:1.1, alpha:0.44, nLines:14, nCross:18 },
-    { yFrac:0.90, halfH:0.07, speed:0.24, amp:0.028, phase:3.8, alpha:0.38, nLines:12, nCross:16 },
+  // [yFrac, halfH, speed, amp, phase, color: r/g/b, maxAlpha]
+  const bands: [number, number, number, number, number, number, number, number, number][] = [
+    // y%,   hH,   spd,  amp,  ph,   r,   g,   b,   a
+    [0.13, 0.095, 0.17, 0.038, 0.00, 192,  35,  20,  0.22],  // crimson red
+    [0.31, 0.085, 0.21, 0.042, 2.80, 155,   8,   8,  0.18],  // deep red
+    [0.50, 0.100, 0.15, 0.035, 5.50,  22,  60, 180,  0.16],  // dark blue
+    [0.69, 0.080, 0.19, 0.033, 1.40, 170,  20,  12,  0.20],  // red-orange
+    [0.88, 0.070, 0.23, 0.028, 4.20,  14,  35, 165,  0.14],  // midnight blue
   ]
 
-  for (const band of bands) {
-    const yCenter = band.yFrac * H
-    const halfPx  = band.halfH * H
-    const freq    = 0.0025 + band.phase * 0.00008
+  const FREQ = 0.00018
 
-    // Horizontal wave lines within band
-    for (let li = 0; li < band.nLines; li++) {
-      const vFrac    = li / (band.nLines - 1)  // 0 → 1 across band height
-      const yOffset  = (vFrac - 0.5) * halfPx * 2
-      const edgeFade = Math.sin(vFrac * Math.PI)
-      const a        = band.alpha * edgeFade
-      if (a < 0.012) continue
+  for (const [yFrac, halfH, spd, amp, phase, r, g, b, maxA] of bands) {
+    const yCenter = yFrac * H
+    const halfPx  = halfH * H
+    const ph      = phase + t * spd
+    const STEPS   = Math.ceil(W / 4)
 
-      const phase = band.phase + li * 0.38 + t * band.speed
+    // Build top-edge and bottom-edge curves
+    const topYs: number[] = []
+    const botYs: number[] = []
 
-      ctx.beginPath()
-      let x = 0
-      const y0 = yCenter + yOffset + band.amp * H * Math.sin(x * freq + phase)
-                                    + band.amp * H * 0.32 * Math.sin(x * freq * 2.1 + phase * 1.35)
-      ctx.moveTo(x, y0)
-      for (x = 6; x <= W; x += 6) {
-        const y = yCenter + yOffset + band.amp * H * Math.sin(x * freq + phase)
-                                    + band.amp * H * 0.32 * Math.sin(x * freq * 2.1 + phase * 1.35)
-        ctx.lineTo(x, y)
-      }
-      ctx.strokeStyle = `rgba(${MESH_COL},${a.toFixed(3)})`
-      ctx.lineWidth = 0.65; ctx.stroke()
+    for (let i = 0; i <= STEPS; i++) {
+      const x  = (i / STEPS) * W
+      const dy = amp * H * Math.sin(x * FREQ * W + ph)
+               + amp * H * 0.45 * Math.sin(x * FREQ * W * 2.3 + ph * 1.2)
+      topYs.push(yCenter - halfPx + dy)
+      botYs.push(yCenter + halfPx + dy)
     }
 
-    // Vertical cross-connections within band
-    const xStep = W / band.nCross
-    for (let ci = 0; ci <= band.nCross; ci++) {
-      const x  = ci * xStep
-      const a  = band.alpha * 0.38
-      ctx.beginPath()
-      for (let li = 0; li < band.nLines; li++) {
-        const vFrac   = li / (band.nLines - 1)
-        const yOffset = (vFrac - 0.5) * halfPx * 2
-        const phase   = band.phase + li * 0.38 + t * band.speed
-        const freq    = 0.0025 + band.phase * 0.00008
-        const y       = yCenter + yOffset + band.amp * H * Math.sin(x * freq + phase)
-                                          + band.amp * H * 0.32 * Math.sin(x * freq * 2.1 + phase * 1.35)
-        li === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-      }
-      ctx.strokeStyle = `rgba(${MESH_COL},${a.toFixed(3)})`
-      ctx.lineWidth = 0.50; ctx.stroke()
-    }
+    // Filled strip path
+    ctx.beginPath()
+    ctx.moveTo(0, topYs[0])
+    for (let i = 1; i <= STEPS; i++) ctx.lineTo((i / STEPS) * W, topYs[i])
+    for (let i = STEPS; i >= 0; i--) ctx.lineTo((i / STEPS) * W, botYs[i])
+    ctx.closePath()
+
+    // Vertical gradient: bright center → transparent edges
+    const topY0  = yCenter - halfPx
+    const botY0  = yCenter + halfPx
+    const bandGr = ctx.createLinearGradient(0, topY0, 0, botY0)
+    bandGr.addColorStop(0.00, `rgba(${r},${g},${b},0)`)
+    bandGr.addColorStop(0.25, `rgba(${r},${g},${b},${(maxA * 0.60).toFixed(3)})`)
+    bandGr.addColorStop(0.50, `rgba(${r},${g},${b},${maxA.toFixed(3)})`)
+    bandGr.addColorStop(0.75, `rgba(${r},${g},${b},${(maxA * 0.60).toFixed(3)})`)
+    bandGr.addColorStop(1.00, `rgba(${r},${g},${b},0)`)
+
+    ctx.fillStyle = bandGr
+    ctx.fill()
+
+    // Subtle bright rim line on top edge only — adds a glow seam
+    const rimA = maxA * 0.55
+    ctx.beginPath()
+    ctx.moveTo(0, topYs[0])
+    for (let i = 1; i <= STEPS; i++) ctx.lineTo((i / STEPS) * W, topYs[i])
+    ctx.strokeStyle = `rgba(${r},${g},${b},${rimA.toFixed(3)})`
+    ctx.lineWidth = 1.0; ctx.stroke()
   }
 }
 
