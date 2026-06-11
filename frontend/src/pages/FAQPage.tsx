@@ -80,6 +80,12 @@ export default function FAQPage() {
     <div className={styles.page}>
       <AuraBg variant="bands" />
 
+      {/* Supplementary CSS light effects layered over the canvas */}
+      <div className={`${styles.lightRay} ${styles.ray1}`} />
+      <div className={`${styles.lightRay} ${styles.ray2}`} />
+      <div className={`${styles.lightRay} ${styles.ray3}`} />
+      <div className={styles.ambientGlow} />
+
       <Navbar />
 
       {/* Hero text */}

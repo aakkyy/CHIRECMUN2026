@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence, useMotionValue, useTransform, useInView, animate } from 'framer-motion'
 import styles from './Countdown.module.css'
 import BlobBg from './BlobBg'
 import { viewport } from '../lib/motion'
@@ -65,10 +65,26 @@ export default function Countdown() {
   const [time, setTime] = useState(getTimeLeft())
   const progress = getProgress()
 
+  // Smooth count-up percentage, in sync with the bar fill
+  const progressWrapRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(progressWrapRef, { once: true, amount: 0.4 })
+  const pctMv = useMotionValue(0)
+  const pctRounded = useTransform(pctMv, Math.round)
+
   useEffect(() => {
     const id = setInterval(() => setTime(getTimeLeft()), 1000)
     return () => clearInterval(id)
   }, [])
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(pctMv, Math.round(progress * 100), {
+      duration: 1.4,
+      ease: [0.22, 1, 0.36, 1],
+      delay: 0.45,
+    })
+    return () => controls.stop()
+  }, [inView, progress, pctMv])
 
   return (
     <section className={`section ${styles.section}`} id="countdown" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -101,13 +117,14 @@ export default function Countdown() {
 
         {/* ── Progress bar ── */}
         <motion.div
+          ref={progressWrapRef}
           className={styles.progressWrap}
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={viewport} transition={{ duration: 0.7, ease: [0.22,1,0.36,1], delay: 0.3 }}
         >
           <div className={styles.progressMeta}>
             <span>Road to Edition XIV</span>
-            <span className={styles.progressPct}>{Math.round(progress * 100)}%</span>
+            <span className={styles.progressPct}><motion.span>{pctRounded}</motion.span>%</span>
           </div>
           <div className={styles.progressTrack}>
             <motion.div

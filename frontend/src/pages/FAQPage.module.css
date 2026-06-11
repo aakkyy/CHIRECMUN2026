@@ -10,6 +10,55 @@
   display: none;
 }
 
+/* ── Vertical light rays — slow pendulum sway over the canvas ── */
+.lightRay {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  width: 2px;
+  height: 60vh;
+  background: linear-gradient(to bottom, transparent, rgba(192,57,43,0.18), transparent);
+  filter: blur(4px);
+  transform-origin: top center;
+}
+
+@keyframes swayRay {
+  0%, 100% { transform: rotate(-8deg); }
+  50%       { transform: rotate(8deg); }
+}
+
+.ray1 {
+  left: 15%; top: 0; height: 50vh;
+  animation: swayRay 14s ease-in-out infinite;
+}
+
+.ray2 {
+  left: 50%; top: 0; height: 70vh;
+  animation: swayRay 18s ease-in-out infinite;
+  animation-delay: -7s;
+}
+
+.ray3 {
+  left: 82%; top: 0; height: 45vh;
+  animation: swayRay 12s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+/* ── Ambient top glow — slow pulse ── */
+.ambientGlow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 15%, rgba(192,57,43,0.07) 0%, transparent 100%);
+  animation: glowPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1.0; }
+}
+
 /* ── HERO TEXT ── */
 .hero {
   position: relative;

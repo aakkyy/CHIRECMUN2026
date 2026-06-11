@@ -124,6 +124,10 @@ export default function GuidelinesPage() {
       <div className={`${styles.orb} ${styles.orbBlue1}`} />
       <div className={`${styles.orb} ${styles.orbRed2}`} />
       <div className={`${styles.orb} ${styles.orbBlue2}`} />
+      <div className={`${styles.orb} ${styles.orbCenter}`} />
+
+      {/* Drifting horizontal light streak */}
+      <div className={styles.scanH} />
 
       <Navbar />
 

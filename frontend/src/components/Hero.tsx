@@ -54,81 +54,131 @@ export default function Hero() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let W, H, stars = [], dust = [], shooters = [], t = 0, raf = null
+    let W, H, t = 0, raf = null
     let lastTime = 0
     const FPS = 30, INTERVAL = 1000 / FPS
 
     function resize() {
       W = canvas.width  = window.innerWidth
       H = canvas.height = window.innerHeight
-      init()
     }
-    function init() {
-      stars = []; dust = []
-      const count = Math.min(Math.floor(W * H / 3500), 180)
+
+    // ── High-Voltage Chromatic Field ──────────────────────────
+    // 4 mega halos drifting in slow lissajous orbits
+    const HALOS = [
+      { xf: 0.00, yf: 0.00, col: 'rgba(175,25,15,',  a: 0.22, phx: 0.0, phy: 1.2 },  // top-left crimson
+      { xf: 1.00, yf: 0.00, col: 'rgba(12,38,172,',  a: 0.18, phx: 3.1, phy: 4.3 },  // top-right blue
+      { xf: 0.00, yf: 1.00, col: 'rgba(8,28,140,',   a: 0.16, phx: 1.9, phy: 0.6 },  // bottom-left blue
+      { xf: 1.00, yf: 1.00, col: 'rgba(160,20,12,',  a: 0.20, phx: 5.0, phy: 2.7 },  // bottom-right crimson
+    ]
+
+    // 3 horizontal chromatic bands — crimson / blue / crimson
+    const BANDS = [
+      { yf: 0.30, col: 'rgba(192,57,43,',  ph: 0.0, spd: 0.05 },
+      { yf: 0.55, col: 'rgba(12,38,172,',  ph: 2.1, spd: 0.04 },
+      { yf: 0.72, col: 'rgba(192,57,43,',  ph: 4.2, spd: 0.06 },
+    ]
+
+    function drawGridSet(angle, offset, count, spacing, alpha) {
+      ctx.save()
+      ctx.translate(W / 2, H / 2)
+      ctx.rotate(angle)
+      ctx.setLineDash([])
+      ctx.lineWidth = 0.5
+      const span = Math.sqrt(W * W + H * H)
+      const total = count * spacing
       for (let i = 0; i < count; i++) {
-        const r = Math.random()
-        stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.5+0.2,
-          s: Math.random()*0.8+0.2, b: Math.random(),
-          col: r<.10?'#56CCF2':r<.18?'#85DEFF':r<.25?'#c0392b':'#ffffff' })
+        let x = ((i * spacing + offset) % total + total) % total - total / 2
+        ctx.beginPath()
+        ctx.moveTo(x, -span / 2)
+        ctx.lineTo(x,  span / 2)
+        ctx.strokeStyle = `rgba(255,255,255,${(alpha).toFixed(4)})`
+        ctx.stroke()
       }
-      for (let i = 0; i < 150; i++) {
-        const arm = Math.floor(Math.random()*3), aa = (arm/3)*Math.PI*2
-        const dist = Math.random()*Math.min(W,H)*0.42+25
-        const ang  = aa + dist*0.011 + (Math.random()-0.5)*0.9
-        const r = Math.random()
-        dust.push({ ang, dist, av:(1e-4+Math.random()*1.2e-4)*(Math.random()<.5?1:-1),
-          rr:Math.random()*2.4+0.3, al:Math.random()*0.44+0.08,
-          col: r<.28?'rgba(192,57,43,':r<.54?'rgba(86,204,242,':r<.72?'rgba(120,55,210,':'rgba(45,85,200,' })
-      }
+      ctx.restore()
     }
-    function shoot() {
-      if (Math.random()<0.004 && shooters.length<2) {
-        const a = Math.PI/4+(Math.random()-0.5)*0.6
-        shooters.push({ x:Math.random()*W, y:Math.random()*H*0.4,
-          vx:Math.cos(a)*(7+Math.random()*5), vy:Math.sin(a)*(7+Math.random()*5), life:1, tail:[] })
-      }
-    }
+
     function draw(ts) {
       if (ts - lastTime < INTERVAL) { raf = requestAnimationFrame(draw); return }
       lastTime = ts
-      t++; ctx.clearRect(0,0,W,H)
-      const bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.8)
-      bg.addColorStop(0,'rgba(16,4,4,1)'); bg.addColorStop(.35,'rgba(8,2,2,1)'); bg.addColorStop(1,'rgba(2,0,0,1)')
-      ctx.fillStyle=bg; ctx.fillRect(0,0,W,H)
-      // Corner smoke clouds — red (top) and blue (sides), matching Aura theme
-      const tl = ctx.createRadialGradient(0,0,0,0,0,W*0.55)
-      tl.addColorStop(0,'rgba(155,5,5,0.55)'); tl.addColorStop(0.4,'rgba(140,4,4,0.22)'); tl.addColorStop(1,'rgba(140,4,4,0)')
-      ctx.fillStyle=tl; ctx.fillRect(0,0,W,H)
-      const tr = ctx.createRadialGradient(W,0,0,W,0,W*0.50)
-      tr.addColorStop(0,'rgba(140,4,4,0.48)'); tr.addColorStop(0.4,'rgba(130,4,4,0.18)'); tr.addColorStop(1,'rgba(130,4,4,0)')
-      ctx.fillStyle=tr; ctx.fillRect(0,0,W,H)
-      const core = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,210)
-      core.addColorStop(0,'rgba(192,57,43,.06)'); core.addColorStop(.5,'rgba(12,38,178,.04)'); core.addColorStop(1,'rgba(0,0,0,0)')
-      ctx.fillStyle=core; ctx.fillRect(0,0,W,H)
-      for (const s of stars) {
-        const tw=.5+.5*Math.sin(t*s.s*.04+s.b*Math.PI*2)
-        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2)
-        ctx.fillStyle=s.col; ctx.globalAlpha=.3+tw*.7; ctx.fill()
+      t = ts / 1000
+
+      // 1. Base fill
+      ctx.fillStyle = '#040002'
+      ctx.fillRect(0, 0, W, H)
+
+      // 2. Slow-drifting mega color halos (lissajous, ~20s period)
+      const haloR = 0.7 * Math.min(W, H)
+      const amp = 0.04 * W
+      for (const hl of HALOS) {
+        const cx = hl.xf * W + Math.sin(t * (Math.PI * 2 / 20) + hl.phx) * amp
+        const cy = hl.yf * H + Math.cos(t * (Math.PI * 2 / 23) + hl.phy) * amp
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, haloR)
+        g.addColorStop(0,    hl.col + hl.a + ')')
+        g.addColorStop(0.45, hl.col + (hl.a * 0.4).toFixed(3) + ')')
+        g.addColorStop(1,    hl.col + '0)')
+        ctx.fillStyle = g
+        ctx.fillRect(0, 0, W, H)
       }
-      ctx.globalAlpha=1
-      for (const d of dust) {
-        d.ang+=d.av; ctx.beginPath()
-        ctx.arc(W/2+Math.cos(d.ang)*d.dist,H/2+Math.sin(d.ang)*d.dist,d.rr,0,Math.PI*2)
-        ctx.fillStyle=d.col+d.al+')'; ctx.fill()
-      }
-      shoot()
-      for (let i=shooters.length-1;i>=0;i--) {
-        const s=shooters[i]; s.tail.push({x:s.x,y:s.y})
-        if(s.tail.length>20) s.tail.shift()
-        s.x+=s.vx; s.y+=s.vy; s.life-=.025
-        for (let j=0;j<s.tail.length-1;j++) {
-          const a=(j/s.tail.length)*s.life*.85
-          ctx.beginPath(); ctx.moveTo(s.tail[j].x,s.tail[j].y); ctx.lineTo(s.tail[j+1].x,s.tail[j+1].y)
-          ctx.strokeStyle=`rgba(86,204,242,${a})`; ctx.lineWidth=(j/s.tail.length)*2.2; ctx.stroke()
+
+      // 3. Diagonal interference grid — two crossing line sets (~55°), moiré drift
+      const spacing = W / 12
+      drawGridSet( 55 * Math.PI / 180,  t * 4, 12, spacing, 0.035)
+      drawGridSet(-55 * Math.PI / 180, -t * 3, 12, spacing, 0.028)
+
+      // 4. Horizontal chromatic bands — fake blur via layered strokes
+      const bandH = H * 0.006
+      for (const b of BANDS) {
+        const y = b.yf * H + Math.sin(t * b.spd * Math.PI * 2 + b.ph) * H * 0.02
+        // 5 layers: widest/faintest → thinnest/brightest
+        const layers = [
+          { h: bandH * 9, a: 0.04 },
+          { h: bandH * 6, a: 0.06 },
+          { h: bandH * 4, a: 0.08 },
+          { h: bandH * 2, a: 0.10 },
+          { h: bandH * 1, a: 0.12 },
+        ]
+        for (const L of layers) {
+          ctx.fillStyle = b.col + L.a + ')'
+          ctx.fillRect(0, y - L.h / 2, W, L.h)
         }
-        if(s.life<=0||s.x>W+60||s.y>H+60) shooters.splice(i,1)
       }
+
+      // 5. Central light well — breathing brighter center
+      const breathe = 0.18 * (0.82 + 0.18 * Math.sin(t * 0.35))
+      const well = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.min(W, H) * 0.55)
+      well.addColorStop(0, `rgba(90,10,6,${breathe.toFixed(3)})`)
+      well.addColorStop(1, 'rgba(90,10,6,0)')
+      ctx.fillStyle = well
+      ctx.fillRect(0, 0, W, H)
+
+      // 6. Edge vignette — darken all 4 edges
+      const vTop = ctx.createLinearGradient(0, 0, 0, H * 0.28)
+      vTop.addColorStop(0, 'rgba(4,0,2,0.75)'); vTop.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vTop; ctx.fillRect(0, 0, W, H * 0.28)
+      const vBot = ctx.createLinearGradient(0, H, 0, H * 0.72)
+      vBot.addColorStop(0, 'rgba(4,0,2,0.75)'); vBot.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vBot; ctx.fillRect(0, H * 0.72, W, H * 0.28)
+      const vL = ctx.createLinearGradient(0, 0, W * 0.22, 0)
+      vL.addColorStop(0, 'rgba(4,0,2,0.75)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vL; ctx.fillRect(0, 0, W * 0.22, H)
+      const vR = ctx.createLinearGradient(W, 0, W * 0.78, 0)
+      vR.addColorStop(0, 'rgba(4,0,2,0.75)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vR; ctx.fillRect(W * 0.78, 0, W * 0.22, H)
+
+      // 7. Fine grain — regenerated each frame for film-grain shimmer
+      ctx.save()
+      for (let i = 0; i < 300; i++) {
+        const gx = Math.random() * W
+        const gy = Math.random() * H
+        const ga = 0.015 + Math.random() * 0.025
+        ctx.beginPath()
+        ctx.arc(gx, gy, 0.5, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,255,255,${ga.toFixed(4)})`
+        ctx.fill()
+      }
+      ctx.restore()
+
       raf = requestAnimationFrame(draw)
     }
     window.addEventListener('resize',resize)

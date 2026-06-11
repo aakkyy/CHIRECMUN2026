@@ -7,24 +7,6 @@
   border-top: 1px solid var(--theme-card-border);
 }
 
-/* ── ghost background text ── */
-.ghost {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Rubik', sans-serif;
-  font-size: clamp(6rem, 19vw, 17rem);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  color: rgba(244, 244, 239, 0.04);
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  line-height: 1;
-}
-
 .inner {
   position: relative;
   z-index: 2;

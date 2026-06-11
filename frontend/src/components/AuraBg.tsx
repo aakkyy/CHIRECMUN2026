@@ -228,6 +228,42 @@ function drawBands(ctx: CanvasRenderingContext2D, W: number, H: number, t: numbe
   }
   ctx.restore()
 
+  // ── 6. Lightning arc traces — brief seeded flashes ──
+  // Each arc cycles via a sawtooth; only visible in the first 8% of
+  // its cycle. Geometry is seeded per-cycle so it stays still during
+  // the flash, then jumps to a new position next cycle.
+  const hash = (n: number) => {
+    const s = Math.sin(n * 127.1 + 311.7) * 43758.5453
+    return s - Math.floor(s) // 0..1 deterministic
+  }
+  const ARCS: [number, string][] = [
+    // speed, color
+    [0.080, '231,76,60'],
+    [0.055, '86,150,242'],
+    [0.110, '231,76,60'],
+  ]
+  ctx.save()
+  ctx.lineWidth = 1
+  for (let ai = 0; ai < ARCS.length; ai++) {
+    const [speed, col] = ARCS[ai]
+    const progress = (t * speed) % 1.0
+    if (progress >= 0.08) continue
+    const seed = Math.floor(t * speed) * 31 + ai * 977
+    const alpha = (1 - progress / 0.08) * 0.12
+    const startX = hash(seed) * W
+    ctx.strokeStyle = `rgba(${col},${alpha.toFixed(3)})`
+    ctx.beginPath()
+    ctx.moveTo(startX, 0)
+    let x = startX
+    const SEGS = 6
+    for (let s = 1; s <= SEGS; s++) {
+      x += (hash(seed + s) - 0.5) * 60 // ±30px horizontal deviation
+      ctx.lineTo(x, (s / SEGS) * H)
+    }
+    ctx.stroke()
+  }
+  ctx.restore()
+
   // ── 4. Center dark well — keeps FAQ text readable ──
   const well = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.6)
   well.addColorStop(0, 'rgba(4,0,2,0.55)')

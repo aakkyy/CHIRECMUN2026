@@ -17,18 +17,6 @@ export default function CTA() {
     <section className={styles.section} id="register" style={{ position: 'relative', overflow: 'hidden' }}>
       <BlobBg variant="cta" />
 
-      {/* ghost background text */}
-      <motion.span
-        className={styles.ghost}
-        aria-hidden="true"
-        initial={{ opacity: 0, scale: 1.08 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={viewport}
-        transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-      >
-        CHIREC MUN
-      </motion.span>
-
       <motion.div
         className={styles.inner} style={{ position: 'relative', zIndex: 1 }}
         initial="hidden"
