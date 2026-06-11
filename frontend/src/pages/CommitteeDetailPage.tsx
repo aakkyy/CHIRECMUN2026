@@ -210,7 +210,6 @@ export default function CommitteeDetailPage() {
           transition={{ type: 'spring', stiffness: 75, damping: 18 }}
         >
           <div className={styles.agendaLeft}>
-            <div className={styles.agendaNumeral}>1</div>
             <div className={styles.agendaLine} />
           </div>
 
@@ -219,7 +218,7 @@ export default function CommitteeDetailPage() {
               <span className={styles.labelDotBlue} />
               Coming Soon
             </div>
-            <h2 className={styles.sectionTitle}>Agenda Topics</h2>
+            <h2 className={styles.sectionTitle}>Agenda</h2>
             <p className={styles.sectionDesc}>
               The committee's agenda topic will be released once finalized. Stay tuned for updates on the official topic for debate.
             </p>
