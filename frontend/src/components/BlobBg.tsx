@@ -124,76 +124,116 @@ const AuraAboutBg = memo(function AuraAboutBg() {
 })
 
 // ─────────────────────────────────────────────────────────────
-// COUNTDOWN — Diagonal light shafts from top corners
-// Like crepuscular rays through atmospheric haze
-// No rings, no circles, no space
+// COUNTDOWN — Vortex energy field
+// Rotating radial plasma lines + counter-rotating outer ring,
+// pulsing elliptical energy rings, breathing crimson core,
+// heavy corner smoke and a subtle scanline interference texture.
+// Industrial, physical electromagnetic energy — NOT space.
 // ─────────────────────────────────────────────────────────────
 const AuraCountdownBg = memo(function AuraCountdownBg() {
   const ref = useCanvasLoop((ctx, W, H, t) => {
     ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
 
-    const diag = Math.sqrt(W * W + H * H)
+    const cx = W / 2, cy = H / 2
+    const minDim = Math.min(W, H)
 
-    // Corner smoke — heavy for CTA feel
-    drawCornerSmoke(ctx, W, H, 0, 0, 155, 5, 5, 0.70, 0.54)
-    drawCornerSmoke(ctx, W, H, 1, 0, 148, 5, 5, 0.62, 0.50)
-    drawCornerSmoke(ctx, W, H, 0, 1, 148, 5, 5, 0.58, 0.48)
-    drawCornerSmoke(ctx, W, H, 1, 1, 12, 38, 172, 0.42, 0.46)
+    // ── 4. Heavy corner smoke — red on top, deep blue below ──
+    drawCornerSmoke(ctx, W, H, 0, 0, 155, 5, 5, 0.72, 0.56)
+    drawCornerSmoke(ctx, W, H, 1, 0, 148, 5, 5, 0.66, 0.52)
+    drawCornerSmoke(ctx, W, H, 0, 1, 10, 28, 150, 0.48, 0.48)
+    drawCornerSmoke(ctx, W, H, 1, 1, 12, 38, 172, 0.52, 0.50)
 
-    // Helper: draw one light shaft (triangle fanning from a point)
-    function shaft(
-      ox: number, oy: number, angle: number,
-      hwNear: number, hwFar: number,
-      cr: number, cg: number, cb: number, alpha: number
-    ) {
-      const ca = Math.cos(angle), sa = Math.sin(angle)
-      const px = -sa, py = ca  // perpendicular direction
-      const len = diag * 1.1
+    // ── 5. Breathing central core — deep crimson, slow pulse ──
+    const breathe = 0.9 + 0.1 * Math.sin(t * 0.30)            // 0.8–1.0 scale
+    const coreR = minDim * 0.62 * breathe
+    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR)
+    core.addColorStop(0,    `rgba(190,30,18,${(0.26 * breathe).toFixed(3)})`)
+    core.addColorStop(0.35, `rgba(155,10,8,${(0.14 * breathe).toFixed(3)})`)
+    core.addColorStop(0.70, `rgba(120,5,5,${(0.05 * breathe).toFixed(3)})`)
+    core.addColorStop(1,    'rgba(120,5,5,0)')
+    ctx.fillStyle = core; ctx.fillRect(0, 0, W, H)
 
-      // 4-point polygon: narrow at origin, wide at far end
-      const p1x = ox + px * hwNear, p1y = oy + py * hwNear
-      const p2x = ox - px * hwNear, p2y = oy - py * hwNear
-      const fx = ox + ca * len,     fy = oy + sa * len
-      const p3x = fx - px * hwFar,  p3y = fy - py * hwFar
-      const p4x = fx + px * hwFar,  p4y = fy + py * hwFar
-
-      const grd = ctx.createLinearGradient(ox, oy, fx, fy)
-      grd.addColorStop(0,    `rgba(${cr},${cg},${cb},${alpha.toFixed(3)})`)
-      grd.addColorStop(0.40, `rgba(${cr},${cg},${cb},${(alpha * 0.30).toFixed(3)})`)
-      grd.addColorStop(1,    `rgba(${cr},${cg},${cb},0)`)
-
-      ctx.fillStyle = grd
+    // ── 1. Rotating radial energy lines — 48 deep-red lines ──
+    const innerLen = minDim * 0.62
+    const innerRot = t * 0.10
+    ctx.save()
+    ctx.translate(cx, cy)
+    ctx.lineWidth = 1
+    for (let i = 0; i < 48; i++) {
+      const base = (i / 48) * Math.PI * 2
+      // mild individual phase offsets — lines spin together but breathe apart
+      const ang = base + innerRot + 0.06 * Math.sin(t * 0.14 + i * 0.7)
+      const a = 0.16 * (0.55 + 0.45 * Math.sin(t * 0.45 + i * 1.31))
+      if (a < 0.012) continue
+      const ca = Math.cos(ang), sa = Math.sin(ang)
+      const len = innerLen * (0.88 + 0.12 * Math.sin(t * 0.18 + i * 0.5))
+      const grd = ctx.createLinearGradient(ca * minDim * 0.04, sa * minDim * 0.04, ca * len, sa * len)
+      grd.addColorStop(0,    `rgba(200,45,28,${a.toFixed(3)})`)
+      grd.addColorStop(0.45, `rgba(170,25,15,${(a * 0.45).toFixed(3)})`)
+      grd.addColorStop(1,    'rgba(150,10,8,0)')
+      ctx.strokeStyle = grd
       ctx.beginPath()
-      ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y)
-      ctx.lineTo(p3x, p3y); ctx.lineTo(p4x, p4y)
-      ctx.closePath(); ctx.fill()
+      ctx.moveTo(ca * minDim * 0.04, sa * minDim * 0.04)
+      ctx.lineTo(ca * len, sa * len)
+      ctx.stroke()
+    }
+    ctx.restore()
+
+    // ── 2. Counter-rotating outer ring — 32 shorter blue lines ──
+    const outerR0 = minDim * 0.58
+    const outerR1 = minDim * 0.86
+    const outerRot = -t * 0.14
+    ctx.save()
+    ctx.translate(cx, cy)
+    ctx.lineWidth = 1
+    for (let i = 0; i < 32; i++) {
+      const base = (i / 32) * Math.PI * 2
+      const ang = base + outerRot + 0.05 * Math.sin(t * 0.12 + i * 0.9)
+      const a = 0.13 * (0.55 + 0.45 * Math.sin(t * 0.52 + i * 1.77))
+      if (a < 0.012) continue
+      const ca = Math.cos(ang), sa = Math.sin(ang)
+      const grd = ctx.createLinearGradient(ca * outerR0, sa * outerR0, ca * outerR1, sa * outerR1)
+      grd.addColorStop(0,    `rgba(40,80,200,${a.toFixed(3)})`)
+      grd.addColorStop(0.5,  `rgba(20,50,175,${(a * 0.55).toFixed(3)})`)
+      grd.addColorStop(1,    'rgba(12,38,172,0)')
+      ctx.strokeStyle = grd
+      ctx.beginPath()
+      ctx.moveTo(ca * outerR0, sa * outerR0)
+      ctx.lineTo(ca * outerR1, sa * outerR1)
+      ctx.stroke()
+    }
+    ctx.restore()
+
+    // ── 3. Glowing elliptical energy rings — 3 crimson ellipses ──
+    for (let ri = 0; ri < 3; ri++) {
+      const baseR = minDim * (0.26 + ri * 0.16)
+      const r = baseR * (0.94 + 0.06 * Math.sin(t * 0.18 + ri * 1.6))
+      const a = 0.16 * (0.6 + 0.4 * Math.sin(t * 0.24 + ri * 2.1))
+      const rot = Math.sin(t * 0.08 + ri * 0.8) * 0.10
+      ctx.save()
+      ctx.translate(cx, cy)
+      ctx.rotate(rot)
+      ctx.scale(1, 0.6)                                       // ground-level squish
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(200,50,32,${a.toFixed(3)})`
+      ctx.lineWidth = 1.2
+      ctx.stroke()
+      // soft outer glow pass
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(192,35,20,${(a * 0.30).toFixed(3)})`
+      ctx.lineWidth = 5
+      ctx.stroke()
+      ctx.restore()
     }
 
-    // Red shafts from top-left corner (pointing down-right: angle ~70-80° from horizontal)
-    const redShafts = [
-      { ox: W * 0.00, oy: H * (-0.02), angle: Math.PI * 0.42, hwF: W * 0.20, spd: 0.06, ph: 0.0, a: 0.22 },
-      { ox: W * 0.10, oy: H * (-0.04), angle: Math.PI * 0.45, hwF: W * 0.15, spd: 0.09, ph: 2.2, a: 0.18 },
-      { ox: W * 0.22, oy: H * (-0.01), angle: Math.PI * 0.40, hwF: W * 0.11, spd: 0.07, ph: 4.6, a: 0.15 },
-      { ox: W * 0.34, oy: H * (-0.03), angle: Math.PI * 0.43, hwF: W * 0.08, spd: 0.11, ph: 1.4, a: 0.11 },
-    ]
-    for (const s of redShafts) {
-      const a = s.a * (0.72 + 0.28 * Math.sin(t * s.spd + s.ph))
-      shaft(s.ox, s.oy, s.angle, 2, s.hwF, 192, 35, 20, a)
-    }
-
-    // Blue shafts from top-right corner (pointing down-left: angle ~100-110°)
-    const blueShafts = [
-      { ox: W * 1.00, oy: H * (-0.02), angle: Math.PI * 0.58, hwF: W * 0.18, spd: 0.07, ph: 1.1, a: 0.18 },
-      { ox: W * 0.90, oy: H * (-0.04), angle: Math.PI * 0.55, hwF: W * 0.13, spd: 0.10, ph: 3.5, a: 0.14 },
-      { ox: W * 0.78, oy: H * (-0.01), angle: Math.PI * 0.60, hwF: W * 0.09, spd: 0.08, ph: 5.8, a: 0.11 },
-    ]
-    for (const s of blueShafts) {
-      const a = s.a * (0.72 + 0.28 * Math.sin(t * s.spd + s.ph))
-      shaft(s.ox, s.oy, s.angle, 2, s.hwF, 14, 40, 172, a)
-    }
+    // ── 6. Scanline interference texture — subtle CRT depth ──
+    ctx.save()
+    ctx.fillStyle = 'rgba(0,0,0,0.06)'
+    for (let y = 0; y < H; y += 8) ctx.fillRect(0, y, W, 4)
+    ctx.restore()
 
     // Center vignette to keep countdown numbers readable
-    const vg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.58)
+    const vg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.58)
     vg.addColorStop(0, 'rgba(4,0,2,0.50)'); vg.addColorStop(1, 'rgba(4,0,2,0)')
     ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H)
   })

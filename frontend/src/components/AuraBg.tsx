@@ -116,68 +116,123 @@ function drawRibbons(ctx: CanvasRenderingContext2D, W: number, H: number, t: num
   }
 }
 
-// ── BANDS — filled aurora gradient bands (NO mesh lines) ─────
-// Each band is a solid sinusoidal stripe rendered as a filled path
-// with a vertical gradient, aurora-style
+// ── BANDS — layered chromatic interference (FAQ) ─────────────
+// Light refracting through a prism mixed with deep-atmosphere
+// aurora: diagonal color slabs, prismatic shimmer sweeps,
+// corner depth fields, a center dark well for readability,
+// and barely-visible flowing interference fringes.
 function drawBands(ctx: CanvasRenderingContext2D, W: number, H: number, t: number) {
-  // [yFrac, halfH, speed, amp, phase, color: r/g/b, maxAlpha]
-  const bands: [number, number, number, number, number, number, number, number, number][] = [
-    // y%,   hH,   spd,  amp,  ph,   r,   g,   b,   a
-    [0.13, 0.095, 0.17, 0.038, 0.00, 192,  35,  20,  0.22],  // crimson red
-    [0.31, 0.085, 0.21, 0.042, 2.80, 155,   8,   8,  0.18],  // deep red
-    [0.50, 0.100, 0.15, 0.035, 5.50,  22,  60, 180,  0.16],  // dark blue
-    [0.69, 0.080, 0.19, 0.033, 1.40, 170,  20,  12,  0.20],  // red-orange
-    [0.88, 0.070, 0.23, 0.028, 4.20,  14,  35, 165,  0.14],  // midnight blue
+  const diag = Math.sqrt(W * W + H * H)
+
+  // ── 3. Depth gradient fields — one diffuse glow near each corner ──
+  const corners: [number, number, number, number, number, number, number][] = [
+    // xf,  yf,   r,   g,   b,   baseA, phase
+    [0.04, 0.06, 192,  35,  20, 0.16, 0.0],   // top-left crimson
+    [0.96, 0.06,  18,  50, 180, 0.14, 1.9],   // top-right blue
+    [0.04, 0.94,  14,  40, 170, 0.13, 3.7],   // bottom-left blue
+    [0.96, 0.94, 180,  25,  15, 0.15, 5.3],   // bottom-right crimson
   ]
-
-  const FREQ = 0.00018
-
-  for (const [yFrac, halfH, spd, amp, phase, r, g, b, maxA] of bands) {
-    const yCenter = yFrac * H
-    const halfPx  = halfH * H
-    const ph      = phase + t * spd
-    const STEPS   = Math.ceil(W / 4)
-
-    // Build top-edge and bottom-edge curves
-    const topYs: number[] = []
-    const botYs: number[] = []
-
-    for (let i = 0; i <= STEPS; i++) {
-      const x  = (i / STEPS) * W
-      const dy = amp * H * Math.sin(x * FREQ * W + ph)
-               + amp * H * 0.45 * Math.sin(x * FREQ * W * 2.3 + ph * 1.2)
-      topYs.push(yCenter - halfPx + dy)
-      botYs.push(yCenter + halfPx + dy)
-    }
-
-    // Filled strip path
-    ctx.beginPath()
-    ctx.moveTo(0, topYs[0])
-    for (let i = 1; i <= STEPS; i++) ctx.lineTo((i / STEPS) * W, topYs[i])
-    for (let i = STEPS; i >= 0; i--) ctx.lineTo((i / STEPS) * W, botYs[i])
-    ctx.closePath()
-
-    // Vertical gradient: bright center → transparent edges
-    const topY0  = yCenter - halfPx
-    const botY0  = yCenter + halfPx
-    const bandGr = ctx.createLinearGradient(0, topY0, 0, botY0)
-    bandGr.addColorStop(0.00, `rgba(${r},${g},${b},0)`)
-    bandGr.addColorStop(0.25, `rgba(${r},${g},${b},${(maxA * 0.60).toFixed(3)})`)
-    bandGr.addColorStop(0.50, `rgba(${r},${g},${b},${maxA.toFixed(3)})`)
-    bandGr.addColorStop(0.75, `rgba(${r},${g},${b},${(maxA * 0.60).toFixed(3)})`)
-    bandGr.addColorStop(1.00, `rgba(${r},${g},${b},0)`)
-
-    ctx.fillStyle = bandGr
-    ctx.fill()
-
-    // Subtle bright rim line on top edge only — adds a glow seam
-    const rimA = maxA * 0.55
-    ctx.beginPath()
-    ctx.moveTo(0, topYs[0])
-    for (let i = 1; i <= STEPS; i++) ctx.lineTo((i / STEPS) * W, topYs[i])
-    ctx.strokeStyle = `rgba(${r},${g},${b},${rimA.toFixed(3)})`
-    ctx.lineWidth = 1.0; ctx.stroke()
+  for (const [xf, yf, r, g, b, baseA, ph] of corners) {
+    const a = baseA * (0.78 + 0.22 * Math.sin(t * 0.16 + ph))
+    const gx = xf * W, gy = yf * H
+    const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * 0.5)
+    gr.addColorStop(0,   `rgba(${r},${g},${b},${a.toFixed(3)})`)
+    gr.addColorStop(0.5, `rgba(${r},${g},${b},${(a * 0.30).toFixed(3)})`)
+    gr.addColorStop(1,   `rgba(${r},${g},${b},0)`)
+    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H)
   }
+
+  // ── 1. Flowing diagonal color fields — 6 drifting gradient slabs ──
+  // Slabs are angled ~25° from horizontal; gradient runs perpendicular
+  // to the slab and the slab drifts along that perpendicular axis.
+  const SLAB_ANG = (25 * Math.PI) / 180
+  const sCos = Math.cos(SLAB_ANG), sSin = Math.sin(SLAB_ANG)
+  // perpendicular axis (unit)
+  const pX = -sSin, pY = sCos
+  const slabs: [number, number, number, number, number, number, number, number][] = [
+    // offsetFrac, halfW(frac of diag), r, g, b, maxA, driftSpd, phase
+    [-0.30, 0.10, 192,  35,  20, 0.18, 0.030, 0.0],
+    [-0.12, 0.12,  16,  45, 175, 0.15, 0.024, 1.6],
+    [ 0.04, 0.09, 165,  15,  10, 0.20, 0.036, 3.1],
+    [ 0.18, 0.11,  12,  38, 172, 0.14, 0.027, 4.4],
+    [ 0.34, 0.10, 185,  30,  18, 0.16, 0.033, 5.7],
+    [ 0.50, 0.13,  20,  55, 185, 0.12, 0.021, 2.3],
+  ]
+  ctx.save()
+  for (const [offF, hwF, r, g, b, maxA, spd, ph] of slabs) {
+    // Perpendicular offset of the slab center from canvas center, drifting
+    const drift = Math.sin(t * spd + ph) * diag * 0.10
+    const off = offF * diag + drift
+    const mx = W / 2 + pX * off, my = H / 2 + pY * off
+    const hw = hwF * diag
+    // Gradient perpendicular to slab: transparent → color → transparent
+    const g0x = mx - pX * hw, g0y = my - pY * hw
+    const g1x = mx + pX * hw, g1y = my + pY * hw
+    const a = maxA * (0.80 + 0.20 * Math.sin(t * 0.12 + ph * 1.3))
+    const gr = ctx.createLinearGradient(g0x, g0y, g1x, g1y)
+    gr.addColorStop(0,   `rgba(${r},${g},${b},0)`)
+    gr.addColorStop(0.5, `rgba(${r},${g},${b},${a.toFixed(3)})`)
+    gr.addColorStop(1,   `rgba(${r},${g},${b},0)`)
+    // Quad covering the slab area along the diagonal direction
+    const L = diag
+    ctx.fillStyle = gr
+    ctx.beginPath()
+    ctx.moveTo(mx - sCos * L - pX * hw, my - sSin * L - pY * hw)
+    ctx.lineTo(mx + sCos * L - pX * hw, my + sSin * L - pY * hw)
+    ctx.lineTo(mx + sCos * L + pX * hw, my + sSin * L + pY * hw)
+    ctx.lineTo(mx - sCos * L + pX * hw, my - sSin * L + pY * hw)
+    ctx.closePath()
+    ctx.fill()
+  }
+  ctx.restore()
+
+  // ── 2. Prismatic shimmer — 3 thin 70° lines sweeping across ──
+  const SHIM_ANG = (70 * Math.PI) / 180
+  const shCos = Math.cos(SHIM_ANG), shSin = Math.sin(SHIM_ANG)
+  ctx.save()
+  ctx.lineWidth = 1
+  for (let i = 0; i < 3; i++) {
+    // staggered sweep: each line is offset a third of the cycle
+    const cycle = (t * 0.05 + i / 3) % 1
+    const x = cycle * (W * 1.4) - W * 0.2
+    // fade in/out at sweep ends
+    const fade = Math.sin(cycle * Math.PI)
+    const a = 0.06 * fade
+    if (a < 0.005) continue
+    ctx.strokeStyle = `rgba(255,255,255,${a.toFixed(3)})`
+    ctx.beginPath()
+    ctx.moveTo(x - shCos * diag, H / 2 - shSin * diag)
+    ctx.lineTo(x + shCos * diag, H / 2 + shSin * diag)
+    ctx.stroke()
+  }
+  ctx.restore()
+
+  // ── 5. Flowing interference fringes — 5 rippling polylines ──
+  ctx.save()
+  ctx.lineWidth = 1
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)'
+  const STEPS = Math.ceil(W / 14)
+  for (let f = 0; f < 5; f++) {
+    const yBase = H * (0.14 + f * 0.18)
+    const ph = f * 1.9
+    const ampl = H * 0.025
+    ctx.beginPath()
+    for (let i = 0; i <= STEPS; i++) {
+      const x = (i / STEPS) * W
+      const y = yBase
+        + ampl * Math.sin(x * 0.004 + t * 0.18 + ph)
+        + ampl * 0.4 * Math.sin(x * 0.009 + t * 0.11 + ph * 1.4)
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
+    }
+    ctx.stroke()
+  }
+  ctx.restore()
+
+  // ── 4. Center dark well — keeps FAQ text readable ──
+  const well = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.6)
+  well.addColorStop(0, 'rgba(4,0,2,0.55)')
+  well.addColorStop(1, 'rgba(4,0,2,0)')
+  ctx.fillStyle = well; ctx.fillRect(0, 0, W, H)
 }
 
 // ── WAVES — sinusoidal full-screen wave mesh ──────────────────

@@ -26,49 +26,6 @@ function getProgress() {
   return Math.min(1, Math.max(0, elapsed / total))
 }
 
-// ── Conference schedule data ──────────────────────────────────
-const schedule = [
-  {
-    day: 'Day 01',
-    date: 'July 31',
-    weekday: 'Friday',
-    color: 'red' as const,
-    sessions: [
-      { time: '08:00', label: 'Delegate Registration' },
-      { time: '09:30', label: 'Opening Ceremony' },
-      { time: '11:00', label: 'Committee Session I' },
-      { time: '14:00', label: 'Committee Session II' },
-      { time: '17:00', label: 'End of Day' },
-    ],
-  },
-  {
-    day: 'Day 02',
-    date: 'August 1',
-    weekday: 'Saturday',
-    color: 'blue' as const,
-    sessions: [
-      { time: '09:00', label: 'Committee Session III' },
-      { time: '12:00', label: 'Lunch Break' },
-      { time: '13:30', label: 'Committee Session IV' },
-      { time: '16:30', label: 'Social Night' },
-      { time: '20:00', label: 'Social Night Ends' },
-    ],
-  },
-  {
-    day: 'Day 03',
-    date: 'August 2',
-    weekday: 'Sunday',
-    color: 'red' as const,
-    sessions: [
-      { time: '09:00', label: 'Committee Session V' },
-      { time: '11:30', label: 'Final Voting Procedures' },
-      { time: '13:00', label: 'Lunch Break' },
-      { time: '14:30', label: 'Closing Ceremony' },
-      { time: '16:30', label: 'Conference Concludes' },
-    ],
-  },
-]
-
 // ── Timer block ───────────────────────────────────────────────
 function Block({ value, label, delay }: { value: string; label: string; delay: number }) {
   return (
@@ -99,42 +56,6 @@ function Block({ value, label, delay }: { value: string; label: string; delay: n
       </div>
       <div className={styles.accent} />
       <span className={styles.label}>{label}</span>
-    </motion.div>
-  )
-}
-
-// ── Schedule day card ─────────────────────────────────────────
-function DayCard({ day, index }: { day: typeof schedule[0]; index: number }) {
-  return (
-    <motion.div
-      className={`${styles.dayCard} ${styles[`dayCard_${day.color}`]}`}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={viewport}
-      transition={{ type: 'spring', stiffness: 80, damping: 20, delay: index * 0.10 }}
-      whileHover={{ y: -4, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
-    >
-      {/* Card header */}
-      <div className={styles.dayHeader}>
-        <div>
-          <span className={styles.dayNum}>{day.day}</span>
-          <span className={styles.dayWeekday}>{day.weekday}</span>
-        </div>
-        <div className={`${styles.datePill} ${styles[`datePill_${day.color}`]}`}>
-          {day.date}
-        </div>
-      </div>
-
-      {/* Sessions list */}
-      <ul className={styles.sessions}>
-        {day.sessions.map((s, i) => (
-          <li key={i} className={styles.session}>
-            <span className={styles.sessionTime}>{s.time}</span>
-            <span className={`${styles.sessionDot} ${styles[`sessionDot_${day.color}`]}`} aria-hidden="true" />
-            <span className={styles.sessionLabel}>{s.label}</span>
-          </li>
-        ))}
-      </ul>
     </motion.div>
   )
 }
@@ -198,31 +119,6 @@ export default function Countdown() {
             />
           </div>
         </motion.div>
-
-        {/* ── Divider ── */}
-        <motion.div
-          className={styles.sectionDivider}
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={viewport}
-          transition={{ duration: 0.8, ease: [0.22,1,0.36,1], delay: 0.2 }}
-        />
-
-        {/* ── Schedule heading ── */}
-        <motion.div className={styles.scheduleHeader}
-          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport} transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
-        >
-          <p className={styles.scheduleEyebrow}>Conference Schedule</p>
-          <h3 className={styles.scheduleTitle}>Three Days of Diplomacy</h3>
-        </motion.div>
-
-        {/* ── Day cards ── */}
-        <div className={styles.dayGrid}>
-          {schedule.map((day, i) => (
-            <DayCard key={day.day} day={day} index={i} />
-          ))}
-        </div>
 
         {/* ── Location sub ── */}
         <motion.p className={styles.sub}
