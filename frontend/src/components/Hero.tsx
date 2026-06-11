@@ -54,7 +54,7 @@ export default function Hero() {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
-    let W, H, t = 0, raf = null
+    let W = window.innerWidth, H = window.innerHeight, t = 0, raf = null
     let lastTime = 0
     const FPS = 30, INTERVAL = 1000 / FPS
 
@@ -63,128 +63,163 @@ export default function Hero() {
       H = canvas.height = window.innerHeight
     }
 
-    // ── High-Voltage Chromatic Field ──────────────────────────
-    // 4 mega halos drifting in slow lissajous orbits
-    const HALOS = [
-      { xf: 0.00, yf: 0.00, col: 'rgba(175,25,15,',  a: 0.22, phx: 0.0, phy: 1.2 },  // top-left crimson
-      { xf: 1.00, yf: 0.00, col: 'rgba(12,38,172,',  a: 0.18, phx: 3.1, phy: 4.3 },  // top-right blue
-      { xf: 0.00, yf: 1.00, col: 'rgba(8,28,140,',   a: 0.16, phx: 1.9, phy: 0.6 },  // bottom-left blue
-      { xf: 1.00, yf: 1.00, col: 'rgba(160,20,12,',  a: 0.20, phx: 5.0, phy: 2.7 },  // bottom-right crimson
-    ]
+    // ── Mouse parallax tracking ───────────────────────────────
+    let mouseX = W / 2, mouseY = H / 2
+    const onMouse = (e) => { mouseX = e.clientX; mouseY = e.clientY }
+    window.addEventListener('mousemove', onMouse)
 
-    // 3 horizontal chromatic bands — crimson / blue / crimson
-    const BANDS = [
-      { yf: 0.30, col: 'rgba(192,57,43,',  ph: 0.0, spd: 0.05 },
-      { yf: 0.55, col: 'rgba(12,38,172,',  ph: 2.1, spd: 0.04 },
-      { yf: 0.72, col: 'rgba(192,57,43,',  ph: 4.2, spd: 0.06 },
-    ]
-
-    function drawGridSet(angle, offset, count, spacing, alpha) {
-      ctx.save()
-      ctx.translate(W / 2, H / 2)
-      ctx.rotate(angle)
-      ctx.setLineDash([])
-      ctx.lineWidth = 0.5
-      const span = Math.sqrt(W * W + H * H)
-      const total = count * spacing
-      for (let i = 0; i < count; i++) {
-        let x = ((i * spacing + offset) % total + total) % total - total / 2
-        ctx.beginPath()
-        ctx.moveTo(x, -span / 2)
-        ctx.lineTo(x,  span / 2)
-        ctx.strokeStyle = `rgba(255,255,255,${(alpha).toFixed(4)})`
-        ctx.stroke()
-      }
-      ctx.restore()
-    }
+    // ── Rising ember particles ────────────────────────────────
+    interface Particle { x:number; y:number; vy:number; vx:number; size:number; isBlue:boolean; alpha:number; phase:number }
+    const particles: Particle[] = Array.from({ length: 55 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vy: -(0.18 + Math.random() * 0.38),
+      vx: (Math.random() - 0.5) * 0.14,
+      size: 0.5 + Math.random() * 1.3,
+      isBlue: Math.random() < 0.32,
+      alpha: 0.25 + Math.random() * 0.42,
+      phase: Math.random() * Math.PI * 2,
+    }))
 
     function draw(ts) {
       if (ts - lastTime < INTERVAL) { raf = requestAnimationFrame(draw); return }
       lastTime = ts
       t = ts / 1000
 
-      // 1. Base fill
+      // 1. BASE
       ctx.fillStyle = '#040002'
       ctx.fillRect(0, 0, W, H)
 
-      // 2. Slow-drifting mega color halos (lissajous, ~20s period)
-      const haloR = 0.7 * Math.min(W, H)
-      const amp = 0.04 * W
-      for (const hl of HALOS) {
-        const cx = hl.xf * W + Math.sin(t * (Math.PI * 2 / 20) + hl.phx) * amp
-        const cy = hl.yf * H + Math.cos(t * (Math.PI * 2 / 23) + hl.phy) * amp
-        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, haloR)
-        g.addColorStop(0,    hl.col + hl.a + ')')
-        g.addColorStop(0.45, hl.col + (hl.a * 0.4).toFixed(3) + ')')
-        g.addColorStop(1,    hl.col + '0)')
+      // 2. MOUSE PARALLAX OFFSET
+      const mOffX = (mouseX - W / 2) * 0.025
+      const mOffY = (mouseY - H / 2) * 0.018
+
+      // 3. THREE MASSIVE ATMOSPHERIC HALOS
+      const HALOS = [
+        { x: W/2 + mOffX*0.8,    y: H*0.70 + mOffY*0.5,  r: Math.min(W,H)*0.88, cr:180, cg:22,  cb:14,  a:0.40, ph:0.0, spd:0.055 },
+        { x: W*0.10 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.28, ph:2.1, spd:0.042 },
+        { x: W*0.90 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.26, ph:4.8, spd:0.038 },
+      ]
+      for (const h of HALOS) {
+        const pulse = 0.93 + 0.07 * Math.sin(t * h.spd + h.ph)
+        const cx = h.x + Math.sin(t * h.spd * 0.7 + h.ph) * W * 0.016
+        const cy = h.y + Math.cos(t * h.spd * 0.5 + h.ph + 1.3) * H * 0.011
+        const rr = h.r * pulse
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr)
+        g.addColorStop(0,    `rgba(${h.cr},${h.cg},${h.cb},${h.a})`)
+        g.addColorStop(0.38, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.42).toFixed(3)})`)
+        g.addColorStop(0.72, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.10).toFixed(3)})`)
+        g.addColorStop(1,    `rgba(${h.cr},${h.cg},${h.cb},0)`)
         ctx.fillStyle = g
         ctx.fillRect(0, 0, W, H)
       }
 
-      // 3. Diagonal interference grid — two crossing line sets (~55°), moiré drift
-      const spacing = W / 12
-      drawGridSet( 55 * Math.PI / 180,  t * 4, 12, spacing, 0.035)
-      drawGridSet(-55 * Math.PI / 180, -t * 3, 12, spacing, 0.028)
+      // 4. PERSPECTIVE GRID — this is the centrepiece
+      const vpX = W / 2 + mOffX * 0.12
+      const vpY = H * 0.72
+      const gridPhase = (t * 0.13) % 1
 
-      // 4. Horizontal chromatic bands — fake blur via layered strokes
-      const bandH = H * 0.006
-      for (const b of BANDS) {
-        const y = b.yf * H + Math.sin(t * b.spd * Math.PI * 2 + b.ph) * H * 0.02
-        // 5 layers: widest/faintest → thinnest/brightest
-        const layers = [
-          { h: bandH * 9, a: 0.04 },
-          { h: bandH * 6, a: 0.06 },
-          { h: bandH * 4, a: 0.08 },
-          { h: bandH * 2, a: 0.10 },
-          { h: bandH * 1, a: 0.12 },
-        ]
-        for (const L of layers) {
-          ctx.fillStyle = b.col + L.a + ')'
-          ctx.fillRect(0, y - L.h / 2, W, L.h)
-        }
+      ctx.save()
+
+      // Horizontal lines: perspective-spaced, continuously scrolling toward viewer
+      const N_H = 22
+      for (let i = 0; i < N_H; i++) {
+        const raw = ((i / N_H) + gridPhase) % 1
+        const gp  = Math.pow(raw, 0.62)            // perspective foreshortening
+        const y   = vpY + (H + 80 - vpY) * gp
+        if (y > H + 2 || y < vpY - 2) continue
+        const alpha = gp * 0.15 * (0.78 + 0.22 * Math.sin(t * 0.20 + i * 0.4))
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(W, y)
+        ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(4)})`
+        ctx.lineWidth = 0.3 + gp * 1.6
+        ctx.stroke()
       }
 
-      // 5. Central light well — breathing brighter center
-      const breathe = 0.18 * (0.82 + 0.18 * Math.sin(t * 0.35))
-      const well = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.min(W, H) * 0.55)
-      well.addColorStop(0, `rgba(90,10,6,${breathe.toFixed(3)})`)
-      well.addColorStop(1, 'rgba(90,10,6,0)')
-      ctx.fillStyle = well
-      ctx.fillRect(0, 0, W, H)
-
-      // 6. Edge vignette — darken all 4 edges
-      const vTop = ctx.createLinearGradient(0, 0, 0, H * 0.28)
-      vTop.addColorStop(0, 'rgba(4,0,2,0.75)'); vTop.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vTop; ctx.fillRect(0, 0, W, H * 0.28)
-      const vBot = ctx.createLinearGradient(0, H, 0, H * 0.72)
-      vBot.addColorStop(0, 'rgba(4,0,2,0.75)'); vBot.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vBot; ctx.fillRect(0, H * 0.72, W, H * 0.28)
-      const vL = ctx.createLinearGradient(0, 0, W * 0.22, 0)
-      vL.addColorStop(0, 'rgba(4,0,2,0.75)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vL; ctx.fillRect(0, 0, W * 0.22, H)
-      const vR = ctx.createLinearGradient(W, 0, W * 0.78, 0)
-      vR.addColorStop(0, 'rgba(4,0,2,0.75)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vR; ctx.fillRect(W * 0.78, 0, W * 0.22, H)
-
-      // 7. Fine grain — regenerated each frame for film-grain shimmer
-      ctx.save()
-      for (let i = 0; i < 300; i++) {
-        const gx = Math.random() * W
-        const gy = Math.random() * H
-        const ga = 0.015 + Math.random() * 0.025
+      // Vertical lines radiating from VP
+      const N_V = 38
+      for (let i = 0; i <= N_V; i++) {
+        const xBottom = (i / N_V) * W * 1.65 - W * 0.325
+        const centerFrac = 1 - Math.abs(i / N_V - 0.5) * 2
+        const alpha = centerFrac * 0.088 * (0.72 + 0.28 * Math.sin(t * 0.16 + i * 0.25))
+        if (alpha < 0.004) continue
         ctx.beginPath()
-        ctx.arc(gx, gy, 0.5, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,255,255,${ga.toFixed(4)})`
+        ctx.moveTo(vpX, vpY)
+        ctx.lineTo(xBottom, H + 40)
+        ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(4)})`
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+      }
+
+      ctx.restore()
+
+      // 5. RISING PARTICLES WITH TRAILS
+      for (const p of particles) {
+        p.y += p.vy
+        p.x += p.vx + Math.sin(t * 0.28 + p.phase) * 0.09
+        if (p.y < -12) { p.y = H + 12; p.x = Math.random() * W; p.phase = Math.random() * Math.PI * 2 }
+
+        const edgeFade = Math.min(1, (H - p.y) / (H * 0.22), Math.max(0, p.y / (H * 0.08)))
+        const a = p.alpha * edgeFade * (0.68 + 0.32 * Math.sin(t * 0.48 + p.phase))
+        if (a < 0.018) continue
+
+        const cr = p.isBlue ? '56,160,242' : '231,76,60'
+        for (let k = 1; k <= 3; k++) {
+          ctx.beginPath()
+          ctx.arc(p.x, p.y + k * 2.8, p.size * 0.65, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(${cr},${(a * 0.26 / k).toFixed(3)})`
+          ctx.fill()
+        }
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${cr},${a.toFixed(3)})`
         ctx.fill()
       }
-      ctx.restore()
+
+      // 6. REACTOR CORE — pulsing bright point above VP
+      const corePulse = 0.5 + 0.5 * Math.sin(t * 1.85)
+      const coreA = 0.52 + 0.38 * corePulse
+      const coreY = vpY - H * 0.04
+      const coreG = ctx.createRadialGradient(vpX, coreY, 0, vpX, coreY, 130)
+      coreG.addColorStop(0,    `rgba(255,110,85,${coreA.toFixed(3)})`)
+      coreG.addColorStop(0.18, `rgba(220,58,38,${(coreA*0.52).toFixed(3)})`)
+      coreG.addColorStop(0.5,  `rgba(192,40,24,${(coreA*0.16).toFixed(3)})`)
+      coreG.addColorStop(1,    'rgba(192,40,24,0)')
+      ctx.fillStyle = coreG
+      ctx.fillRect(vpX - 140, coreY - 140, 280, 280)
+      // Tiny bright centre dot
+      ctx.beginPath()
+      ctx.arc(vpX, coreY, 2.8, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(255,190,170,${(0.75 + 0.25 * corePulse).toFixed(3)})`
+      ctx.fill()
+
+      // 7. VIGNETTE — protect text legibility
+      const vT = ctx.createLinearGradient(0, 0, 0, H * 0.34)
+      vT.addColorStop(0, 'rgba(4,0,2,0.94)'); vT.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vT; ctx.fillRect(0, 0, W, H * 0.34)
+
+      const vB = ctx.createLinearGradient(0, H, 0, H * 0.65)
+      vB.addColorStop(0, 'rgba(4,0,2,0.90)'); vB.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vB; ctx.fillRect(0, H * 0.65, W, H * 0.35)
+
+      const vL = ctx.createLinearGradient(0, 0, W * 0.16, 0)
+      vL.addColorStop(0, 'rgba(4,0,2,0.85)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vL; ctx.fillRect(0, 0, W * 0.16, H)
+
+      const vR = ctx.createLinearGradient(W, 0, W * 0.84, 0)
+      vR.addColorStop(0, 'rgba(4,0,2,0.85)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
+      ctx.fillStyle = vR; ctx.fillRect(W * 0.84, 0, W * 0.16, H)
 
       raf = requestAnimationFrame(draw)
     }
     window.addEventListener('resize',resize)
     resize()
     raf = requestAnimationFrame(draw)
-    return () => { if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize',resize) }
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('resize',resize)
+      window.removeEventListener('mousemove', onMouse)
+    }
   }, [])
 
   return (
