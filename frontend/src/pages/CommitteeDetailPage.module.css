@@ -7,34 +7,24 @@
 }
 
 /* ── AURA BACKGROUND ── */
-.vignette {
+.bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 55% 50% at 0% 0%,   rgba(192,57,43,0.18) 0%, transparent 65%),
-    radial-gradient(ellipse 48% 45% at 100% 0%,  rgba(12,38,172,0.14) 0%, transparent 62%),
-    radial-gradient(ellipse 60% 55% at 50% 100%, rgba(192,57,43,0.08) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 70% at 50% 50%,  transparent 35%, rgba(4,0,2,0.82) 100%);
+    radial-gradient(ellipse 60% 55% at 5% 5%,   rgba(192,57,43,0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 45% at 95% 8%,   rgba(12,38,172,0.12) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 60% at 15% 85%,  rgba(192,57,43,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 50% at 85% 92%,  rgba(12,38,172,0.08) 0%, transparent 58%);
 }
-
-.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px); }
-.orbRed1  { width:320px; height:320px; background: radial-gradient(circle, rgba(192,57,43,0.20) 0%, transparent 70%); top:6%;    left:4%;   animation: floatA 18s ease-in-out infinite; }
-.orbBlue1 { width:400px; height:400px; background: radial-gradient(circle, rgba(12,38,172,0.16) 0%, transparent 70%); top:10%;   right:3%;  animation: floatB 22s ease-in-out infinite; }
-.orbRed2  { width:280px; height:280px; background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%); bottom:15%; right:10%; animation: floatC 20s ease-in-out infinite; }
-
-@keyframes floatA { 0%,100%{transform:translate(0,0)} 40%{transform:translate(18px,-22px)} 70%{transform:translate(-12px,14px)} }
-@keyframes floatB { 0%,100%{transform:translate(0,0)} 35%{transform:translate(-20px,18px)} 65%{transform:translate(14px,-10px)} }
-@keyframes floatC { 0%,100%{transform:translate(0,0)} 45%{transform:translate(-16px,-18px)} 75%{transform:translate(20px,10px)} }
 
 /* ── HERO SECTION ── */
 .heroSection {
   position: relative;
   z-index: 1;
-  height: 75vh;
-  min-height: 520px;
-  max-height: 820px;
+  height: 78vh;
+  min-height: 540px;
+  max-height: 860px;
 }
 
-/* Image wrapper — fills entire hero section */
 .heroImgWrap {
   position: absolute;
   inset: 0;
@@ -47,7 +37,6 @@
   object-position: center;
   opacity: 0;
   transition: opacity 0.8s ease;
-  transform: scale(1.04);
   animation: subtleZoom 18s ease-out forwards;
 }
 
@@ -58,7 +47,6 @@
 
 .heroImgLoaded { opacity: 1; }
 
-/* Placeholder when no image uploaded */
 .heroImgPlaceholder {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -73,19 +61,17 @@
   user-select: none;
 }
 
-/* Bottom gradient overlay — dark at bottom for text legibility */
 .heroImgGradient {
   position: absolute; inset: 0;
-  background:
-    linear-gradient(to bottom,
-      rgba(4,0,2,0.55) 0%,
-      rgba(4,0,2,0.10) 35%,
-      rgba(4,0,2,0.10) 55%,
-      rgba(4,0,2,0.88) 100%
-    );
+  background: linear-gradient(to bottom,
+    rgba(4,0,2,0.55) 0%,
+    rgba(4,0,2,0.08) 32%,
+    rgba(4,0,2,0.08) 52%,
+    rgba(4,0,2,0.92) 100%
+  );
 }
 
-/* ── HERO OVERLAY — content on top of image ── */
+/* ── HERO OVERLAY ── */
 .heroOverlay {
   position: absolute;
   inset: 0;
@@ -93,13 +79,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 7rem 3rem 3rem;
-  max-width: 1200px;
+  padding: 7rem 4rem 3.5rem;
+  max-width: 1280px;
   margin: 0 auto;
   left: 0; right: 0;
 }
 
-/* Back link */
 .backLink {
   display: inline-flex;
   align-items: center;
@@ -109,7 +94,7 @@
   font-weight: 600;
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: rgba(244,244,239,0.55);
+  color: rgba(244,244,239,0.52);
   text-decoration: none;
   transition: color 0.25s ease, gap 0.25s ease;
   width: fit-content;
@@ -118,14 +103,39 @@
 .backLink svg { transition: transform 0.25s ease; }
 .backLink:hover svg { transform: translateX(-3px); }
 
-/* Bottom meta block */
+/* Bottom hero block */
 .heroMeta {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  align-items: flex-end;
+  gap: 2rem;
+  overflow: hidden;
 }
 
-/* Category tag */
+/* Oversized abbreviation watermark behind the content */
+.heroAbbr {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.18em;
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(5rem, 13vw, 11rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: rgba(244,244,239,0.055);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.heroMetaContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-width: 740px;
+  position: relative;
+  z-index: 1;
+}
+
 .heroTag {
   display: inline-block; width: fit-content;
   font-family: 'Geist', sans-serif;
@@ -139,131 +149,365 @@
 .tag_crisis      { color: rgba(255,165,60,0.90);  border-color: rgba(255,165,60,0.28); background: rgba(180,80,10,0.10); }
 .tag_press       { color: rgba(200,200,200,0.80); border-color: rgba(200,200,200,0.22);background: rgba(100,100,100,0.10); }
 
-/* Committee name */
 .heroTitle {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+  font-size: clamp(1.9rem, 4.8vw, 3.6rem);
   font-weight: 900;
   color: #f4f4ef;
-  line-height: 1.15;
+  line-height: 1.12;
   margin: 0;
-  text-shadow: 0 4px 40px rgba(0,0,0,0.8);
-  max-width: 800px;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.85);
 }
 
 .heroType {
   font-family: 'Geist', sans-serif;
   font-size: 0.82rem;
-  color: rgba(244,244,239,0.45);
+  color: rgba(244,244,239,0.42);
   letter-spacing: 0.06em;
   margin: 0;
 }
 
-/* ── THREE COMING SOON SECTIONS ── */
-.sections {
+/* ── SHARED LABEL ── */
+.sectionLabel {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.60rem; font-weight: 700;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(192,57,43,0.68);
+  margin-bottom: 0.55rem;
+}
+.labelDot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(231,76,60,0.80);
+  box-shadow: 0 0 8px rgba(231,76,60,0.55);
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+.labelDotBlue {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(86,160,242,0.80);
+  box-shadow: 0 0 8px rgba(86,160,242,0.55);
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.30;transform:scale(0.65)} }
+
+.sectionTitle {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-weight: 900;
+  color: rgba(244,244,239,0.92);
+  margin: 0 0 0.65rem;
+  line-height: 1.2;
+}
+
+.sectionDesc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.90rem;
+  color: rgba(244,244,239,0.38);
+  line-height: 1.85;
+  margin: 0;
+  max-width: 580px;
+}
+
+/* ── MAIN CONTENT AREA ── */
+.content {
   position: relative; z-index: 1;
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 4rem 2rem 6rem;
+  padding: 5.5rem 2.5rem 7rem;
   display: flex;
   flex-direction: column;
+  gap: 4.5rem;
+}
+
+/* ── DAIS SECTION ── */
+.daisSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2.8rem;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.daisGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.4rem;
 }
 
-/* ── COMING SOON CARD ── */
-.csCard {
+/* ── PERSON CARD ── */
+.personCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 2.2rem 1.6rem;
+  background: linear-gradient(150deg, rgba(16,5,10,0.92) 0%, rgba(8,4,20,0.88) 100%);
+  border: 1px solid rgba(192,57,43,0.11);
+  border-radius: 22px;
+  text-align: center;
+  transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+.personCard:hover {
+  border-color: rgba(192,57,43,0.30);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 40px rgba(192,57,43,0.06);
+}
+
+/* Photo circle */
+.personPhotoWrap {
+  position: relative;
+  width: 108px; height: 108px;
+  flex-shrink: 0;
+}
+
+.personPhoto {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.personPhotoLoaded { opacity: 1; }
+
+.personPhotoPlaceholder {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(192,57,43,0.07) 0%, rgba(12,38,172,0.05) 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Gradient ring around the circle */
+.personPhotoBorder {
+  position: absolute; inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(192,57,43,0.28) 0%, rgba(12,38,172,0.16) 60%, transparent 100%);
+  mask-image: radial-gradient(farthest-side, transparent calc(100% - 1.5px), black calc(100% - 1.5px));
+  -webkit-mask-image: radial-gradient(farthest-side, transparent calc(100% - 1.5px), black calc(100% - 1.5px));
+  pointer-events: none;
+}
+
+.personInfo {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  align-items: center;
+}
+
+.personRole {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: rgba(192,57,43,0.72);
+}
+
+.personName {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.88rem; font-weight: 600;
+  color: rgba(244,244,239,0.32);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── AGENDA SECTION ── */
+.agendaSection {
+  display: flex;
+  gap: 3.5rem;
+  align-items: flex-start;
+  background: linear-gradient(150deg, rgba(10,4,8,0.92) 0%, rgba(6,4,18,0.88) 100%);
+  border: 1px solid rgba(86,160,242,0.10);
+  border-radius: 26px;
+  padding: 3.5rem;
+  overflow: hidden;
+}
+
+.agendaLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+  padding-top: 0.4rem;
+}
+
+.agendaNumeral {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(3.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(86,160,242,0.12);
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.agendaLine {
+  width: 1px;
+  height: 90px;
+  background: linear-gradient(to bottom, rgba(86,160,242,0.20), transparent);
+}
+
+.agendaRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Placeholder agenda topic bars */
+.agendaPlaceholders {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.agendaPlaceholder {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.4rem;
+  background: rgba(86,160,242,0.035);
+  border: 1px solid rgba(86,160,242,0.07);
+  border-radius: 12px;
+}
+
+.agendaPlaceholderNum {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.10em;
+  color: rgba(86,160,242,0.35);
+  flex-shrink: 0;
+  width: 22px;
+}
+
+.agendaPlaceholderContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agendaPlaceholderBar {
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(244,244,239,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.agendaPlaceholderBar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(86,160,242,0.10), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2.8s ease-in-out infinite;
+}
+
+.agendaPlaceholderBarShort {
+  height: 5px;
+  width: 55%;
+  border-radius: 4px;
+  background: rgba(244,244,239,0.025);
+  position: relative;
+  overflow: hidden;
+}
+
+.agendaPlaceholderBarShort::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(86,160,242,0.08), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2.8s ease-in-out 0.4s infinite;
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* ── BACKGROUND GUIDE SECTION ── */
+.bgGuideSection {
   position: relative;
   display: flex;
-  gap: 1.6rem;
+  gap: 2.4rem;
   align-items: flex-start;
-  background: linear-gradient(135deg, rgba(14,4,8,0.90) 0%, rgba(8,4,18,0.86) 100%);
-  border: 1px solid rgba(192,57,43,0.12);
-  border-radius: 18px;
-  padding: 2rem 2.2rem;
+  background: linear-gradient(150deg, rgba(38,7,4,0.55) 0%, rgba(16,4,8,0.92) 45%, rgba(8,4,20,0.90) 100%);
+  border: 1px solid rgba(192,57,43,0.16);
+  border-radius: 26px;
+  padding: 3.5rem;
   overflow: hidden;
-  transition: border-color 0.3s ease;
 }
-.csCard:hover { border-color: rgba(192,57,43,0.28); }
 
-/* Ambient glow on hover */
-.csGlow {
-  position: absolute; inset: 0; border-radius: 18px;
-  background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(192,57,43,0.06) 0%, transparent 70%);
-  opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-}
-.csCard:hover .csGlow { opacity: 1; }
-
-/* Icon */
-.csIconWrap {
+.bgGuideIcon {
   flex-shrink: 0;
-  width: 56px; height: 56px;
-  border-radius: 14px;
+  width: 72px; height: 72px;
+  border-radius: 20px;
   background: rgba(192,57,43,0.07);
-  border: 1px solid rgba(192,57,43,0.15);
+  border: 1px solid rgba(192,57,43,0.16);
   display: flex; align-items: center; justify-content: center;
-  margin-top: 2px;
+  margin-top: 6px;
 }
 
-/* Card body */
-.csBody { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
-
-/* "Coming Soon" badge */
-.csBadge {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: 'Geist', sans-serif;
-  font-size: 0.60rem; font-weight: 700;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(192,57,43,0.65);
-  margin-bottom: 0.1rem;
+.bgGuideBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
-.csBadgeDot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(231,76,60,0.65);
-  box-shadow: 0 0 8px rgba(231,76,60,0.5);
-  animation: badgePulse 2.4s ease-in-out infinite;
-}
-@keyframes badgePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.7)} }
 
-/* Section title */
-.csTitle {
+.bgGuideTitle {
   font-family: 'Rubik', sans-serif;
-  font-size: 1.25rem; font-weight: 800;
-  color: rgba(244,244,239,0.88);
-  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-weight: 900;
+  color: rgba(244,244,239,0.92);
+  margin: 0 0 0.65rem;
 }
 
-/* Description */
-.csDesc {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  color: rgba(244,244,239,0.42);
-  line-height: 1.75;
-  margin: 0;
-  max-width: 560px;
+/* Ambient glow in top-right corner of the card */
+.bgGuideGlow {
+  position: absolute;
+  right: -80px; top: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,57,43,0.09) 0%, transparent 70%);
+  pointer-events: none;
 }
-
-/* Action area */
-.csAction { margin-top: 0.8rem; }
 
 /* Disabled download button */
 .downloadBtn {
   display: inline-flex; align-items: center; gap: 9px;
-  padding: 0.7rem 1.6rem;
+  padding: 0.78rem 1.9rem;
   border-radius: 999px;
-  border: 1px solid rgba(192,57,43,0.22);
-  background: rgba(192,57,43,0.06);
+  border: 1px solid rgba(192,57,43,0.20);
+  background: rgba(192,57,43,0.05);
   font-family: 'Geist', sans-serif;
   font-size: 0.75rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(192,57,43,0.45);
+  color: rgba(192,57,43,0.42);
   cursor: not-allowed;
   opacity: 0.7;
+  margin-top: 1.4rem;
+  width: fit-content;
+  transition: none;
 }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  .heroOverlay { padding: 6rem 1.5rem 2rem; }
-  .csCard { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-  .csIconWrap { width: 44px; height: 44px; border-radius: 10px; }
-  .sections { padding: 2.5rem 1.2rem 4rem; }
+@media (max-width: 900px) {
+  .daisGrid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .agendaSection { padding: 2.5rem; gap: 2.5rem; }
+  .bgGuideSection { padding: 2.5rem; }
+  .content { padding: 4rem 1.8rem 5rem; gap: 3.5rem; }
+}
+
+@media (max-width: 720px) {
+  .heroOverlay { padding: 6rem 1.8rem 2.5rem; }
+  .heroAbbr { display: none; }
+  .daisGrid { grid-template-columns: repeat(1, 1fr); max-width: 320px; margin: 0 auto; }
+  .content { padding: 3rem 1.2rem 4rem; gap: 2.8rem; }
+  .agendaSection { flex-direction: column; gap: 1.5rem; padding: 2rem; }
+  .agendaLeft { flex-direction: row; align-items: center; }
+  .agendaLine { width: 48px; height: 1px; background: linear-gradient(to right, rgba(86,160,242,0.20), transparent); }
+  .bgGuideSection { flex-direction: column; padding: 2rem; }
+  .bgGuideIcon { width: 56px; height: 56px; border-radius: 14px; }
 }

@@ -17,9 +17,10 @@ import { useEffect, useRef, memo, type CSSProperties } from 'react'
 function useCanvasLoop(
   draw: (ctx: CanvasRenderingContext2D, W: number, H: number, t: number) => void,
 ) {
-  const ref     = useRef<HTMLCanvasElement>(null)
-  const t       = useRef(0)
-  const visible = useRef(false)
+  const ref       = useRef<HTMLCanvasElement>(null)
+  const t         = useRef(0)
+  const visible   = useRef(false)
+  const lastFrame = useRef(0)
 
   useEffect(() => {
     const c = ref.current; if (!c) return
@@ -43,7 +44,9 @@ function useCanvasLoop(
     }
   }, [])
 
-  useAnimationFrame((_, dt) => {
+  useAnimationFrame((time, dt) => {
+    if (time - lastFrame.current < 50) return   // ~20fps cap for section backgrounds
+    lastFrame.current = time
     if (!visible.current) return
     const c = ref.current; if (!c) return
     const ctx = c.getContext('2d'); if (!ctx) return

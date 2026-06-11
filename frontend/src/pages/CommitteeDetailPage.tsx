@@ -14,7 +14,6 @@ function HeroImage({ id, abbr, type }: { id: string; abbr: string; type: string 
 
   return (
     <div className={styles.heroImgWrap}>
-      {/* Real image */}
       <img
         src={`/media/committees/${id}.jpg`}
         alt={abbr}
@@ -22,7 +21,6 @@ function HeroImage({ id, abbr, type }: { id: string; abbr: string; type: string 
         onLoad={() => { setLoaded(true); setHasError(false) }}
         onError={() => setHasError(true)}
       />
-      {/* Placeholder when no image */}
       {hasError && (
         <div
           className={styles.heroImgPlaceholder}
@@ -31,42 +29,61 @@ function HeroImage({ id, abbr, type }: { id: string; abbr: string; type: string 
           <span className={styles.heroAbbrBg}>{abbr}</span>
         </div>
       )}
-      {/* Bottom gradient so text below reads cleanly */}
       <div className={styles.heroImgGradient} />
     </div>
   )
 }
 
-// ── "Coming Soon" section card ────────────────────────────────
-function ComingSoonCard({ icon, title, description, action }: {
-  icon: React.ReactNode
-  title: string
-  description: string
-  action?: React.ReactNode
+// ── Dais member card with photo placeholder ───────────────────
+function PersonCard({
+  role,
+  committeeId,
+  index,
+}: {
+  role: string
+  committeeId: string
+  index: number
 }) {
+  const [loaded, setLoaded] = useState(false)
+  const [hasError, setHasError] = useState(false)
+  const roleSlug = role.toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')
+
   return (
     <motion.div
-      className={styles.csCard}
-      initial={{ opacity: 0, y: 32 }}
+      className={styles.personCard}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ type: 'spring', stiffness: 80, damping: 18 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ type: 'spring', stiffness: 80, damping: 18, delay: index * 0.09 }}
     >
-      <div className={styles.csIconWrap}>{icon}</div>
-      <div className={styles.csBody}>
-        <div className={styles.csBadge}>
-          <span className={styles.csBadgeDot} />
-          Coming Soon
-        </div>
-        <h3 className={styles.csTitle}>{title}</h3>
-        <p className={styles.csDesc}>{description}</p>
-        {action && <div className={styles.csAction}>{action}</div>}
+      <div className={styles.personPhotoWrap}>
+        <img
+          src={`/media/dais/${committeeId}-${roleSlug}.jpg`}
+          alt={role}
+          className={`${styles.personPhoto} ${loaded ? styles.personPhotoLoaded : ''}`}
+          onLoad={() => { setLoaded(true); setHasError(false) }}
+          onError={() => setHasError(true)}
+        />
+        {(!loaded || hasError) && (
+          <div className={styles.personPhotoPlaceholder}>
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.28)" strokeWidth="1.2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" />
+            </svg>
+          </div>
+        )}
+        <div className={styles.personPhotoBorder} />
       </div>
-      <div className={styles.csGlow} aria-hidden="true" />
+
+      <div className={styles.personInfo}>
+        <span className={styles.personRole}>{role}</span>
+        <p className={styles.personName}>To Be Announced</p>
+      </div>
     </motion.div>
   )
 }
 
+// ── Main page ─────────────────────────────────────────────────
 export default function CommitteeDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -81,117 +98,182 @@ export default function CommitteeDetailPage() {
 
   return (
     <div className={styles.page}>
-      {/* Aura background */}
-      <div className={styles.vignette} />
-      <div className={`${styles.orb} ${styles.orbRed1}`} />
-      <div className={`${styles.orb} ${styles.orbBlue1}`} />
-      <div className={`${styles.orb} ${styles.orbRed2}`} />
+      <div className={styles.bg} />
 
       <Navbar />
 
-      {/* ── HERO IMAGE SECTION ── */}
+      {/* ── HERO ── */}
       <motion.div
         className={styles.heroSection}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.55 }}
       >
         <HeroImage id={committee.id} abbr={committee.abbr} type={committee.type} />
 
-        {/* Overlay content */}
         <div className={styles.heroOverlay}>
-          {/* Back link */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -18 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            transition={{ delay: 0.18, duration: 0.45 }}
           >
             <Link to="/committees" className={styles.backLink}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               All Committees
             </Link>
           </motion.div>
 
-          {/* Committee identity */}
           <div className={styles.heroMeta}>
             <motion.span
-              className={`${styles.heroTag} ${styles[`tag_${committee.type}`]}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              {committee.category}
-            </motion.span>
-
-            <motion.h1
-              className={styles.heroTitle}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 80, damping: 16, delay: 0.38 }}
-            >
-              {committee.name}
-            </motion.h1>
-
-            <motion.p
-              className={styles.heroType}
+              className={styles.heroAbbr}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.55, duration: 0.5 }}
+              transition={{ delay: 0.22, duration: 1.0 }}
             >
-              {TYPE_LABELS[committee.type]} · CHIREC MUN 2026
-            </motion.p>
+              {committee.abbr}
+            </motion.span>
+
+            <div className={styles.heroMetaContent}>
+              <motion.span
+                className={`${styles.heroTag} ${styles[`tag_${committee.type}`]}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.28, duration: 0.45 }}
+              >
+                {committee.category}
+              </motion.span>
+
+              <motion.h1
+                className={styles.heroTitle}
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 80, damping: 16, delay: 0.35 }}
+              >
+                {committee.name}
+              </motion.h1>
+
+              <motion.p
+                className={styles.heroType}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.52, duration: 0.45 }}
+              >
+                {TYPE_LABELS[committee.type]} · CHIREC MUN 2026
+              </motion.p>
+            </div>
           </div>
         </div>
       </motion.div>
 
-      {/* ── THREE SECTIONS ── */}
-      <div className={styles.sections}>
+      {/* ── CONTENT ── */}
+      <div className={styles.content}>
 
-        {/* 1. DAIS */}
-        <ComingSoonCard
-          icon={
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.75)" strokeWidth="1.5">
-              <circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
-              <circle cx="19" cy="7" r="2"/><path d="M23 21v-1a2 2 0 00-2-2h-2"/>
-            </svg>
-          }
-          title="Dais"
-          description="The Chairs, Vice Chairs, and Rapporteurs for this committee will be announced soon. Check back closer to the conference."
-        />
+        {/* ── DAIS ── */}
+        <section className={styles.daisSection}>
+          <motion.div
+            className={styles.sectionHeader}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ type: 'spring', stiffness: 80, damping: 18 }}
+          >
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelDot} />
+              Coming Soon
+            </div>
+            <h2 className={styles.sectionTitle}>Meet the Dais</h2>
+            <p className={styles.sectionDesc}>
+              The Chairs, Vice Chairs, and Rapporteurs for this committee will be announced closer to the conference.
+            </p>
+          </motion.div>
 
-        {/* 2. AGENDA */}
-        <ComingSoonCard
-          icon={
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(86,160,242,0.75)" strokeWidth="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="3"/>
-              <path d="M8 12h8M8 8h8M8 16h5"/>
-            </svg>
-          }
-          title="Agenda"
-          description="The committee's agenda topics will be released once finalized. Stay tuned for updates."
-        />
+          <div className={styles.daisGrid}>
+            {['Chairperson', 'Vice Chair', 'Rapporteur'].map((role, i) => (
+              <PersonCard
+                key={role}
+                role={role}
+                committeeId={committee.id}
+                index={i}
+              />
+            ))}
+          </div>
+        </section>
 
-        {/* 3. BACKGROUND GUIDE */}
-        <ComingSoonCard
-          icon={
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.75)" strokeWidth="1.5">
-              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/>
+        {/* ── AGENDA ── */}
+        <motion.section
+          className={styles.agendaSection}
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ type: 'spring', stiffness: 75, damping: 18 }}
+        >
+          <div className={styles.agendaLeft}>
+            <div className={styles.agendaNumeral}>01</div>
+            <div className={styles.agendaLine} />
+          </div>
+
+          <div className={styles.agendaRight}>
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelDotBlue} />
+              Coming Soon
+            </div>
+            <h2 className={styles.sectionTitle}>Agenda Topics</h2>
+            <p className={styles.sectionDesc}>
+              The committee's agenda topics will be released once finalized. Stay tuned for updates on the official topics for debate.
+            </p>
+
+            <div className={styles.agendaPlaceholders}>
+              {[1, 2].map(n => (
+                <div key={n} className={styles.agendaPlaceholder}>
+                  <span className={styles.agendaPlaceholderNum}>{n < 10 ? `0${n}` : n}</span>
+                  <div className={styles.agendaPlaceholderContent}>
+                    <div className={styles.agendaPlaceholderBar} />
+                    <div className={styles.agendaPlaceholderBarShort} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        {/* ── BACKGROUND GUIDE ── */}
+        <motion.section
+          className={styles.bgGuideSection}
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ type: 'spring', stiffness: 75, damping: 18, delay: 0.08 }}
+        >
+          <div className={styles.bgGuideIcon}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.82)" strokeWidth="1.5">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
             </svg>
-          }
-          title="Background Guide"
-          description="The Background Guide (Study Guide) for this committee will be available for download before the conference. It will be a PDF document."
-          action={
+          </div>
+
+          <div className={styles.bgGuideBody}>
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelDot} />
+              Coming Soon
+            </div>
+            <h2 className={styles.bgGuideTitle}>Background Guide</h2>
+            <p className={styles.sectionDesc}>
+              The Background Guide (Study Guide) will be available for download before the conference. It contains all the context delegates need to prepare for substantive debate.
+            </p>
+
             <button className={styles.downloadBtn} disabled>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M12 15V3M7 10l5 5 5-5M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2"/>
+                <path d="M12 15V3M7 10l5 5 5-5M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" />
               </svg>
               Download PDF — Coming Soon
             </button>
-          }
-        />
+          </div>
+
+          <div className={styles.bgGuideGlow} />
+        </motion.section>
+
       </div>
 
       <BottomBar />
