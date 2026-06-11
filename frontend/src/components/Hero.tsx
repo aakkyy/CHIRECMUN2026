@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
 import BlobButton from './BlobButton'
+import Magnetic from './Magnetic'
 import CinematicAtmosphere from './CinematicAtmosphere'
 
 const CHIREC_LETTERS = [
@@ -14,9 +15,13 @@ const CHIREC_LETTERS = [
   { char: 'C', color: '#1e3a8a', glow: 'rgba(30,58,138,0.85)'   },  // dark blue
 ]
 
+/* letters crash into position — heavy spring, slight overshoot */
 const letterVariant = {
-  hidden:  { opacity: 0, y: 80 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 16 } },
+  hidden:  { opacity: 0, y: -140, scale: 1.35, rotate: -8 },
+  visible: {
+    opacity: 1, y: 0, scale: 1, rotate: 0,
+    transition: { type: 'spring', stiffness: 240, damping: 17, mass: 1.1 },
+  },
 }
 
 const fadeUp = {
@@ -42,8 +47,9 @@ export default function Hero() {
   }, [])
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
-  const contentOp  = useTransform(scrollYProgress, [0, 0.65], [1, 0])
+  const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
+  const contentOp  = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  const hintOp     = useTransform(scrollYProgress, [0, 0.15], [1, 0])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -153,6 +159,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.span className={styles.badge} variants={fadeUp}>
+          <span className={styles.badgeDot} aria-hidden="true" />
           Edition XIV
         </motion.span>
 
@@ -161,7 +168,7 @@ export default function Hero() {
           <motion.div
             ref={chirecRowRef}
             className={styles.chirecRow}
-            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
           >
             {CHIREC_LETTERS.map((l, i) => (
               <motion.span
@@ -212,21 +219,26 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className={styles.actions} variants={fadeUp}>
-          {/* red button → blue energy blob */}
-          <BlobButton href="#register" className={styles.btnPrimary} variant="red">
-            Register as Delegate
-          </BlobButton>
-          {/* blue/transparent button → red energy blob */}
-          <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
-            View Countdown
-          </BlobButton>
+          {/* magnetic buttons — pull gently toward the cursor */}
+          <Magnetic strength={0.28}>
+            <BlobButton href="#register" className={styles.btnPrimary} variant="red">
+              Register as Delegate
+            </BlobButton>
+          </Magnetic>
+          <Magnetic strength={0.28}>
+            <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
+              View Countdown
+            </BlobButton>
+          </Magnetic>
         </motion.div>
       </motion.div>
 
-      <div className={styles.scrollHint}>
+      <motion.div className={styles.scrollHint} style={{ opacity: hintOp }}>
         <span className={styles.scrollLabel}>Scroll</span>
-        <div className={styles.scrollLine} />
-      </div>
+        <div className={styles.scrollTrack}>
+          <div className={styles.scrollGlider} />
+        </div>
+      </motion.div>
     </section>
   )
 }

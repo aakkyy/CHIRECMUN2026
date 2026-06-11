@@ -14,6 +14,13 @@
 }
 
 /* ── LEFT COPY ── */
+.eyebrowWrap {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 0.85rem;
+}
+
 .eyebrow {
   font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
@@ -21,7 +28,18 @@
   letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--red);
-  margin-bottom: 0.75rem;
+}
+
+/* growing red accent line under the eyebrow */
+.eyebrowLine {
+  display: block;
+  height: 2px;
+  width: 56px;
+  border-radius: 1px;
+  background: linear-gradient(to right, #e74c3c, rgba(192,57,43,0.15));
+  box-shadow: 0 0 12px rgba(231,76,60,0.55);
+  transform-origin: left center;
+  will-change: transform;
 }
 
 .title {
@@ -84,15 +102,17 @@
   gap: 0.75rem;
 }
 
-/* ── EACH PILLAR CARD — gradient border ── */
+/* ── EACH PILLAR CARD — gradient border + 3D tilt ── */
 .pillarWrap {
   border-radius: 13px;
   padding: 1.5px;
-  transition: filter 0.3s;
+  transition: filter 0.3s, box-shadow 0.35s ease;
+  transform-style: preserve-3d;
 }
 
 .pillarWrap:hover {
   filter: brightness(1.12) saturate(1.15);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.45), 0 0 26px rgba(192,57,43,0.14);
 }
 
 /* Represent — red dominant, vivid */

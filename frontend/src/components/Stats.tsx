@@ -57,7 +57,7 @@ export default function Stats() {
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
-        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
       >
         {stats.map((s, i) => {
           const isSelected = selected === i
@@ -73,22 +73,34 @@ export default function Stats() {
                   ? { boxShadow: '0 0 0 2px #c0392b, 0 4px 24px rgba(192,57,43,0.22)', scale: 1 }
                   : { boxShadow: '0 0 0 0px rgba(192,57,43,0)',                          scale: 1 }
                 }
-                whileHover={isSelected ? {} : {
-                  boxShadow: '0 0 0 1.5px rgba(86,204,242,0.45), 0 4px 20px rgba(86,204,242,0.10)',
+                whileHover={isSelected ? { y: -3 } : {
+                  y: -3,
+                  boxShadow: '0 0 0 1.5px rgba(192,57,43,0.40), 0 10px 28px rgba(192,57,43,0.12)',
                 }}
                 transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-                style={{ cursor: 'pointer', borderRadius: 10, padding: '0.9rem 1.4rem' }}
+                style={{ cursor: 'pointer', borderRadius: 12, padding: '1rem 1.5rem' }}
               >
                 {s.comingSoon ? (
                   <>
-                    <div className={styles.cautionTape}>
-                      <span className={styles.cautionText}>Coming Soon</span>
+                    <div className={styles.csBadge}>
+                      <span className={styles.csShimmer} aria-hidden="true" />
+                      <span className={styles.csText}>Coming Soon</span>
                     </div>
                     <span className={styles.csLabel}>Committees</span>
                   </>
                 ) : (
                   <>
-                    <AnimatedNum target={parseInt(s.num)} suffix={s.num.includes('+') ? '+' : ''} />
+                    <span className={styles.numWrap}>
+                      <AnimatedNum target={parseInt(s.num)} suffix={s.num.includes('+') ? '+' : ''} />
+                      <motion.span
+                        className={styles.numUnderline}
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={viewport}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.35 + i * 0.1 }}
+                        aria-hidden="true"
+                      />
+                    </span>
                     <span className={styles.label}>{s.label}</span>
                     {s.sub && <span className={styles.sub}>{s.sub}</span>}
                   </>

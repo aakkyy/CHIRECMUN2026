@@ -1,16 +1,42 @@
+/* ── full-width dark glass panel ── */
 .strip {
-  background: var(--theme-bg-alt);
+  position: relative;
+  background:
+    linear-gradient(to right, rgba(192,57,43,0.05), transparent 22%, transparent 78%, rgba(12,38,178,0.05)),
+    rgba(5, 2, 4, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-top: 1px solid var(--theme-card-border);
   border-bottom: 1px solid var(--theme-card-border);
-  padding: 2.2rem 0;
+  padding: 2.6rem 0;
+}
+
+/* hairline accents */
+.strip::before,
+.strip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 80%);
+  height: 1px;
+  pointer-events: none;
+}
+.strip::before {
+  top: -1px;
+  background: linear-gradient(to right, transparent, rgba(231,76,60,0.55), transparent);
+}
+.strip::after {
+  bottom: -1px;
+  background: linear-gradient(to right, transparent, rgba(231,76,60,0.35), transparent);
 }
 
 .inner {
-  max-width: 880px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-around;
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -24,8 +50,9 @@
 
 .divider {
   width: 1px;
-  height: 44px;
-  background: rgba(192,57,43,0.18);
+  align-self: center;
+  height: 52px;
+  background: linear-gradient(to bottom, transparent, rgba(192,57,43,0.30), transparent);
   margin-right: 0.5rem;
 }
 
@@ -33,118 +60,126 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 0 1.2rem;
+  gap: 4px;
+  will-change: transform;
 }
 
 .numWrap {
   position: relative;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .num {
   font-family: 'Rubik', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2.7rem;
   font-weight: 900;
-  color: #e74c3c;
   line-height: 1;
+  color: var(--theme-text);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 36px rgba(192,57,43,0.35);
 }
 
-/* Caution tape badge */
-.cautionBadge {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  z-index: 10;
-}
-
-.cautionTape {
-  display: flex;
-  align-items: center;
-  padding: 3px 10px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #f5cc50,
-    #f5cc50 6px,
-    #1a1a00 6px,
-    #1a1a00 12px
-  );
-  border-radius: 3px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  border: 1px solid rgba(0,0,0,0.3);
-}
-
-.cautionText {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.55rem;
-  font-weight: 900;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #09090f;
-  text-shadow: none;
+/* thin red underline that draws itself */
+.numUnderline {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 7px;
+  border-radius: 1px;
+  background: linear-gradient(to right, #e74c3c, #8e1f15);
+  box-shadow: 0 0 10px rgba(231,76,60,0.6);
+  transform-origin: left center;
+  will-change: transform;
 }
 
 .label {
   font-family: 'Geist', sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--theme-text-40);
-  margin-top: 2px;
+  margin-top: 5px;
+  text-align: center;
 }
 
 .sub {
   font-family: 'Inter', sans-serif;
   font-size: 0.6rem;
-  color: rgba(192,57,43,0.75);
+  color: rgba(231,76,60,0.8);
   letter-spacing: 0.1em;
+}
+
+/* ── COMING SOON — intentional caution-tape shimmer ── */
+.csItem {
+  gap: 10px;
+  justify-content: center;
+}
+
+.csBadge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 22px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(192,57,43,0.85),
+    rgba(192,57,43,0.85) 9px,
+    rgba(20,4,2,0.95) 9px,
+    rgba(20,4,2,0.95) 18px
+  );
+  border: 1px solid rgba(231,76,60,0.45);
+  box-shadow:
+    0 3px 14px rgba(0,0,0,0.55),
+    0 0 22px rgba(192,57,43,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* sweeping shimmer across the tape */
+.csShimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 10%, rgba(255,255,255,0.30) 50%, transparent 90%);
+  transform: translateX(-180%) skewX(-18deg);
+  animation: csSweep 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes csSweep {
+  0%       { transform: translateX(-180%) skewX(-18deg); }
+  45%, 100% { transform: translateX(380%)  skewX(-18deg); }
+}
+
+.csText {
+  position: relative;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #f4f4ef;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.csLabel {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--theme-text-40);
 }
 
 @media (max-width: 600px) {
   .divider { display: none; }
-  .inner   { gap: 1rem; }
-}
-
-/* Full coming-soon tile — no number, just the tape */
-.csItem {
-  gap: 8px;
-}
-
-.cautionTape {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 20px;
-  background: repeating-linear-gradient(
-    -45deg,
-    #f5cc50,
-    #f5cc50 8px,
-    #1a1400 8px,
-    #1a1400 16px
-  );
-  border-radius: 6px;
-  box-shadow: 0 3px 14px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.4);
-}
-
-.cautionText {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #09090f;
-}
-
-.csLabel {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--theme-text-40);
+  .inner   { gap: 1.4rem; }
 }

@@ -5,6 +5,8 @@ import BlobBg from './BlobBg'
 import { viewport } from '../lib/motion'
 
 const CONFERENCE = new Date('2026-07-31T08:00:00+05:30')
+/* journey start — used only for the progress bar */
+const JOURNEY_START = new Date('2025-08-03T08:00:00+05:30')
 
 function pad(n) { return String(n).padStart(2, '0') }
 
@@ -19,28 +21,38 @@ function getTimeLeft() {
   }
 }
 
+function getProgress() {
+  const total   = CONFERENCE.getTime() - JOURNEY_START.getTime()
+  const elapsed = Date.now() - JOURNEY_START.getTime()
+  return Math.min(1, Math.max(0, elapsed / total))
+}
+
 function Block({ value, label, delay }) {
   return (
     <motion.div
       className={styles.unit}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 36, scale: 0.94 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={viewport}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
+      transition={{ type: 'spring', stiffness: 90, damping: 19, delay }}
     >
-      <div className={styles.numWrap}>
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.span
-            key={value}
-            className={styles.num}
-            initial={{ y: -48, opacity: 0 }}
-            animate={{ y: 0,   opacity: 1 }}
-            exit={{   y: 48,  opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-          >
-            {value}
-          </motion.span>
-        </AnimatePresence>
+      <div className={styles.card}>
+        <span className={styles.cardSeam} aria-hidden="true" />
+        <div className={styles.numWrap}>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={value}
+              className={styles.num}
+              initial={{ rotateX: -92, y: -14, opacity: 0 }}
+              animate={{ rotateX: 0,   y: 0,   opacity: 1 }}
+              exit={{   rotateX: 88,  y: 16,  opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 340, damping: 26, mass: 0.9 }}
+              style={{ transformOrigin: 'center 60%', display: 'inline-block', backfaceVisibility: 'hidden' }}
+            >
+              {value}
+            </motion.span>
+          </AnimatePresence>
+        </div>
       </div>
       <div className={styles.accent} />
       <span className={styles.label}>{label}</span>
@@ -50,6 +62,7 @@ function Block({ value, label, delay }) {
 
 export default function Countdown() {
   const [time, setTime] = useState(getTimeLeft())
+  const progress = getProgress()
 
   useEffect(() => {
     const id = setInterval(() => setTime(getTimeLeft()), 1000)
@@ -74,10 +87,34 @@ export default function Countdown() {
 
         <div className={styles.grid}>
           <Block value={time.d} label="Days"    delay={0}    />
+          <span className={styles.colon} aria-hidden="true">:</span>
           <Block value={time.h} label="Hours"   delay={0.08} />
+          <span className={styles.colon} aria-hidden="true">:</span>
           <Block value={time.m} label="Minutes" delay={0.16} />
+          <span className={styles.colon} aria-hidden="true">:</span>
           <Block value={time.s} label="Seconds" delay={0.24} />
         </div>
+
+        {/* progress to conference day */}
+        <motion.div
+          className={styles.progressWrap}
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport} transition={{ duration: 0.7, ease: [0.22,1,0.36,1], delay: 0.3 }}
+        >
+          <div className={styles.progressMeta}>
+            <span>The road to Edition XIV</span>
+            <span className={styles.progressPct}>{Math.round(progress * 100)}%</span>
+          </div>
+          <div className={styles.progressTrack}>
+            <motion.div
+              className={styles.progressFill}
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: progress }}
+              viewport={viewport}
+              transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
+            />
+          </div>
+        </motion.div>
 
         <motion.p className={styles.sub}
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}

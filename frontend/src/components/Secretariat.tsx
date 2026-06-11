@@ -40,16 +40,25 @@ function AddressCard({ addr, reverse }) {
   return (
     <motion.div
       className={`${styles.card} ${reverse ? styles.reverse : ''}`}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 64, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={viewport}
+      whileHover={{ y: -8 }}
       transition={{ ...spring }}
     >
       {/* Photo column */}
       <div className={styles.photoCol}>
-        <div className={styles.avatar}>
-          <img src={addr.photo} alt={addr.name} className={styles.avatarImg} />
-        </div>
+        <motion.div
+          className={styles.avatarFrame}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={viewport}
+          transition={{ type: 'spring', stiffness: 90, damping: 18, delay: 0.15 }}
+        >
+          <div className={styles.avatar}>
+            <img src={addr.photo} alt={addr.name} className={styles.avatarImg} />
+          </div>
+        </motion.div>
         <p className={styles.personName}>{addr.name}</p>
         <p className={styles.personRole}>{addr.role}</p>
         <p className={styles.personConf}>{addr.conf}</p>

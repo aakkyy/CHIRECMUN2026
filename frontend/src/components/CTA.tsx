@@ -3,34 +3,61 @@ import { motion } from 'framer-motion'
 import styles from './CTA.module.css'
 import { viewport } from '../lib/motion'
 import BlobButton from './BlobButton'
+import Magnetic from './Magnetic'
+
+const crashIn = {
+  hidden:  { opacity: 0, y: 70, scale: 1.06 },
+  visible: {
+    opacity: 1, y: 0, scale: 1,
+    transition: { type: 'spring', stiffness: 100, damping: 16, mass: 1.1 },
+  },
+}
 
 export default function CTA() {
   return (
     <section className={styles.section} id="register" style={{ position: 'relative', overflow: 'hidden' }}>
       <BlobBg variant="cta" />
+
+      {/* ghost background text */}
+      <motion.span
+        className={styles.ghost}
+        aria-hidden="true"
+        initial={{ opacity: 0, scale: 1.08 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={viewport}
+        transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        CHIREC MUN
+      </motion.span>
+
       <motion.div
         className={styles.inner} style={{ position: 'relative', zIndex: 1 }}
-        initial={{ opacity: 0, scale: 0.94, y: 30 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
+        initial="hidden"
+        whileInView="visible"
         viewport={viewport}
-        transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
       >
-        <p className={styles.eyebrow}>Don't Miss Out</p>
-        <h2 className={styles.title}>
-          Ready to Make Your Mark<br />on the World Stage?
-        </h2>
-        <p className={styles.sub}>
+        <motion.p className={styles.eyebrow} variants={crashIn}>Don't Miss Out</motion.p>
+        <motion.h2 className={styles.title} variants={crashIn}>
+          Ready to Make<br />
+          <span className={styles.titleAccent}>Your Mark?</span>
+        </motion.h2>
+        <motion.p className={styles.sub} variants={crashIn}>
           Join hundreds of delegates from across the country at CHIREC International School
           across three days of diplomacy, debate, and discovery.
-        </p>
-        <div className={styles.actions}>
-          <BlobButton href="#" className={styles.btnPrimary} variant="red">
-            Register as Delegate
-          </BlobButton>
-          <BlobButton href="/committees" className={styles.btnOutline} variant="blue">
-            View Committees
-          </BlobButton>
-        </div>
+        </motion.p>
+        <motion.div className={styles.actions} variants={crashIn}>
+          <Magnetic strength={0.3}>
+            <BlobButton href="#" className={styles.btnPrimary} variant="red">
+              Register as Delegate
+            </BlobButton>
+          </Magnetic>
+          <Magnetic strength={0.3}>
+            <BlobButton href="/committees" className={styles.btnOutline} variant="blue">
+              View Committees
+            </BlobButton>
+          </Magnetic>
+        </motion.div>
       </motion.div>
     </section>
   )
