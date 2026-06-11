@@ -4,11 +4,14 @@ import styles from './CTA.module.css'
 import { viewport } from '../lib/motion'
 import BlobButton from './BlobButton'
 
+// scale removed — animating scale on large text elements while a canvas
+// is also drawing forces per-element compositor layers and kills perf.
+// y + opacity are GPU-composited for free via transform/opacity.
 const crashIn = {
-  hidden:  { opacity: 0, y: 70, scale: 1.06 },
+  hidden:  { opacity: 0, y: 48 },
   visible: {
-    opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring', stiffness: 100, damping: 16, mass: 1.1 },
+    opacity: 1, y: 0,
+    transition: { type: 'spring', stiffness: 90, damping: 20 },
   },
 }
 
@@ -18,7 +21,7 @@ export default function CTA() {
       <BlobBg variant="cta" />
 
       <motion.div
-        className={styles.inner} style={{ position: 'relative', zIndex: 1 }}
+        className={styles.inner} style={{ position: 'relative', zIndex: 1, willChange: 'transform' }}
         initial="hidden"
         whileInView="visible"
         viewport={viewport}
