@@ -5,35 +5,32 @@ import BottomBar from '../components/BottomBar'
 import { SECRETARIAT_LEVELS, type SecretariatMember, type SecTier } from '../data/secretariat'
 import styles from './SecretariatPage.module.css'
 
-// Photo diameter (px) by tier
-const PHOTO_SIZE: Record<SecTier, number> = {
-  sg: 126, dg: 114, cda: 106, hoc: 98, usg: 90,
-}
-
-// ── Photo circle with placeholder ─────────────────────────────
-function MemberPhoto({ slug, role, size }: { slug: string; role: string; size: number }) {
+// ── Portrait card photo ────────────────────────────────────────
+function PortraitPhoto({ slug, role, tier }: { slug: string; role: string; tier: SecTier }) {
   const [loaded, setLoaded] = useState(false)
   const [err,    setErr]    = useState(false)
-  const iconSize = Math.round(size * 0.32)
 
   return (
-    <div className={styles.photoWrap} style={{ width: size, height: size }}>
+    <div className={`${styles.portrait} ${styles[`portrait_${tier}`]}`}>
       <img
         src={`/media/secretariat/${slug}.jpg`}
         alt={role}
-        className={`${styles.photo} ${loaded ? styles.photoLoaded : ''}`}
+        className={`${styles.portraitImg} ${loaded ? styles.portraitImgLoaded : ''}`}
         onLoad={() => { setLoaded(true); setErr(false) }}
         onError={() => setErr(true)}
       />
       {(!loaded || err) && (
-        <div className={styles.photoPlaceholder}>
-          <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.28)" strokeWidth="1.2">
+        <div className={styles.portraitPlaceholder}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.22)" strokeWidth="0.9">
             <circle cx="12" cy="8" r="4" />
             <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" />
           </svg>
         </div>
       )}
-      <div className={styles.photoRing} />
+      {/* Hover overlay */}
+      <div className={styles.portraitOverlay}>
+        <span className={styles.portraitHint}>View Profile</span>
+      </div>
     </div>
   )
 }
@@ -48,23 +45,19 @@ function MemberCard({
   index: number
   onClick: () => void
 }) {
-  const size = PHOTO_SIZE[member.tier]
-
   return (
     <motion.button
-      className={`${styles.card} ${styles[`tier_${member.tier}`]}`}
+      className={`${styles.card} ${styles[`card_${member.tier}`]}`}
       onClick={onClick}
       aria-label={`View profile: ${member.role}`}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-16px' }}
-      transition={{ type: 'spring', stiffness: 78, damping: 18, delay: index * 0.09 }}
-      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 380, damping: 22 } }}
-      whileTap={{ scale: 0.96 }}
+      transition={{ type: 'spring', stiffness: 78, damping: 18, delay: index * 0.10 }}
+      whileHover={{ y: -8, transition: { type: 'spring', stiffness: 360, damping: 22 } }}
+      whileTap={{ scale: 0.97 }}
     >
-      <MemberPhoto slug={member.photoSlug} role={member.role} size={size} />
-      <span className={styles.cardRole}>{member.role}</span>
-      <span className={styles.cardHint}>View Profile</span>
+      <PortraitPhoto slug={member.photoSlug} role={member.role} tier={member.tier} />
     </motion.button>
   )
 }
@@ -80,14 +73,12 @@ function ProfileModal({
   const [loaded, setLoaded] = useState(false)
   const [err,    setErr]    = useState(false)
 
-  // ESC to close
   useEffect(() => {
     const handle = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handle)
     return () => window.removeEventListener('keydown', handle)
   }, [onClose])
 
-  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
@@ -110,19 +101,18 @@ function ProfileModal({
         transition={{ type: 'spring', stiffness: 240, damping: 24 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Close */}
         <button className={styles.modalClose} onClick={onClose} aria-label="Close">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M18 6L6 18M6 6l12 12" />
           </svg>
         </button>
 
-        {/* Photo */}
-        <div className={styles.modalPhotoWrap}>
+        {/* Portrait in modal */}
+        <div className={styles.modalPortrait}>
           <img
             src={`/media/secretariat/${member.photoSlug}.jpg`}
             alt={member.role}
-            className={`${styles.modalPhoto} ${loaded ? styles.modalPhotoLoaded : ''}`}
+            className={`${styles.modalPortraitImg} ${loaded ? styles.modalPortraitImgLoaded : ''}`}
             onLoad={() => { setLoaded(true); setErr(false) }}
             onError={() => setErr(true)}
           />
@@ -134,13 +124,11 @@ function ProfileModal({
               </svg>
             </div>
           )}
-          <div className={styles.modalPhotoRing} />
+          {/* Gradient at bottom */}
+          <div className={styles.modalPortraitGrad} />
         </div>
 
-        {/* Role */}
         <span className={styles.modalRole}>{member.role}</span>
-
-        {/* Description */}
         <p className={styles.modalDesc}>
           {member.description || 'Description coming soon.'}
         </p>
@@ -181,16 +169,16 @@ export default function SecretariatPage() {
             key={level.levelId}
             className={`${styles.level} ${styles[`level_${level.members[0].tier}`]}`}
           >
-            {/* Level label */}
-            <motion.div
-              className={styles.levelLabel}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+            {/* Section title */}
+            <motion.h2
+              className={`${styles.levelTitle} ${styles[`lt_${level.members[0].tier}`]}`}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-16px' }}
               transition={{ duration: 0.45 }}
             >
               {level.levelTitle}
-            </motion.div>
+            </motion.h2>
 
             {/* Cards */}
             <div className={styles.levelCards}>
