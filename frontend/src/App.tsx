@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import CommitteeMarquee from './components/CommitteeMarquee'
 import Stats from './components/Stats'
 import About from './components/About'
 import Countdown from './components/Countdown'
@@ -21,7 +20,6 @@ function HomePage() {
     <>
       <Navbar />
       <Hero />
-      <CommitteeMarquee />
       <Stats />
       <About />
       <Countdown />
