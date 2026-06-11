@@ -1,21 +1,19 @@
 /**
  * BlobBg — Aura-themed section backgrounds
  *
- * Each section gets a completely different visual technique:
+ * ZERO space/galaxy/star imagery. Everything is atmospheric light, color, and energy.
  *
- *  nebula      (About)       → slow-drifting volumetric color orbs
- *  red         (Countdown)   → cinematic concentric pulse rings + orbiting sparks
- *  secretariat (Secretariat) → refined starfield with red/blue glowing nodes
- *  cta         (CTA)         → radial red-core portal glow that breathes
- *  contact     (Contact)     → floating constellation — dots + connecting lines
- *
- * All share: dark #040002 base + corner red smoke accent
+ *  nebula      (About)       → slow-drifting volumetric color orbs (atmospheric halos)
+ *  red         (Countdown)   → diagonal light shafts fanning from top corners
+ *  secretariat (Secretariat) → flowing curved light ribbons crossing the canvas
+ *  cta         (CTA)         → radial red-core glow that breathes
+ *  contact     (Contact)     → smooth morphing gradient color field
  */
 
 import { useAnimationFrame } from 'framer-motion'
 import { useEffect, useRef, memo, type CSSProperties } from 'react'
 
-// ── shared canvas loop — pauses off-screen & on hidden tab ────
+// ── shared canvas loop — pauses off-screen & on hidden tab ─────
 function useCanvasLoop(
   draw: (ctx: CanvasRenderingContext2D, W: number, H: number, t: number) => void,
 ) {
@@ -26,10 +24,10 @@ function useCanvasLoop(
   useEffect(() => {
     const c = ref.current; if (!c) return
     function resize() {
-      const dpr    = Math.min(window.devicePixelRatio || 1, 2)
-      c.width      = c.offsetWidth  * dpr
-      c.height     = c.offsetHeight * dpr
-      const ctx    = c.getContext('2d')
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      c.width   = c.offsetWidth  * dpr
+      c.height  = c.offsetHeight * dpr
+      const ctx = c.getContext('2d')
       if (ctx) ctx.scale(dpr, dpr)
     }
     resize()
@@ -65,54 +63,60 @@ const CSS: CSSProperties = {
   pointerEvents: 'none', zIndex: 0,
 }
 
+// Helper: draw corner smoke cloud
+function drawCornerSmoke(
+  ctx: CanvasRenderingContext2D, W: number, H: number,
+  xf: number, yf: number, r: number, g: number, b: number,
+  alpha: number, radiusFrac: number
+) {
+  const sx = xf * W, sy = yf * H, sr = radiusFrac * W
+  ctx.save(); ctx.translate(sx, sy); ctx.scale(1, (radiusFrac * 0.85 * H) / sr)
+  const gr = ctx.createRadialGradient(0, 0, 0, 0, 0, sr)
+  gr.addColorStop(0, `rgba(${r},${g},${b},${alpha})`)
+  gr.addColorStop(0.35, `rgba(${r},${g},${b},${(alpha * 0.42).toFixed(3)})`)
+  gr.addColorStop(1, `rgba(${r},${g},${b},0)`)
+  ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(0, 0, sr, 0, Math.PI * 2); ctx.fill()
+  ctx.restore()
+}
+
 // ─────────────────────────────────────────────────────────────
 // ABOUT — Slow-drifting volumetric color orbs
-// Large soft gradient blobs, very atmospheric and professional
+// Large soft gradient halos — atmospheric, not space
 // ─────────────────────────────────────────────────────────────
+type Orb = { ox: number; oy: number; r: number; cr: number; cg: number; cb: number; a: number; px: number; py: number; speed: number; phase: number }
+
 const AuraAboutBg = memo(function AuraAboutBg() {
-  type Orb = { x: number; y: number; ox: number; oy: number; r: number; red: number; green: number; blue: number; a: number; px: number; py: number; speed: number; phase: number }
   const orbs = useRef<Orb[]>([])
 
   const ref = useCanvasLoop((ctx, W, H, t) => {
     if (!orbs.current.length) {
       orbs.current = [
-        // Large red orb — top left
-        { x:0.08, y:0.15, ox:0.08, oy:0.15, r:0.62, red:155, green:5,  blue:5,   a:0.48, px:0.038, py:0.028, speed:0.14, phase:0.0 },
-        // Large blue orb — top right
-        { x:0.92, y:0.10, ox:0.92, oy:0.10, r:0.55, red:12,  green:40, blue:178, a:0.32, px:0.032, py:0.035, speed:0.11, phase:2.5 },
-        // Medium red orb — bottom left
-        { x:0.12, y:0.85, ox:0.12, oy:0.85, r:0.44, red:148, green:5,  blue:5,   a:0.38, px:0.044, py:0.022, speed:0.17, phase:5.1 },
-        // Medium deep blue — bottom right
-        { x:0.88, y:0.80, ox:0.88, oy:0.80, r:0.40, red:10,  green:28, blue:155, a:0.28, px:0.028, py:0.040, speed:0.13, phase:3.4 },
-        // Small crimson accent — center
-        { x:0.50, y:0.50, ox:0.50, oy:0.50, r:0.28, red:130, green:5,  blue:5,   a:0.18, px:0.022, py:0.018, speed:0.22, phase:1.8 },
+        { ox:0.08, oy:0.15, r:0.62, cr:155, cg:5,  cb:5,   a:0.48, px:0.038, py:0.028, speed:0.14, phase:0.0 },
+        { ox:0.92, oy:0.10, r:0.55, cr:12,  cg:40, cb:178, a:0.32, px:0.032, py:0.035, speed:0.11, phase:2.5 },
+        { ox:0.12, oy:0.85, r:0.44, cr:148, cg:5,  cb:5,   a:0.38, px:0.044, py:0.022, speed:0.17, phase:5.1 },
+        { ox:0.88, oy:0.80, r:0.40, cr:10,  cg:28, cb:155, a:0.28, px:0.028, py:0.040, speed:0.13, phase:3.4 },
+        { ox:0.50, oy:0.50, r:0.28, cr:130, cg:5,  cb:5,   a:0.18, px:0.022, py:0.018, speed:0.22, phase:1.8 },
       ]
     }
 
-    ctx.fillStyle = '#040002'
-    ctx.fillRect(0, 0, W, H)
+    ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
 
     for (const o of orbs.current) {
-      // Gentle drift using lissajous-style motion
       const x  = (o.ox + Math.sin(t * o.speed + o.phase)        * o.px) * W
       const y  = (o.oy + Math.cos(t * o.speed * 0.73 + o.phase) * o.py) * H
       const rr = o.r * Math.min(W, H) * (0.92 + 0.08 * Math.sin(t * o.speed * 0.5 + o.phase))
-
       ctx.save()
       const g = ctx.createRadialGradient(x, y, 0, x, y, rr)
-      g.addColorStop(0,    `rgba(${o.red},${o.green},${o.blue},${o.a})`)
-      g.addColorStop(0.38, `rgba(${o.red},${o.green},${o.blue},${(o.a * 0.42).toFixed(3)})`)
-      g.addColorStop(0.72, `rgba(${o.red},${o.green},${o.blue},${(o.a * 0.10).toFixed(3)})`)
-      g.addColorStop(1,    `rgba(${o.red},${o.green},${o.blue},0)`)
-      ctx.fillStyle = g
-      ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2); ctx.fill()
+      g.addColorStop(0,    `rgba(${o.cr},${o.cg},${o.cb},${o.a})`)
+      g.addColorStop(0.38, `rgba(${o.cr},${o.cg},${o.cb},${(o.a * 0.42).toFixed(3)})`)
+      g.addColorStop(0.72, `rgba(${o.cr},${o.cg},${o.cb},${(o.a * 0.10).toFixed(3)})`)
+      g.addColorStop(1,    `rgba(${o.cr},${o.cg},${o.cb},0)`)
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2); ctx.fill()
       ctx.restore()
     }
 
-    // Subtle center darkening to keep text legible
     const vg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.62)
-    vg.addColorStop(0, 'rgba(4,0,2,0.45)')
-    vg.addColorStop(1, 'rgba(4,0,2,0)')
+    vg.addColorStop(0, 'rgba(4,0,2,0.45)'); vg.addColorStop(1, 'rgba(4,0,2,0)')
     ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H)
   })
 
@@ -120,177 +124,155 @@ const AuraAboutBg = memo(function AuraAboutBg() {
 })
 
 // ─────────────────────────────────────────────────────────────
-// COUNTDOWN — Cinematic concentric pulse rings + orbiting sparks
-// Deep red rings that emanate from center, very dramatic
+// COUNTDOWN — Diagonal light shafts from top corners
+// Like crepuscular rays through atmospheric haze
+// No rings, no circles, no space
 // ─────────────────────────────────────────────────────────────
 const AuraCountdownBg = memo(function AuraCountdownBg() {
-  type Spark = { angle: number; speed: number; radius: number; size: number; phase: number; isBlue: boolean }
-  const sparks = useRef<Spark[]>([])
-
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (!sparks.current.length) {
-      sparks.current = Array.from({ length: 28 }, (_, i) => ({
-        angle:  (i / 28) * Math.PI * 2 + Math.random() * 0.4,
-        speed:  0.08 + Math.random() * 0.14,
-        radius: 0.18 + Math.random() * 0.18,
-        size:   1.0  + Math.random() * 1.5,
-        phase:  Math.random() * Math.PI * 2,
-        isBlue: i % 5 === 0,
-      }))
+    ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
+
+    const diag = Math.sqrt(W * W + H * H)
+
+    // Corner smoke — heavy for CTA feel
+    drawCornerSmoke(ctx, W, H, 0, 0, 155, 5, 5, 0.70, 0.54)
+    drawCornerSmoke(ctx, W, H, 1, 0, 148, 5, 5, 0.62, 0.50)
+    drawCornerSmoke(ctx, W, H, 0, 1, 148, 5, 5, 0.58, 0.48)
+    drawCornerSmoke(ctx, W, H, 1, 1, 12, 38, 172, 0.42, 0.46)
+
+    // Helper: draw one light shaft (triangle fanning from a point)
+    function shaft(
+      ox: number, oy: number, angle: number,
+      hwNear: number, hwFar: number,
+      cr: number, cg: number, cb: number, alpha: number
+    ) {
+      const ca = Math.cos(angle), sa = Math.sin(angle)
+      const px = -sa, py = ca  // perpendicular direction
+      const len = diag * 1.1
+
+      // 4-point polygon: narrow at origin, wide at far end
+      const p1x = ox + px * hwNear, p1y = oy + py * hwNear
+      const p2x = ox - px * hwNear, p2y = oy - py * hwNear
+      const fx = ox + ca * len,     fy = oy + sa * len
+      const p3x = fx - px * hwFar,  p3y = fy - py * hwFar
+      const p4x = fx + px * hwFar,  p4y = fy + py * hwFar
+
+      const grd = ctx.createLinearGradient(ox, oy, fx, fy)
+      grd.addColorStop(0,    `rgba(${cr},${cg},${cb},${alpha.toFixed(3)})`)
+      grd.addColorStop(0.40, `rgba(${cr},${cg},${cb},${(alpha * 0.30).toFixed(3)})`)
+      grd.addColorStop(1,    `rgba(${cr},${cg},${cb},0)`)
+
+      ctx.fillStyle = grd
+      ctx.beginPath()
+      ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y)
+      ctx.lineTo(p3x, p3y); ctx.lineTo(p4x, p4y)
+      ctx.closePath(); ctx.fill()
     }
 
-    ctx.fillStyle = '#040002'
-    ctx.fillRect(0, 0, W, H)
-
-    const cx = W / 2, cy = H / 2
-    const maxR = Math.min(W, H)
-
-    // Corner red smoke (Aura signature)
-    ;([
-      [0, 0], [1, 0], [0, 1], [1, 1],
-    ] as [number, number][]).forEach(([xf, yf], i) => {
-      const pulse = 1 + 0.06 * Math.sin(t * 0.18 + i * 1.6)
-      const sx = xf * W, sy = yf * H
-      const sr = 0.50 * W * pulse
-      ctx.save(); ctx.translate(sx, sy); ctx.scale(1, (0.44 * H * pulse) / sr)
-      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, sr)
-      g.addColorStop(0,    'rgba(152,5,5,0.62)')
-      g.addColorStop(0.35, 'rgba(145,5,5,0.26)')
-      g.addColorStop(1,    'rgba(145,5,5,0)')
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, sr, 0, Math.PI * 2); ctx.fill()
-      ctx.restore()
-    })
-
-    // Expanding concentric rings (3 rings at different phases, looped 0→1 over time)
-    for (let ri = 0; ri < 3; ri++) {
-      const tOff = (t * 0.18 + ri / 3) % 1       // 0→1 endlessly
-      const r    = tOff * maxR * 0.62
-      const a    = (1 - tOff) * (1 - tOff) * 0.30  // bright at center, fades out
-
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(192,57,43,${a.toFixed(3)})`
-      ctx.lineWidth = 1.5 - tOff; ctx.stroke()
+    // Red shafts from top-left corner (pointing down-right: angle ~70-80° from horizontal)
+    const redShafts = [
+      { ox: W * 0.00, oy: H * (-0.02), angle: Math.PI * 0.42, hwF: W * 0.20, spd: 0.06, ph: 0.0, a: 0.22 },
+      { ox: W * 0.10, oy: H * (-0.04), angle: Math.PI * 0.45, hwF: W * 0.15, spd: 0.09, ph: 2.2, a: 0.18 },
+      { ox: W * 0.22, oy: H * (-0.01), angle: Math.PI * 0.40, hwF: W * 0.11, spd: 0.07, ph: 4.6, a: 0.15 },
+      { ox: W * 0.34, oy: H * (-0.03), angle: Math.PI * 0.43, hwF: W * 0.08, spd: 0.11, ph: 1.4, a: 0.11 },
+    ]
+    for (const s of redShafts) {
+      const a = s.a * (0.72 + 0.28 * Math.sin(t * s.spd + s.ph))
+      shaft(s.ox, s.oy, s.angle, 2, s.hwF, 192, 35, 20, a)
     }
 
-    // Steady background glow rings
-    for (let ri = 0; ri < 4; ri++) {
-      const fr   = (ri + 1) / 5
-      const r    = fr * maxR * 0.42
-      const a    = 0.10 * (0.7 + 0.3 * Math.sin(t * 0.22 + ri * 0.8))
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(192,57,43,${a.toFixed(3)})`
-      ctx.lineWidth = 0.8; ctx.stroke()
+    // Blue shafts from top-right corner (pointing down-left: angle ~100-110°)
+    const blueShafts = [
+      { ox: W * 1.00, oy: H * (-0.02), angle: Math.PI * 0.58, hwF: W * 0.18, spd: 0.07, ph: 1.1, a: 0.18 },
+      { ox: W * 0.90, oy: H * (-0.04), angle: Math.PI * 0.55, hwF: W * 0.13, spd: 0.10, ph: 3.5, a: 0.14 },
+      { ox: W * 0.78, oy: H * (-0.01), angle: Math.PI * 0.60, hwF: W * 0.09, spd: 0.08, ph: 5.8, a: 0.11 },
+    ]
+    for (const s of blueShafts) {
+      const a = s.a * (0.72 + 0.28 * Math.sin(t * s.spd + s.ph))
+      shaft(s.ox, s.oy, s.angle, 2, s.hwF, 14, 40, 172, a)
     }
 
-    // Central core glow
-    const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.22)
-    const cp  = 0.85 + 0.15 * Math.sin(t * 0.35)
-    cg.addColorStop(0,    `rgba(192,57,43,${(0.22 * cp).toFixed(3)})`)
-    cg.addColorStop(0.4,  `rgba(155,5,5,${(0.10 * cp).toFixed(3)})`)
-    cg.addColorStop(1,    'rgba(155,5,5,0)')
-    ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, maxR * 0.22, 0, Math.PI * 2); ctx.fill()
-
-    // Orbiting sparks
-    for (const s of sparks.current) {
-      const ang  = s.angle + t * s.speed
-      const r    = s.radius * maxR * 0.5
-      const px   = cx + Math.cos(ang) * r
-      const py   = cy + Math.sin(ang) * r
-      const a    = (0.55 + 0.45 * Math.sin(t * 1.4 + s.phase)) * 0.70
-      const col  = s.isBlue ? '86,180,242' : '220,70,50'
-      ctx.beginPath(); ctx.arc(px, py, s.size, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${col},${a.toFixed(3)})`; ctx.fill()
-    }
+    // Center vignette to keep countdown numbers readable
+    const vg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.58)
+    vg.addColorStop(0, 'rgba(4,0,2,0.50)'); vg.addColorStop(1, 'rgba(4,0,2,0)')
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H)
   })
 
   return <canvas ref={ref} style={CSS} aria-hidden="true" />
 })
 
 // ─────────────────────────────────────────────────────────────
-// SECRETARIAT — Refined starfield with colored glowing nodes
-// Minimal and elegant — red/blue stars drift slowly
+// SECRETARIAT — Flowing curved light ribbons
+// 4 bezier-path ribbons that drift slowly across the full width
+// Elegant and refined — completely different from every other section
 // ─────────────────────────────────────────────────────────────
 const AuraSecretariatBg = memo(function AuraSecretariatBg() {
-  type Star = { x: number; y: number; vx: number; vy: number; r: number; a: number; cr: number; cg: number; cb: number; glow: boolean; phase: number }
-  const stars = useRef<Star[]>([])
-  const prevW = useRef(0), prevH = useRef(0)
-
-  function init(W: number, H: number) {
-    const PALS = [
-      [231, 76, 60], [192, 57, 43], [255, 110, 90],  // reds
-      [86, 200, 240], [42, 155, 215], [60, 180, 255], // blues
-      [240, 240, 255],                                  // white
-    ]
-    stars.current = Array.from({ length: 130 }, (_, i) => {
-      const isGlow = i < 22
-      const col    = isGlow
-        ? (i < 12 ? PALS[Math.floor(Math.random() * 3)] : PALS[3 + Math.floor(Math.random() * 3)])
-        : PALS[Math.floor(Math.random() * PALS.length)]
-      return {
-        x:     Math.random() * W, y: Math.random() * H,
-        vx:    (Math.random() - 0.5) * 0.06,
-        vy:    (Math.random() - 0.5) * 0.05,
-        r:     isGlow ? 1.5 + Math.random() * 1.4 : 0.3 + Math.random() * 0.9,
-        a:     isGlow ? 0.80 + Math.random() * 0.20 : 0.18 + Math.random() * 0.45,
-        cr: col[0], cg: col[1], cb: col[2],
-        glow:  isGlow,
-        phase: Math.random() * Math.PI * 2,
-      }
-    })
-  }
-
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW.current || H !== prevH.current) { init(W, H); prevW.current = W; prevH.current = H }
-
     ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
 
-    // Subtle corner smoke
-    ;([[0,0],[1,0],[0,1],[1,1]] as [number,number][]).forEach(([xf,yf], i) => {
-      const sx = xf * W, sy = yf * H
-      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, W * 0.42)
-      g.addColorStop(0, `rgba(148,5,5,0.42)`)
-      g.addColorStop(1, 'rgba(148,5,5,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
-    })
+    // Corner smoke — diagonal placement: red top-left + bottom-right, blue top-right + bottom-left
+    drawCornerSmoke(ctx, W, H, 0, 0, 148, 5, 5, 0.60, 0.50)
+    drawCornerSmoke(ctx, W, H, 1, 1, 148, 5, 5, 0.55, 0.48)
+    drawCornerSmoke(ctx, W, H, 1, 0, 12, 38, 172, 0.42, 0.44)
+    drawCornerSmoke(ctx, W, H, 0, 1, 12, 38, 172, 0.38, 0.42)
 
-    const ss = stars.current
-    for (const s of ss) {
-      s.x += s.vx; s.y += s.vy
-      if (s.x < -6) s.x = W + 6; if (s.x > W + 6) s.x = -6
-      if (s.y < -6) s.y = H + 6; if (s.y > H + 6) s.y = -6
+    // Each ribbon: defined by base control points + slow drift parameters
+    const ribbonDefs = [
+      // Main crimson ribbon — sweeps bottom-left to top-right
+      { basePts: [0.00, 0.72, 0.28, 0.15, 0.72, 0.88, 1.00, 0.28] as const,
+        cr: 192, cg: 35, cb: 20, maxA: 0.52, lineW: 3.8, glowW: 22,
+        driftAmp: 0.055, speed: 0.10, phase: 0.0 },
+      // Deep blue ribbon — sweeps top-left to bottom-right
+      { basePts: [0.00, 0.25, 0.32, 0.78, 0.68, 0.18, 1.00, 0.68] as const,
+        cr: 14, cg: 40, cb: 178, maxA: 0.44, lineW: 3.2, glowW: 18,
+        driftAmp: 0.048, speed: 0.08, phase: 2.6 },
+      // Thin red accent — nearly horizontal through middle
+      { basePts: [0.00, 0.48, 0.38, 0.62, 0.62, 0.35, 1.00, 0.52] as const,
+        cr: 160, cg: 10, cb: 8, maxA: 0.36, lineW: 2.2, glowW: 14,
+        driftAmp: 0.040, speed: 0.12, phase: 5.1 },
+      // Thin blue accent — near bottom
+      { basePts: [0.00, 0.82, 0.40, 0.55, 0.60, 0.90, 1.00, 0.60] as const,
+        cr: 12, cg: 35, cb: 165, maxA: 0.30, lineW: 1.8, glowW: 12,
+        driftAmp: 0.035, speed: 0.09, phase: 3.8 },
+    ]
 
-      const pulse = 0.70 + 0.30 * Math.sin(t * 0.85 + s.phase)
+    for (const rib of ribbonDefs) {
+      const [bx0, by0, bcp1x, bcp1y, bcp2x, bcp2y, bx3, by3] = rib.basePts
+      const d = rib.driftAmp, spd = rib.speed, ph = rib.phase
 
-      if (s.glow) {
-        // Soft glow halo
-        const hg = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 8 * pulse)
-        hg.addColorStop(0,    `rgba(${s.cr},${s.cg},${s.cb},${(0.22 * pulse).toFixed(3)})`)
-        hg.addColorStop(1,    `rgba(${s.cr},${s.cg},${s.cb},0)`)
-        ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 8 * pulse, 0, Math.PI * 2); ctx.fill()
+      // Drift each control point independently
+      const x0   = (bx0   + Math.sin(t * spd + ph)          * d * 0.3) * W
+      const y0   = (by0   + Math.cos(t * spd * 0.7 + ph)    * d * 0.5) * H
+      const cp1x = (bcp1x + Math.sin(t * spd + ph + 1.2)    * d)       * W
+      const cp1y = (bcp1y + Math.cos(t * spd * 0.8 + ph)    * d)       * H
+      const cp2x = (bcp2x + Math.sin(t * spd * 0.9 + ph + 2.4) * d)    * W
+      const cp2y = (bcp2y + Math.cos(t * spd + ph + 3.1)    * d)       * H
+      const x3   = (bx3   + Math.sin(t * spd * 0.6 + ph)   * d * 0.3) * W
+      const y3   = (by3   + Math.cos(t * spd + ph + 4.2)   * d * 0.5) * H
 
-        // 4-point diffraction spike (short, elegant)
-        const sl = s.r * 10 * pulse
-        ctx.save(); ctx.globalAlpha = 0.55 * pulse
-        for (let a = 0; a < 2; a++) {
-          const ang = (a / 2) * Math.PI
-          const lg = ctx.createLinearGradient(
-            s.x - Math.cos(ang)*sl, s.y - Math.sin(ang)*sl,
-            s.x + Math.cos(ang)*sl, s.y + Math.sin(ang)*sl,
-          )
-          lg.addColorStop(0, `rgba(${s.cr},${s.cg},${s.cb},0)`)
-          lg.addColorStop(0.5, `rgba(${s.cr},${s.cg},${s.cb},0.90)`)
-          lg.addColorStop(1, `rgba(${s.cr},${s.cg},${s.cb},0)`)
-          ctx.strokeStyle = lg; ctx.lineWidth = 0.8
-          ctx.beginPath()
-          ctx.moveTo(s.x - Math.cos(ang)*sl, s.y - Math.sin(ang)*sl)
-          ctx.lineTo(s.x + Math.cos(ang)*sl, s.y + Math.sin(ang)*sl)
-          ctx.stroke()
-        }
-        ctx.restore()
-      }
+      const pulse = rib.maxA * (0.72 + 0.28 * Math.sin(t * spd + ph))
 
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${s.cr},${s.cg},${s.cb},${(s.a * pulse).toFixed(3)})`; ctx.fill()
+      // Gradient along the ribbon (start/end fade, bright middle)
+      const grd = ctx.createLinearGradient(x0, y0, x3, y3)
+      grd.addColorStop(0,    `rgba(${rib.cr},${rib.cg},${rib.cb},0)`)
+      grd.addColorStop(0.15, `rgba(${rib.cr},${rib.cg},${rib.cb},${(pulse * 0.60).toFixed(3)})`)
+      grd.addColorStop(0.50, `rgba(${rib.cr},${rib.cg},${rib.cb},${pulse.toFixed(3)})`)
+      grd.addColorStop(0.85, `rgba(${rib.cr},${rib.cg},${rib.cb},${(pulse * 0.60).toFixed(3)})`)
+      grd.addColorStop(1,    `rgba(${rib.cr},${rib.cg},${rib.cb},0)`)
+
+      // Outer glow (wide, soft)
+      ctx.beginPath()
+      ctx.moveTo(x0, y0); ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x3, y3)
+      const glowGrd = ctx.createLinearGradient(x0, y0, x3, y3)
+      glowGrd.addColorStop(0,    `rgba(${rib.cr},${rib.cg},${rib.cb},0)`)
+      glowGrd.addColorStop(0.50, `rgba(${rib.cr},${rib.cg},${rib.cb},${(pulse * 0.14).toFixed(3)})`)
+      glowGrd.addColorStop(1,    `rgba(${rib.cr},${rib.cg},${rib.cb},0)`)
+      ctx.strokeStyle = glowGrd; ctx.lineWidth = rib.glowW; ctx.stroke()
+
+      // Core bright line
+      ctx.beginPath()
+      ctx.moveTo(x0, y0); ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x3, y3)
+      ctx.strokeStyle = grd; ctx.lineWidth = rib.lineW; ctx.stroke()
     }
   })
 
@@ -299,7 +281,7 @@ const AuraSecretariatBg = memo(function AuraSecretariatBg() {
 
 // ─────────────────────────────────────────────────────────────
 // CTA — Radial red-core portal glow that breathes
-// Very commanding — one strong visual idea, executed cleanly
+// Commanding and dramatic — one idea executed hard
 // ─────────────────────────────────────────────────────────────
 const AuraCTABg = memo(function AuraCTABg() {
   const ref = useCanvasLoop((ctx, W, H, t) => {
@@ -308,25 +290,16 @@ const AuraCTABg = memo(function AuraCTABg() {
     const cx = W / 2, cy = H * 0.5
     const maxR = Math.min(W, H)
 
-    // Heavy corner smoke (CTA should feel intense)
-    ;([[0,0],[1,0],[0,1],[1,1]] as [number,number][]).forEach(([xf,yf], i) => {
-      const pulse = 1 + 0.07 * Math.sin(t * 0.20 + i * 1.8)
-      const sx = xf * W, sy = yf * H
-      const sr = 0.60 * W * pulse
-      ctx.save(); ctx.translate(sx, sy); ctx.scale(1, (0.52 * H * pulse) / sr)
-      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, sr)
-      g.addColorStop(0,    'rgba(155,5,5,0.72)')
-      g.addColorStop(0.30, 'rgba(145,5,5,0.32)')
-      g.addColorStop(1,    'rgba(145,5,5,0)')
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, sr, 0, Math.PI * 2); ctx.fill()
-      ctx.restore()
-    })
+    // Heavy corner smoke
+    drawCornerSmoke(ctx, W, H, 0, 0, 155, 5, 5, 0.72, 0.60)
+    drawCornerSmoke(ctx, W, H, 1, 0, 148, 5, 5, 0.65, 0.56)
+    drawCornerSmoke(ctx, W, H, 0, 1, 148, 5, 5, 0.62, 0.54)
+    drawCornerSmoke(ctx, W, H, 1, 1, 155, 5, 5, 0.68, 0.58)
 
     // Blue side accents
-    ;([[0,0.5],[1,0.5]] as [number,number][]).forEach(([xf,yf]) => {
+    ;([[0, 0.5], [1, 0.5]] as [number, number][]).forEach(([xf, yf]) => {
       const g = ctx.createRadialGradient(xf * W, yf * H, 0, xf * W, yf * H, W * 0.30)
-      g.addColorStop(0, 'rgba(12,38,175,0.28)')
-      g.addColorStop(1, 'rgba(12,38,175,0)')
+      g.addColorStop(0, 'rgba(12,38,175,0.28)'); g.addColorStop(1, 'rgba(12,38,175,0)')
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
     })
 
@@ -339,11 +312,11 @@ const AuraCTABg = memo(function AuraCTABg() {
     coreGrad.addColorStop(1,    'rgba(148,5,5,0)')
     ctx.fillStyle = coreGrad; ctx.fillRect(0, 0, W, H)
 
-    // 3 concentric ring accents at different radii
+    // 3 concentric ring accents
     for (let ri = 0; ri < 3; ri++) {
-      const fr  = (ri + 1) / 4
-      const r   = fr * maxR * 0.48 * (0.94 + 0.06 * Math.sin(t * 0.22 + ri * 1.1))
-      const a   = 0.14 * Math.sin(fr * Math.PI) * (0.72 + 0.28 * Math.sin(t * 0.30 + ri * 0.9))
+      const fr = (ri + 1) / 4
+      const r  = fr * maxR * 0.48 * (0.94 + 0.06 * Math.sin(t * 0.22 + ri * 1.1))
+      const a  = 0.14 * Math.sin(fr * Math.PI) * (0.72 + 0.28 * Math.sin(t * 0.30 + ri * 0.9))
       ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
       ctx.strokeStyle = `rgba(200,55,35,${a.toFixed(3)})`
       ctx.lineWidth = 0.8; ctx.stroke()
@@ -354,83 +327,51 @@ const AuraCTABg = memo(function AuraCTABg() {
 })
 
 // ─────────────────────────────────────────────────────────────
-// CONTACT — Floating constellation network
-// Elegant dots + connecting lines, red/blue palette
+// CONTACT — Smooth morphing gradient color field
+// No discrete objects — pure color wash that shifts slowly
+// Like aurora light seen through frosted glass
 // ─────────────────────────────────────────────────────────────
 const AuraContactBg = memo(function AuraContactBg() {
-  type Node = { x: number; y: number; vx: number; vy: number; r: number; cr: number; cg: number; cb: number; phase: number }
-  const nodes = useRef<Node[]>([])
-  const prevW = useRef(0), prevH = useRef(0)
-
-  function init(W: number, H: number) {
-    const REDS  = [[192,57,43],[231,76,60],[210,65,45]]
-    const BLUES = [[86,200,240],[42,155,215],[14,40,178]]
-    nodes.current = Array.from({ length: 42 }, (_, i) => {
-      const col = i % 3 === 0
-        ? BLUES[Math.floor(Math.random() * 3)]
-        : REDS[Math.floor(Math.random() * 3)]
-      return {
-        x:     Math.random() * W, y: Math.random() * H,
-        vx:    (Math.random() - 0.5) * 0.22,
-        vy:    (Math.random() - 0.5) * 0.16,
-        r:     1.2 + Math.random() * 1.6,
-        cr: col[0], cg: col[1], cb: col[2],
-        phase: Math.random() * Math.PI * 2,
-      }
-    })
-  }
-
   const ref = useCanvasLoop((ctx, W, H, t) => {
-    if (W !== prevW.current || H !== prevH.current) { init(W, H); prevW.current = W; prevH.current = H }
-
     ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
 
-    // Subtle corner smoke
-    ;([[0,0],[1,1]] as [number,number][]).forEach(([xf,yf]) => {
-      const g = ctx.createRadialGradient(xf*W, yf*H, 0, xf*W, yf*H, W * 0.44)
-      g.addColorStop(0, 'rgba(148,5,5,0.38)'); g.addColorStop(1, 'rgba(148,5,5,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
-    })
-    ;([[1,0],[0,1]] as [number,number][]).forEach(([xf,yf]) => {
-      const g = ctx.createRadialGradient(xf*W, yf*H, 0, xf*W, yf*H, W * 0.38)
-      g.addColorStop(0, 'rgba(12,38,172,0.22)'); g.addColorStop(1, 'rgba(12,38,172,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
-    })
+    // 5 large slow-moving color blobs — but MORE of them, closer together,
+    // creating a smooth continuously-morphing color field with no visible objects
+    const blobs = [
+      { oxf:0.12, oyf:0.20, rxf:0.80, ryf:0.65, cr:155, cg:5,  cb:5,   a:0.32, spd:0.12, ph:0.0 },
+      { oxf:0.88, oyf:0.15, rxf:0.70, ryf:0.55, cr:12,  cg:38, cb:175, a:0.24, spd:0.09, ph:2.8 },
+      { oxf:0.50, oyf:0.60, rxf:0.90, ryf:0.70, cr:148, cg:5,  cb:5,   a:0.22, spd:0.15, ph:5.2 },
+      { oxf:0.20, oyf:0.80, rxf:0.65, ryf:0.55, cr:14,  cg:40, cb:172, a:0.20, spd:0.11, ph:1.6 },
+      { oxf:0.80, oyf:0.75, rxf:0.60, ryf:0.50, cr:140, cg:5,  cb:5,   a:0.25, spd:0.13, ph:3.9 },
+      { oxf:0.50, oyf:0.25, rxf:0.75, ryf:0.60, cr:10,  cg:32, cb:162, a:0.18, spd:0.10, ph:6.4 },
+    ]
 
-    const ns = nodes.current
-    const maxD = Math.min(W, H) * 0.20
+    for (const b of blobs) {
+      // Smooth lissajous drift for each blob center
+      const cx = (b.oxf + Math.sin(t * b.spd + b.ph)          * 0.12) * W
+      const cy = (b.oyf + Math.cos(t * b.spd * 0.77 + b.ph)   * 0.10) * H
+      const rx = b.rxf * W * (0.90 + 0.10 * Math.sin(t * b.spd * 0.6 + b.ph))
+      const ry = b.ryf * H * (0.90 + 0.10 * Math.cos(t * b.spd * 0.5 + b.ph))
+      const alpha = b.a * (0.75 + 0.25 * Math.sin(t * b.spd + b.ph))
 
-    for (const n of ns) {
-      n.x += n.vx; n.y += n.vy
-      if (n.x < -8) n.x = W+8; if (n.x > W+8) n.x = -8
-      if (n.y < -8) n.y = H+8; if (n.y > H+8) n.y = -8
+      ctx.save()
+      ctx.translate(cx, cy)
+      ctx.scale(rx / Math.min(rx, ry), ry / Math.min(rx, ry))
+      const r = Math.min(rx, ry)
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r)
+      g.addColorStop(0,    `rgba(${b.cr},${b.cg},${b.cb},${alpha.toFixed(3)})`)
+      g.addColorStop(0.40, `rgba(${b.cr},${b.cg},${b.cb},${(alpha * 0.38).toFixed(3)})`)
+      g.addColorStop(0.75, `rgba(${b.cr},${b.cg},${b.cb},${(alpha * 0.08).toFixed(3)})`)
+      g.addColorStop(1,    `rgba(${b.cr},${b.cg},${b.cb},0)`)
+      ctx.fillStyle = g
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill()
+      ctx.restore()
     }
 
-    // Connection lines
-    for (let i = 0; i < ns.length; i++) {
-      for (let j = i + 1; j < ns.length; j++) {
-        const a = ns[i], b = ns[j]
-        const dx = a.x - b.x, dy = a.y - b.y
-        const dist = Math.sqrt(dx*dx + dy*dy)
-        if (dist > maxD) continue
-        const alpha = (1 - dist / maxD) * 0.26 * (0.7 + 0.3 * Math.sin(t * 1.2 + i * 0.3))
-        const cr = (a.cr + b.cr) >> 1, cg = (a.cg + b.cg) >> 1, cb = (a.cb + b.cb) >> 1
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${alpha.toFixed(3)})`
-        ctx.lineWidth = 0.7; ctx.stroke()
-      }
-    }
-
-    // Node dots
-    for (const n of ns) {
-      const pulse = 0.75 + 0.25 * Math.sin(t * 1.1 + n.phase)
-      // Subtle glow behind each node
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 5 * pulse, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${n.cr},${n.cg},${n.cb},${(0.06 * pulse).toFixed(3)})`; ctx.fill()
-      // Node dot
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(${n.cr},${n.cg},${n.cb},${(0.65 * pulse).toFixed(3)})`; ctx.fill()
-    }
+    // Center vignette — keeps form legible
+    const vg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.65)
+    vg.addColorStop(0, 'rgba(4,0,2,0.50)'); vg.addColorStop(1, 'rgba(4,0,2,0)')
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H)
   })
 
   return <canvas ref={ref} style={CSS} aria-hidden="true" />
