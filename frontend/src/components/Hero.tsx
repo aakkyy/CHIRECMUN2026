@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
 import BlobButton from './BlobButton'
-import Magnetic from './Magnetic'
 import CinematicAtmosphere from './CinematicAtmosphere'
 
 const CHIREC_LETTERS = [
@@ -219,17 +218,12 @@ export default function Hero() {
         </motion.p>
 
         <motion.div className={styles.actions} variants={fadeUp}>
-          {/* magnetic buttons — pull gently toward the cursor */}
-          <Magnetic strength={0.28}>
-            <BlobButton href="#register" className={styles.btnPrimary} variant="red">
-              Register as Delegate
-            </BlobButton>
-          </Magnetic>
-          <Magnetic strength={0.28}>
-            <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
-              View Countdown
-            </BlobButton>
-          </Magnetic>
+          <BlobButton href="#register" className={styles.btnPrimary} variant="red">
+            Register as Delegate
+          </BlobButton>
+          <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
+            View Countdown
+          </BlobButton>
         </motion.div>
       </motion.div>
 

@@ -37,12 +37,7 @@ export default function Navbar() {
   }
 
   return (
-    <motion.nav
-      className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}
-      initial={{ y: -64, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 90, damping: 20, delay: 0.15 }}
-    >
+    <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}>
       <div className={styles.glassLayer} aria-hidden="true" />
       <div className={styles.hairline} aria-hidden="true" />
 
@@ -109,6 +104,6 @@ export default function Navbar() {
         </div>
 
       </div>
-    </motion.nav>
+    </nav>
   )
 }

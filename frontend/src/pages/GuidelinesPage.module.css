@@ -6,15 +6,18 @@
   overflow-x: hidden;
 }
 
+/* Static Huly-inspired background: dark base with crisp corner glows — no canvas */
 .vignette {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(192,57,43,0.05) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 38% at 85% 75%, rgba(28,115,215,0.05) 0%, transparent 70%),
-    radial-gradient(ellipse 90% 80% at 50% 50%, transparent 30%, rgba(4,0,2,0.75) 100%);
+    radial-gradient(ellipse 55% 48% at 0%   0%,   rgba(192,57,43,0.14) 0%, transparent 68%),
+    radial-gradient(ellipse 48% 42% at 100% 0%,   rgba(192,57,43,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 52% 45% at 0%   100%, rgba(12,38,172,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 44% at 100% 100%, rgba(12,38,172,0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 70% at 50% 50%,  transparent 38%, rgba(4,0,2,0.82) 100%);
 }
 
 /* ── FLOATING ORBS (only animated elements) ── */
@@ -230,12 +233,23 @@
 .cardBody:hover .item:nth-child(5) { transform: translateX(7px); color: rgba(244,244,239,0.72); transition-delay: 0.20s; }
 .cardBody:hover .item:nth-child(6) { transform: translateX(7px); color: rgba(244,244,239,0.70); transition-delay: 0.25s; }
 
-/* ── PLANET BULLET ── */
-.planet {
+/* ── MINIMAL DIAMOND BULLET — Huly-style precision marker ── */
+.bullet {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-top: 0.22em;
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background: rgba(192, 57, 43, 0.70);
+  transform: rotate(45deg);
+  margin-top: 0.60em;
+  box-shadow: 0 0 6px rgba(192, 57, 43, 0.40);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardBody:hover .bullet {
+  background: rgba(231, 76, 60, 0.90);
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.55);
 }
 
 /* ── FOOTER ── */

@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './GuidelinesPage.module.css'
-import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
 
@@ -92,19 +91,8 @@ const sections = [
   },
 ]
 
-const Planet = () => (
-  <svg className={styles.planet} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="9" cy="9" r="4.2" fill="rgba(192,57,43,0.55)" />
-    <circle cx="9" cy="9" r="4.2" fill="url(#pgrad)" />
-    <ellipse cx="9" cy="9" rx="8" ry="2.6" stroke="rgba(231,76,60,0.55)" strokeWidth="1.1" fill="none" transform="rotate(-22 9 9)" />
-    <circle cx="7.5" cy="7.5" r="1.1" fill="rgba(255,130,90,0.28)" />
-    <defs>
-      <radialGradient id="pgrad" cx="38%" cy="35%" r="65%" gradientUnits="objectBoundingBox">
-        <stop offset="0%" stopColor="rgba(231,100,60,0.7)" />
-        <stop offset="100%" stopColor="rgba(100,20,10,0)" />
-      </radialGradient>
-    </defs>
-  </svg>
+const Bullet = () => (
+  <span className={styles.bullet} aria-hidden="true" />
 )
 
 const cardVariants = {
@@ -129,7 +117,6 @@ export default function GuidelinesPage() {
 
   return (
     <div className={styles.page}>
-      <AuraBg />
       <div className={styles.vignette} />
 
       {/* Small animated orbs — only these move */}
@@ -204,7 +191,7 @@ export default function GuidelinesPage() {
               <ul className={styles.list}>
                 {section.items.map((item, ii) => (
                   <li key={ii} className={styles.item}>
-                    <Planet />
+                    <Bullet />
                     <span>{item}</span>
                   </li>
                 ))}

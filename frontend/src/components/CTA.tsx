@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import styles from './CTA.module.css'
 import { viewport } from '../lib/motion'
 import BlobButton from './BlobButton'
-import Magnetic from './Magnetic'
 
 const crashIn = {
   hidden:  { opacity: 0, y: 70, scale: 1.06 },
@@ -47,16 +46,12 @@ export default function CTA() {
           across three days of diplomacy, debate, and discovery.
         </motion.p>
         <motion.div className={styles.actions} variants={crashIn}>
-          <Magnetic strength={0.3}>
-            <BlobButton href="#" className={styles.btnPrimary} variant="red">
-              Register as Delegate
-            </BlobButton>
-          </Magnetic>
-          <Magnetic strength={0.3}>
-            <BlobButton href="/committees" className={styles.btnOutline} variant="blue">
-              View Committees
-            </BlobButton>
-          </Magnetic>
+          <BlobButton href="#" className={styles.btnPrimary} variant="red">
+            Register as Delegate
+          </BlobButton>
+          <BlobButton href="/committees" className={styles.btnOutline} variant="blue">
+            View Committees
+          </BlobButton>
         </motion.div>
       </motion.div>
     </section>
