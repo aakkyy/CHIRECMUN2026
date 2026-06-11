@@ -76,7 +76,7 @@ export default function Hero() {
       vx: (Math.random() - 0.5) * 0.14,
       size: 0.5 + Math.random() * 1.3,
       isBlue: Math.random() < 0.32,
-      alpha: 0.25 + Math.random() * 0.42,
+      alpha: 0.35 + Math.random() * 0.50,
       phase: Math.random() * Math.PI * 2,
     }))
 
@@ -95,9 +95,9 @@ export default function Hero() {
 
       // 3. THREE MASSIVE ATMOSPHERIC HALOS
       const HALOS = [
-        { x: W/2 + mOffX*0.8,    y: H*0.70 + mOffY*0.5,  r: Math.min(W,H)*0.88, cr:180, cg:22,  cb:14,  a:0.40, ph:0.0, spd:0.055 },
-        { x: W*0.10 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.28, ph:2.1, spd:0.042 },
-        { x: W*0.90 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.26, ph:4.8, spd:0.038 },
+        { x: W/2 + mOffX*0.8,    y: H*0.70 + mOffY*0.5,  r: Math.min(W,H)*0.88, cr:180, cg:22,  cb:14,  a:0.62, ph:0.0, spd:0.055 },
+        { x: W*0.10 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.42, ph:2.1, spd:0.042 },
+        { x: W*0.90 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.40, ph:4.8, spd:0.038 },
       ]
       for (const h of HALOS) {
         const pulse = 0.93 + 0.07 * Math.sin(t * h.spd + h.ph)
@@ -115,7 +115,7 @@ export default function Hero() {
 
       // 4. PERSPECTIVE GRID — this is the centrepiece
       const vpX = W / 2 + mOffX * 0.12
-      const vpY = H * 0.72
+      const vpY = H * 0.68
       const gridPhase = (t * 0.13) % 1
 
       ctx.save()
@@ -127,7 +127,7 @@ export default function Hero() {
         const gp  = Math.pow(raw, 0.62)            // perspective foreshortening
         const y   = vpY + (H + 80 - vpY) * gp
         if (y > H + 2 || y < vpY - 2) continue
-        const alpha = gp * 0.15 * (0.78 + 0.22 * Math.sin(t * 0.20 + i * 0.4))
+        const alpha = gp * 0.24 * (0.78 + 0.22 * Math.sin(t * 0.20 + i * 0.4))
         ctx.beginPath()
         ctx.moveTo(0, y)
         ctx.lineTo(W, y)
@@ -141,7 +141,7 @@ export default function Hero() {
       for (let i = 0; i <= N_V; i++) {
         const xBottom = (i / N_V) * W * 1.65 - W * 0.325
         const centerFrac = 1 - Math.abs(i / N_V - 0.5) * 2
-        const alpha = centerFrac * 0.088 * (0.72 + 0.28 * Math.sin(t * 0.16 + i * 0.25))
+        const alpha = centerFrac * 0.14 * (0.72 + 0.28 * Math.sin(t * 0.16 + i * 0.25))
         if (alpha < 0.004) continue
         ctx.beginPath()
         ctx.moveTo(vpX, vpY)
@@ -176,38 +176,21 @@ export default function Hero() {
         ctx.fill()
       }
 
-      // 6. REACTOR CORE — pulsing bright point above VP
-      const corePulse = 0.5 + 0.5 * Math.sin(t * 1.85)
-      const coreA = 0.52 + 0.38 * corePulse
-      const coreY = vpY - H * 0.04
-      const coreG = ctx.createRadialGradient(vpX, coreY, 0, vpX, coreY, 130)
-      coreG.addColorStop(0,    `rgba(255,110,85,${coreA.toFixed(3)})`)
-      coreG.addColorStop(0.18, `rgba(220,58,38,${(coreA*0.52).toFixed(3)})`)
-      coreG.addColorStop(0.5,  `rgba(192,40,24,${(coreA*0.16).toFixed(3)})`)
-      coreG.addColorStop(1,    'rgba(192,40,24,0)')
-      ctx.fillStyle = coreG
-      ctx.fillRect(vpX - 140, coreY - 140, 280, 280)
-      // Tiny bright centre dot
-      ctx.beginPath()
-      ctx.arc(vpX, coreY, 2.8, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255,190,170,${(0.75 + 0.25 * corePulse).toFixed(3)})`
-      ctx.fill()
-
-      // 7. VIGNETTE — protect text legibility
+      // 6. VIGNETTE — protect text legibility
       const vT = ctx.createLinearGradient(0, 0, 0, H * 0.34)
-      vT.addColorStop(0, 'rgba(4,0,2,0.94)'); vT.addColorStop(1, 'rgba(4,0,2,0)')
+      vT.addColorStop(0, 'rgba(4,0,2,0.82)'); vT.addColorStop(1, 'rgba(4,0,2,0)')
       ctx.fillStyle = vT; ctx.fillRect(0, 0, W, H * 0.34)
 
       const vB = ctx.createLinearGradient(0, H, 0, H * 0.65)
-      vB.addColorStop(0, 'rgba(4,0,2,0.90)'); vB.addColorStop(1, 'rgba(4,0,2,0)')
+      vB.addColorStop(0, 'rgba(4,0,2,0.78)'); vB.addColorStop(1, 'rgba(4,0,2,0)')
       ctx.fillStyle = vB; ctx.fillRect(0, H * 0.65, W, H * 0.35)
 
       const vL = ctx.createLinearGradient(0, 0, W * 0.16, 0)
-      vL.addColorStop(0, 'rgba(4,0,2,0.85)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
+      vL.addColorStop(0, 'rgba(4,0,2,0.70)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
       ctx.fillStyle = vL; ctx.fillRect(0, 0, W * 0.16, H)
 
       const vR = ctx.createLinearGradient(W, 0, W * 0.84, 0)
-      vR.addColorStop(0, 'rgba(4,0,2,0.85)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
+      vR.addColorStop(0, 'rgba(4,0,2,0.70)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
       ctx.fillStyle = vR; ctx.fillRect(W * 0.84, 0, W * 0.16, H)
 
       raf = requestAnimationFrame(draw)

@@ -41,6 +41,11 @@
 .navScrolled .glassLayer { opacity: 1; }
 .navScrolled .hairline   { opacity: 1; transform: scaleX(1); }
 
+.navScrolled {
+  border-bottom: 1px solid rgba(192,57,43,0.22);
+  box-shadow: 0 1px 0 rgba(192,57,43,0.08), 0 8px 32px rgba(0,0,0,0.55);
+}
+
 .inner {
   position: relative;
   z-index: 1;

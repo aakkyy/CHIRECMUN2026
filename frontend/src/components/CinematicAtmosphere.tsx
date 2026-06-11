@@ -24,7 +24,7 @@ function drawAurora(
 
     const a1 = Math.abs(Math.sin(fi * 6.4 + t * 0.33 + phase))
     const a2 = Math.abs(Math.sin(fi * 11.8 - t * 0.22 + phase * 0.85))
-    const stripAlpha = maxAlpha * (0.25 + 0.75 * ((a1 + a2) / 2))
+    const stripAlpha = maxAlpha * (0.30 + 0.70 * ((a1 + a2) / 2))
     if (stripAlpha < 0.006) continue
 
     const grd = ctx.createLinearGradient(0, yTop, 0, yTop + rayH)
@@ -66,9 +66,9 @@ export default function CinematicAtmosphere() {
       ctx.clearRect(0, 0, W, H)
 
       // Crimson aurora — hangs from top, reaches ~52% height
-      drawAurora(ctx, W, H, t, 0, H * 0.52, 192, 57, 43, 0.30, 0.0)
+      drawAurora(ctx, W, H, t, 0, H * 0.58, 192, 57, 43, 0.48, 0.0)
       // Blue aurora — shorter, different phase
-      drawAurora(ctx, W, H, t, 0, H * 0.42, 18, 75, 205, 0.22, 3.14)
+      drawAurora(ctx, W, H, t, 0, H * 0.48, 18, 75, 205, 0.36, 3.14)
     }
 
     window.addEventListener('resize', resize)
