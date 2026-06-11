@@ -210,7 +210,7 @@ export default function CommitteeDetailPage() {
           transition={{ type: 'spring', stiffness: 75, damping: 18 }}
         >
           <div className={styles.agendaLeft}>
-            <div className={styles.agendaNumeral}>01</div>
+            <div className={styles.agendaNumeral}>1</div>
             <div className={styles.agendaLine} />
           </div>
 
@@ -221,11 +221,11 @@ export default function CommitteeDetailPage() {
             </div>
             <h2 className={styles.sectionTitle}>Agenda Topics</h2>
             <p className={styles.sectionDesc}>
-              The committee's agenda topics will be released once finalized. Stay tuned for updates on the official topics for debate.
+              The committee's agenda topic will be released once finalized. Stay tuned for updates on the official topic for debate.
             </p>
 
             <div className={styles.agendaPlaceholders}>
-              {[1, 2].map(n => (
+              {[1].map(n => (
                 <div key={n} className={styles.agendaPlaceholder}>
                   <span className={styles.agendaPlaceholderNum}>{n < 10 ? `0${n}` : n}</span>
                   <div className={styles.agendaPlaceholderContent}>
