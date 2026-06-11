@@ -1,0 +1,269 @@
+/* ── PAGE ── */
+.page {
+  min-height: 100vh;
+  background: #040002;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── AURA BACKGROUND ── */
+.vignette {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 50% at 0% 0%,   rgba(192,57,43,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 48% 45% at 100% 0%,  rgba(12,38,172,0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 60% 55% at 50% 100%, rgba(192,57,43,0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 70% at 50% 50%,  transparent 35%, rgba(4,0,2,0.82) 100%);
+}
+
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px); }
+.orbRed1  { width:320px; height:320px; background: radial-gradient(circle, rgba(192,57,43,0.20) 0%, transparent 70%); top:6%;    left:4%;   animation: floatA 18s ease-in-out infinite; }
+.orbBlue1 { width:400px; height:400px; background: radial-gradient(circle, rgba(12,38,172,0.16) 0%, transparent 70%); top:10%;   right:3%;  animation: floatB 22s ease-in-out infinite; }
+.orbRed2  { width:280px; height:280px; background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%); bottom:15%; right:10%; animation: floatC 20s ease-in-out infinite; }
+
+@keyframes floatA { 0%,100%{transform:translate(0,0)} 40%{transform:translate(18px,-22px)} 70%{transform:translate(-12px,14px)} }
+@keyframes floatB { 0%,100%{transform:translate(0,0)} 35%{transform:translate(-20px,18px)} 65%{transform:translate(14px,-10px)} }
+@keyframes floatC { 0%,100%{transform:translate(0,0)} 45%{transform:translate(-16px,-18px)} 75%{transform:translate(20px,10px)} }
+
+/* ── HERO SECTION ── */
+.heroSection {
+  position: relative;
+  z-index: 1;
+  height: 75vh;
+  min-height: 520px;
+  max-height: 820px;
+}
+
+/* Image wrapper — fills entire hero section */
+.heroImgWrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.heroImg {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  transform: scale(1.04);
+  animation: subtleZoom 18s ease-out forwards;
+}
+
+@keyframes subtleZoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1.00); }
+}
+
+.heroImgLoaded { opacity: 1; }
+
+/* Placeholder when no image uploaded */
+.heroImgPlaceholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.heroAbbrBg {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(6rem, 18vw, 14rem);
+  font-weight: 900;
+  color: rgba(244,244,239,0.06);
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+/* Bottom gradient overlay — dark at bottom for text legibility */
+.heroImgGradient {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(4,0,2,0.55) 0%,
+      rgba(4,0,2,0.10) 35%,
+      rgba(4,0,2,0.10) 55%,
+      rgba(4,0,2,0.88) 100%
+    );
+}
+
+/* ── HERO OVERLAY — content on top of image ── */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 7rem 3rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  left: 0; right: 0;
+}
+
+/* Back link */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.55);
+  text-decoration: none;
+  transition: color 0.25s ease, gap 0.25s ease;
+  width: fit-content;
+}
+.backLink:hover { color: rgba(244,244,239,0.95); gap: 12px; }
+.backLink svg { transition: transform 0.25s ease; }
+.backLink:hover svg { transform: translateX(-3px); }
+
+/* Bottom meta block */
+.heroMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* Category tag */
+.heroTag {
+  display: inline-block; width: fit-content;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 999px; border: 1px solid;
+}
+.tag_ga          { color: rgba(231,76,60,0.90);  border-color: rgba(231,76,60,0.30);  background: rgba(192,57,43,0.12); }
+.tag_security    { color: rgba(255,100,80,0.95);  border-color: rgba(255,100,80,0.32); background: rgba(200,30,10,0.12); }
+.tag_specialized { color: rgba(86,160,242,0.90);  border-color: rgba(86,160,242,0.28); background: rgba(12,38,172,0.12); }
+.tag_crisis      { color: rgba(255,165,60,0.90);  border-color: rgba(255,165,60,0.28); background: rgba(180,80,10,0.10); }
+.tag_press       { color: rgba(200,200,200,0.80); border-color: rgba(200,200,200,0.22);background: rgba(100,100,100,0.10); }
+
+/* Committee name */
+.heroTitle {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+  font-weight: 900;
+  color: #f4f4ef;
+  line-height: 1.15;
+  margin: 0;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.8);
+  max-width: 800px;
+}
+
+.heroType {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(244,244,239,0.45);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+/* ── THREE COMING SOON SECTIONS ── */
+.sections {
+  position: relative; z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* ── COMING SOON CARD ── */
+.csCard {
+  position: relative;
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(14,4,8,0.90) 0%, rgba(8,4,18,0.86) 100%);
+  border: 1px solid rgba(192,57,43,0.12);
+  border-radius: 18px;
+  padding: 2rem 2.2rem;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.csCard:hover { border-color: rgba(192,57,43,0.28); }
+
+/* Ambient glow on hover */
+.csGlow {
+  position: absolute; inset: 0; border-radius: 18px;
+  background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(192,57,43,0.06) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+}
+.csCard:hover .csGlow { opacity: 1; }
+
+/* Icon */
+.csIconWrap {
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(192,57,43,0.07);
+  border: 1px solid rgba(192,57,43,0.15);
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+
+/* Card body */
+.csBody { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+
+/* "Coming Soon" badge */
+.csBadge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.60rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(192,57,43,0.65);
+  margin-bottom: 0.1rem;
+}
+.csBadgeDot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(231,76,60,0.65);
+  box-shadow: 0 0 8px rgba(231,76,60,0.5);
+  animation: badgePulse 2.4s ease-in-out infinite;
+}
+@keyframes badgePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.7)} }
+
+/* Section title */
+.csTitle {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.25rem; font-weight: 800;
+  color: rgba(244,244,239,0.88);
+  margin: 0;
+}
+
+/* Description */
+.csDesc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: rgba(244,244,239,0.42);
+  line-height: 1.75;
+  margin: 0;
+  max-width: 560px;
+}
+
+/* Action area */
+.csAction { margin-top: 0.8rem; }
+
+/* Disabled download button */
+.downloadBtn {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 0.7rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(192,57,43,0.22);
+  background: rgba(192,57,43,0.06);
+  font-family: 'Geist', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(192,57,43,0.45);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .heroOverlay { padding: 6rem 1.5rem 2rem; }
+  .csCard { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  .csIconWrap { width: 44px; height: 44px; border-radius: 10px; }
+  .sections { padding: 2.5rem 1.2rem 4rem; }
+}

@@ -1,38 +1,16 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, type Variants } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
+import { COMMITTEES, TYPE_COLORS, TYPE_LABELS, type CommitteeType } from '../data/committees'
 import styles from './CommitteesPage.module.css'
 
-const COMMITTEES = [
-  { id: 'disec',    abbr: 'DISEC',   name: 'Disarmament and International Security Committee', category: 'General Assembly',      type: 'ga' },
-  { id: 'unhrc',    abbr: 'UNHRC',   name: 'United Nations Human Rights Council',              category: 'Human Rights',          type: 'ga' },
-  { id: 'who',      abbr: 'WHO',     name: 'World Health Organization',                        category: 'Specialized Agency',    type: 'specialized' },
-  { id: 'unctad',   abbr: 'UNCTAD',  name: 'UN Conference on Trade and Development',           category: 'Trade & Development',   type: 'specialized' },
-  { id: 'loksabha', abbr: 'LS',      name: 'Lok Sabha',                                        category: 'National Legislature',  type: 'crisis' },
-  { id: 'unsc',     abbr: 'UNSC',    name: 'United Nations Security Council',                  category: 'Security Council',      type: 'security' },
-  { id: 'unodc',    abbr: 'UNODC',   name: 'UN Office on Drugs and Crime',                     category: 'Specialized Agency',    type: 'specialized' },
-  { id: 'copuos',   abbr: 'COPUOS',  name: 'Committee on the Peaceful Uses of Outer Space',    category: 'Specialized Committee', type: 'specialized' },
-  { id: 'ec',       abbr: 'EC',      name: 'European Council',                                 category: 'Regional Body',         type: 'crisis' },
-  { id: 'jcc',      abbr: 'JCC',     name: 'Joint Crisis Cabinet',                             category: 'Crisis Committee',      type: 'crisis' },
-  { id: 'sci',      abbr: 'SCI',     name: 'Supreme Court of India',                           category: 'Legal Body',            type: 'crisis' },
-  { id: 'bcci',     abbr: 'BCCI',    name: 'Board of Control for Cricket in India',            category: 'Specialized Committee', type: 'crisis' },
-  { id: 'ip-r',     abbr: 'IP',      name: 'International Press — Reporters',                  category: 'Press Corps',           type: 'press' },
-  { id: 'ip-p',     abbr: 'IP',      name: 'International Press — Photojournalists',           category: 'Press Corps',           type: 'press' },
-]
-
-function CommitteeImage({ id, abbr, type }: { id: string; abbr: string; type: string }) {
+function CommitteeImage({ id, abbr, type }: { id: string; abbr: string; type: CommitteeType }) {
   const [hasError, setHasError] = useState(true) // start with placeholder until image loads
   const [loaded, setLoaded] = useState(false)
 
-  const typeColors: Record<string, string> = {
-    ga:          'rgba(192,57,43,',
-    security:    'rgba(139,0,0,',
-    specialized: 'rgba(12,38,172,',
-    crisis:      'rgba(140,30,10,',
-    press:       'rgba(80,80,80,',
-  }
-  const col = typeColors[type] || typeColors.ga
+  const col = TYPE_COLORS[type] || TYPE_COLORS.ga
 
   return (
     <div className={styles.imgWrap}>
@@ -64,11 +42,6 @@ const cardVariants: Variants = {
     opacity: 1, y: 0, scale: 1,
     transition: { type: 'spring', stiffness: 85, damping: 18, delay: i * 0.055 },
   }),
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  ga: 'General Assembly', security: 'Security', specialized: 'Specialized',
-  crisis: 'Crisis', press: 'Press Corps',
 }
 
 export default function CommitteesPage() {
@@ -117,24 +90,36 @@ export default function CommitteesPage() {
       {/* GRID */}
       <div className={styles.grid}>
         {COMMITTEES.map((c, i) => (
-          <motion.div
+          <Link
             key={c.id}
-            className={styles.card}
-            custom={i}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            whileHover={{ y: -6, transition: { type: 'spring', stiffness: 280, damping: 20 } }}
+            to={`/committees/${c.id}`}
+            className={styles.cardLink}
+            style={{ textDecoration: 'none', display: 'block' }}
           >
-            <CommitteeImage id={c.id} abbr={c.abbr} type={c.type} />
-            <div className={styles.cardBody}>
-              <span className={`${styles.tag} ${styles[`tag_${c.type}`]}`}>{c.category}</span>
-              <h2 className={styles.cardName}>{c.name}</h2>
-              <p className={styles.cardType}>{TYPE_LABELS[c.type]}</p>
-            </div>
-            <div className={styles.cardGlow} aria-hidden="true" />
-          </motion.div>
+            <motion.div
+              className={styles.card}
+              custom={i}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              whileHover={{ y: -6, transition: { type: 'spring', stiffness: 280, damping: 20 } }}
+            >
+              <CommitteeImage id={c.id} abbr={c.abbr} type={c.type} />
+              <div className={styles.cardBody}>
+                <span className={`${styles.tag} ${styles[`tag_${c.type}`]}`}>{c.category}</span>
+                <h2 className={styles.cardName}>{c.name}</h2>
+                <p className={styles.cardType}>{TYPE_LABELS[c.type]}</p>
+                <div className={styles.cardArrow}>
+                  <span>View Committee</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+              <div className={styles.cardGlow} aria-hidden="true" />
+            </motion.div>
+          </Link>
         ))}
       </div>
 

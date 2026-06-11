@@ -13,6 +13,7 @@ import FAQPage from './pages/FAQPage'
 import GuidelinesPage from './pages/GuidelinesPage'
 import ComingSoonPage from './pages/ComingSoonPage'
 import CommitteesPage from './pages/CommitteesPage'
+import CommitteeDetailPage from './pages/CommitteeDetailPage'
 import { useReveal } from './hooks/useReveal'
 
 function HomePage() {
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/faq"        element={<FAQPage />}       />
       <Route path="/team"       element={<ComingSoonPage />} />
       <Route path="/committees" element={<CommitteesPage />} />
+      <Route path="/committees/:id" element={<CommitteeDetailPage />} />
       <Route path="/guidelines" element={<GuidelinesPage />} />
       <Route path="/schedule"   element={<ComingSoonPage />} />
     </Routes>
