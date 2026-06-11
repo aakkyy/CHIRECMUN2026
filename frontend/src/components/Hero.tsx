@@ -89,10 +89,17 @@ export default function Hero() {
       lastTime = ts
       t++; ctx.clearRect(0,0,W,H)
       const bg = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.8)
-      bg.addColorStop(0,'rgba(22,8,36,1)'); bg.addColorStop(.35,'rgba(12,5,20,1)'); bg.addColorStop(1,'rgba(2,2,8,1)')
+      bg.addColorStop(0,'rgba(16,4,4,1)'); bg.addColorStop(.35,'rgba(8,2,2,1)'); bg.addColorStop(1,'rgba(2,0,0,1)')
       ctx.fillStyle=bg; ctx.fillRect(0,0,W,H)
+      // Corner smoke clouds — red (top) and blue (sides), matching Aura theme
+      const tl = ctx.createRadialGradient(0,0,0,0,0,W*0.55)
+      tl.addColorStop(0,'rgba(155,5,5,0.55)'); tl.addColorStop(0.4,'rgba(140,4,4,0.22)'); tl.addColorStop(1,'rgba(140,4,4,0)')
+      ctx.fillStyle=tl; ctx.fillRect(0,0,W,H)
+      const tr = ctx.createRadialGradient(W,0,0,W,0,W*0.50)
+      tr.addColorStop(0,'rgba(140,4,4,0.48)'); tr.addColorStop(0.4,'rgba(130,4,4,0.18)'); tr.addColorStop(1,'rgba(130,4,4,0)')
+      ctx.fillStyle=tr; ctx.fillRect(0,0,W,H)
       const core = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,210)
-      core.addColorStop(0,'rgba(86,204,242,.08)'); core.addColorStop(.3,'rgba(192,57,43,.05)'); core.addColorStop(1,'rgba(0,0,0,0)')
+      core.addColorStop(0,'rgba(192,57,43,.06)'); core.addColorStop(.5,'rgba(12,38,178,.04)'); core.addColorStop(1,'rgba(0,0,0,0)')
       ctx.fillStyle=core; ctx.fillRect(0,0,W,H)
       for (const s of stars) {
         const tw=.5+.5*Math.sin(t*s.s*.04+s.b*Math.PI*2)

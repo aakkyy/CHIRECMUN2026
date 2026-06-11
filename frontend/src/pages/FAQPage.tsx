@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './FAQPage.module.css'
-import AnimatedBg from '../components/AnimatedBg'
+import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
 
@@ -78,8 +78,7 @@ export default function FAQPage() {
 
   return (
     <div className={styles.page}>
-      <AnimatedBg variant="cosmic" />
-      <div className={styles.overlay} />
+      <AuraBg />
 
       <Navbar />
 

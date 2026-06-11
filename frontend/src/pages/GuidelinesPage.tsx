@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './GuidelinesPage.module.css'
-import GuidelinesBg from '../components/GuidelinesBg'
+import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
 
@@ -129,7 +129,7 @@ export default function GuidelinesPage() {
 
   return (
     <div className={styles.page}>
-      <GuidelinesBg />
+      <AuraBg />
       <div className={styles.vignette} />
 
       {/* Small animated orbs — only these move */}
@@ -201,20 +201,14 @@ export default function GuidelinesPage() {
             {/* Content */}
             <div className={styles.cardBody}>
               <h2 className={styles.sectionTitle}>{section.title}</h2>
-              <motion.ul
-                className={styles.list}
-                variants={listVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-40px' }}
-              >
+              <ul className={styles.list}>
                 {section.items.map((item, ii) => (
-                  <motion.li key={ii} className={styles.item} variants={itemVariants}>
+                  <li key={ii} className={styles.item}>
                     <Planet />
                     <span>{item}</span>
-                  </motion.li>
+                  </li>
                 ))}
-              </motion.ul>
+              </ul>
             </div>
           </motion.div>
         ))}
