@@ -27,30 +27,48 @@ export const SECRETARIAT_LEVELS: SecretariatLevel[] = [
     levelId: 'co-sg',
     levelTitle: 'Co-Secretary General',
     members: [
-      { id: 'co-sg-1', role: 'Co-Secretary General', tier: 'sg', photoSlug: 'co-sg-1', description: '' },
-      { id: 'co-sg-2', role: 'Co-Secretary General', tier: 'sg', photoSlug: 'co-sg-2', description: '' },
+      {
+        id: 'co-sg-1', role: 'Co-Secretary General', tier: 'sg', photoSlug: 'co-sg-1',
+        description: `Whether he's discussing a new business idea, analysing a cricket match or planning the next big conference detail, Dev is someone who genuinely enjoys taking on new challenges and working with people. Having experienced MUN as a delegate, OC member, and USG, he is thrilled now to serve as the Co-Secretary General of this year's conference. For Dev, MUN has always been more than just debate, it's about connections, teamwork and creating an environment where every delegate feels challenged and inspired. He is looking forward to shaping a conference filled with meaningful discussions, unforgettable moments and an experience that everyone a part of this edition of CHIREC MUN, will truly enjoy.`,
+      },
+      {
+        id: 'co-sg-2', role: 'Co-Secretary General', tier: 'sg', photoSlug: 'co-sg-2',
+        description: `Anusha Anchlia is a 12th grader at Chirec International School, Kondapur, studying Commerce with Mathematics. Since beginning her MUN journey in 2021, she has participated in nearly 20 conferences, delegating in a wide range of committees. Anusha also serves as Secretary of her school's Interact Club. In her free time, she loves to read books, listen to music and audiobooks, fill her scrapbook, attempt (and often fail) to bake the perfect chocolate chip cookies, and binge-watch her favourite TV shows for the fifth time. Having been part of Chirec MUN as a delegate, OC member, Executive Board member, and member of the secretariat, she now returns as Secretary-General for the second time. As Secretary-General for CHIREC MUN 2026, she aims to work tirelessly to make this edition the most impactful and memorable one yet.`,
+      },
     ],
   },
   {
     levelId: 'dg',
     levelTitle: 'Director General',
     members: [
-      { id: 'dg', role: 'Director General', tier: 'dg', photoSlug: 'director-general', description: '' },
+      {
+        id: 'dg', role: 'Director General', tier: 'dg', photoSlug: 'director-general',
+        description: `Having served as a Delegate, IP, OC, USG and now Director General, Anika has experienced MUN from every side of a conference and is excited to bring those experiences into this year's edition. Currently a DP2 student and aspiring pharmacologist, you'll usually find her between experiments in the chemistry lab, working on her research, meeting new people, or taking on one project too many. If she's not doing any of the above, she's probably watching a cricket match or revisiting one of her favourite TFI movies. She looks forward to working alongside the Secretariat and OC to make this conference an engaging and memorable experience for all participants.`,
+      },
     ],
   },
   {
     levelId: 'cda',
     levelTitle: "Chargé D'Affaires",
     members: [
-      { id: 'cda', role: "Chargé D'Affaires", tier: 'cda', photoSlug: 'charge-daffaires', description: '' },
+      {
+        id: 'cda', role: "Chargé D'Affaires", tier: 'cda', photoSlug: 'charge-daffaires',
+        description: `From driving down the court to driving the debate floor, Arnav has a dozen conferences under his belt. Taking Physics, Chemistry and Maths AA at Higher Level in the IB diploma, he is aspiring for a strong future in aerospace engineering. When he isn't engrossed in following the Lakers or rewatching Suits for the zillionth time, you can find him listening to music or getting into an argument with someone over the smallest things. While playing the piano and annoying others are his two biggest sidequests, he can prove to be surprising when you least expect it. He is truly excited for having you all and making this conference a grand success!`,
+      },
     ],
   },
   {
     levelId: 'head-oc',
     levelTitle: 'Head of Organizing Committee',
     members: [
-      { id: 'head-oc-1', role: 'Head of OC', tier: 'hoc', photoSlug: 'head-oc-1', description: '' },
-      { id: 'head-oc-2', role: 'Head of OC', tier: 'hoc', photoSlug: 'head-oc-2', description: '' },
+      {
+        id: 'head-oc-1', role: 'Head of OC', tier: 'hoc', photoSlug: 'head-oc-1',
+        description: `Aditi is an IBDP Year 2 student studying Math, Biology, and Chemistry at a higher level. If you know Aditi, you know that when she's not squeezing in a nap, she's probably listening to music or meeting friends. Approachable and always willing to help, she thrives on collaboration and never backs down from a challenge. With her love for connecting with people and making the most of every opportunity, she's thrilled to make this MUN the best yet. As Head of OC for this year's edition, she can't wait to work with her team and bring CMUN to life!`,
+      },
+      {
+        id: 'head-oc-2', role: 'Head of OC', tier: 'hoc', photoSlug: 'head-oc-2',
+        description: `Dakshita is a Grade 12 CBSE Commerce student pursuing Accountancy. When she's not busy with numbers, you can find her rewatching her favourite shows, working on her latest art piece, or on the basketball court. A firm believer that fries and naps can solve most problems, she brings creativity, dedication, and enthusiasm to everything she does. She's thrilled to be a part of the Secretariat and looks forward to making CHIRECMUN 2026 an unforgettable experience!`,
+      },
     ],
   },
   {

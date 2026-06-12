@@ -4,310 +4,296 @@
   width: 100%;
   min-height: 100svh;
   display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  overflow: hidden;
-}
-
-/* ── CANVAS ── */
-.canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* ── LEFT PANEL ── */
-.leftPanel {
-  position: relative;
-  z-index: 2;
-  display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   overflow: hidden;
-  /* flex value set via inline style for smooth CSS transition */
-  transition: flex 0.58s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 0;
 }
 
-/* Red glow behind the CHIREC letters */
-.leftGlow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 80% 70% at 75% 55%,
-    rgba(192, 57, 43, 0.22) 0%,
-    transparent 72%
-  );
+.canvas {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+}
+
+.vignette {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 72% 62% at 50% 50%, transparent 38%, rgba(4,0,2,0.52) 100%);
+}
+
+/* ── CONTENT ── */
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 860px;
+  padding: 6rem 2.4rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* ── DOCUMENT HEADER ROW ── */
+.docHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.0rem;
+}
+
+.docLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoImg {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(192,57,43,0.30));
+  flex-shrink: 0;
+}
+
+.unLabel {
+  font-family: 'Geist', monospace;
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.30);
+}
+
+.docRef {
+  font-family: 'Geist', monospace;
+  font-size: 0.60rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: rgba(192,57,43,0.55);
+}
+
+/* ── HAIRLINES ── */
+.fullHair {
+  width: 100%;
+  height: 1px;
+  background: rgba(192,57,43,0.22);
+  margin-bottom: 0.90rem;
+}
+
+.fullHairDim {
+  width: 100%;
+  height: 1px;
+  background: rgba(192,57,43,0.10);
+  margin-bottom: 0.80rem;
+}
+
+/* ── DOC META ROW ── */
+.docMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.90rem;
+}
+
+.metaLeft, .metaRight {
+  font-family: 'Geist', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.22);
+}
+
+/* ── RESOLUTION LABEL ── */
+.resLabel {
+  font-family: 'Geist', monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.50);
+  text-align: center;
+  display: block;
+  margin-bottom: 1.4rem;
+}
+
+/* ── TITLE BLOCK ── */
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 0 0 1.2rem;
+  text-align: center;
 }
 
 /* ── CHIREC ROW ── */
 .chirecRow {
   display: flex;
   align-items: baseline;
-  justify-content: flex-end;
-  /* Right-aligned so overflow bleeds off the LEFT edge */
-  padding-right: 0;
-  position: relative;
-  z-index: 1;
+  justify-content: center;
+  gap: 0.02em;
+  margin-bottom: 0.18em;
 }
 
-/* ── INDIVIDUAL LETTER ── */
 .chirec {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(6.5rem, 20vw, 18rem);
+  font-size: clamp(4.2rem, 11vw, 9.5rem);
   font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 0.90;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
   display: inline-block;
   user-select: none;
 }
 
-/* ── HOVER HINT ── */
-.leftHint {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.hintLine {
-  width: 24px;
-  height: 1px;
-  background: rgba(192, 57, 43, 0.35);
-}
-
-.hintText {
-  font-family: 'Geist', sans-serif;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+/* ── MUN + YEAR ── */
+.mun {
+  font-family: 'Geist', monospace;
+  font-size: clamp(0.58rem, 1.4vw, 0.80rem);
+  font-weight: 700;
+  letter-spacing: 0.48em;
   text-transform: uppercase;
-  color: rgba(244, 244, 239, 0.18);
+  color: rgba(192,57,43,0.60);
+  margin-bottom: 0.3rem;
 }
 
-/* ── HAIRLINE DIVIDER ── */
-.hairline {
-  position: relative;
-  z-index: 2;
-  width: 1px;
-  background: rgba(192, 57, 43, 0.30);
-  flex-shrink: 0;
-  transform-origin: top center;
-  align-self: stretch;
+.year {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.3rem, 3.5vw, 3.0rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #922b21 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* ── RIGHT PANEL ── */
-.rightPanel {
-  position: relative;
-  z-index: 2;
+/* ── BODY LINE ── */
+.bodyLine {
+  font-family: 'Geist', monospace;
+  font-size: 0.60rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.18);
+  text-align: center;
+  margin: 0 0 0.90rem;
+  line-height: 1.8;
+}
+
+/* ── STAMP + TAGLINE ROW ── */
+.stampRow {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: flex 0.58s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 0;
-  overflow: hidden;
-  /* subtle dark overlay so content reads clearly */
-  background: rgba(4, 0, 2, 0.18);
+  gap: 3.5rem;
+  padding: 1.8rem 0 0.8rem;
 }
 
-.rightInner {
+.stamp {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 22px rgba(192,57,43,0.18));
+}
+
+.taglineBlock {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  padding: 3rem 3.5rem 3rem 3rem;
-  width: 100%;
-  max-width: 440px;
+  gap: 0.1rem;
 }
 
-/* ── LOGO ── */
-.logoImg {
-  width: 58px;
-  height: 58px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(192, 57, 43, 0.28));
-  margin-bottom: 1.2rem;
-}
-
-/* ── EDITION BADGE ── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: 'Geist', sans-serif;
-  font-size: 0.60rem;
-  font-weight: 700;
+.taglineLabel {
+  font-family: 'Geist', monospace;
+  font-size: 0.56rem;
+  font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(192, 57, 43, 0.70);
-  border: 1px solid rgba(192, 57, 43, 0.16);
-  border-radius: 100px;
-  padding: 0.28rem 0.9rem;
-  margin-bottom: 1.6rem;
+  color: rgba(192,57,43,0.42);
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
-.badgeDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(231, 76, 60, 0.80);
-  animation: pulse 2.2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.40; transform: scale(0.68); }
-}
-
-/* ── MUN + YEAR ── */
-.munBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 0.90;
-  margin-bottom: 1.8rem;
-}
-
-.munWord {
+.tagline {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(1.6rem, 4vw, 3.2rem);
+  font-size: clamp(1.4rem, 3.5vw, 2.6rem);
   font-weight: 900;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #922b21 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.munYear {
-  font-family: 'Rubik', sans-serif;
-  font-size: clamp(2.8rem, 7vw, 5.8rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #922b21 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── RIGHT HAIRLINES ── */
-.rHair {
-  width: 100%;
-  height: 1px;
-  background: rgba(192, 57, 43, 0.14);
-  margin-bottom: 1.2rem;
-}
-
-/* ── META BLOCK ── */
-.metaBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1.2rem;
-}
-
-.metaBlock span {
-  font-family: 'Geist', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(244, 244, 239, 0.22);
-}
-
-/* ── TAGLINE ── */
-.slogan {
-  font-family: 'Geist', sans-serif;
-  font-size: 0.60rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(244, 244, 239, 0.16);
-  margin-bottom: 2rem;
+  color: rgba(244,244,239,0.88);
+  line-height: 1.05;
+  display: block;
 }
 
 /* ── CTAs ── */
 .actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding-top: 1.4rem;
 }
 
 .btnPrimary {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  width: 100%;
-  justify-content: center;
 }
 
 .btnGhost {
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  width: 100%;
-  justify-content: center;
+}
+
+/* ── SCROLL HINT ── */
+.scrollHint {
+  position: absolute;
+  bottom: 2rem; left: 50%; transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.scrollLabel {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.16);
+}
+
+.scrollTrack {
+  width: 1px; height: 40px;
+  background: rgba(192,57,43,0.12);
+  position: relative; overflow: hidden; border-radius: 1px;
+}
+
+.scrollGlider {
+  position: absolute; top: -100%; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(231,76,60,0.70), transparent);
+  animation: scrollGlide 2.0s ease-in-out infinite;
+}
+
+@keyframes scrollGlide {
+  0%   { top: -100%; }
+  100% { top: 200%; }
 }
 
 /* ── MOBILE ── */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    min-height: 100svh;
-  }
-
-  .leftPanel {
-    flex: none !important;
-    height: 48svh;
-    align-items: center;
-    justify-content: center;
-    transition: none;
-  }
-
-  .chirecRow {
-    justify-content: center;
-  }
-
-  .chirec {
-    font-size: clamp(4.2rem, 19vw, 7rem);
-  }
-
-  .leftHint { display: none; }
-
-  .hairline {
-    width: 100%;
-    height: 1px;
-    align-self: auto;
-  }
-
-  .rightPanel {
-    flex: none !important;
-    height: 52svh;
-    transition: none;
-    justify-content: flex-start;
-  }
-
-  .rightInner {
-    padding: 2rem 1.8rem;
-    max-width: 100%;
-  }
-
-  .logoImg { width: 44px; height: 44px; margin-bottom: 0.8rem; }
-  .badge { margin-bottom: 1rem; }
-  .munBlock { margin-bottom: 1.2rem; }
-  .munYear { font-size: clamp(2.4rem, 10vw, 3.8rem); }
-  .rHair { margin-bottom: 0.8rem; }
-  .metaBlock { margin-bottom: 0.8rem; }
-  .slogan { margin-bottom: 1.2rem; }
-  .actions { flex-direction: row; flex-wrap: wrap; }
-  .btnPrimary, .btnGhost { width: auto; }
+@media (max-width: 640px) {
+  .content { padding: 5.5rem 1.4rem 4rem; }
+  .docHeader { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.8rem; }
+  .docMeta { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+  .stampRow { flex-direction: column; gap: 1.8rem; padding: 1.4rem 0 0.6rem; }
+  .stamp { width: 100px; height: 100px; }
+  .tagline { font-size: clamp(1.2rem, 6vw, 2rem); }
+  .actions { flex-direction: column; align-items: stretch; }
+  .btnPrimary, .btnGhost { text-align: center; }
+  .metaRight { display: none; }
 }
