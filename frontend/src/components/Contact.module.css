@@ -113,7 +113,7 @@
   position: absolute;
   top: 0; left: 10%; right: 10%;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(192,57,43,0.5), transparent);
+  background: rgba(255,255,255,0.07);
   pointer-events: none;
 }
 

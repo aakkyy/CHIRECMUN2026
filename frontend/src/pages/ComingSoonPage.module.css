@@ -55,6 +55,6 @@
 .divider {
   width: 160px;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(192,57,43,0.45) 50%, transparent);
+  background: rgba(255,255,255,0.10);
   transform-origin: center;
 }

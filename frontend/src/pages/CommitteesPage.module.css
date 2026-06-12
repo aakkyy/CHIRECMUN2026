@@ -68,7 +68,7 @@
 /* 1px hairline, fading at both ends — Huly/GitHub dark-mode separator pattern */
 .heroDivider {
   width: 150px; height: 1px;
-  background: linear-gradient(to right, transparent, rgba(192,57,43,0.45) 50%, transparent);
+  background: rgba(255,255,255,0.10);
   margin: 0 auto; transform-origin: center;
 }
 
