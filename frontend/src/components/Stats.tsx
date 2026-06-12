@@ -5,7 +5,7 @@ import { spring, viewport } from '../lib/motion'
 
 const stats = [
   { num: '14',   label: 'Editions' },
-  { num: '450+', label: 'Expected Delegates' },
+  { num: '600+', label: 'Expected Delegates' },
   { num: '14',   label: 'Committees' },
   { num: '3',    label: 'Days of Diplomacy', sub: 'Jul 31 · Aug 1 & 2' },
 ]
