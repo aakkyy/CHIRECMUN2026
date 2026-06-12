@@ -163,7 +163,8 @@ export default function Hero() {
       }
     }
     init()
-    window.addEventListener('resize', () => init())
+    const onResize = () => init()
+    window.addEventListener('resize', onResize)
 
     const drawFrame = (now: number) => {
       canvasRafId = requestAnimationFrame(drawFrame)

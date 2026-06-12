@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect, useLayoutEffect } from 'react'
+import { Component, useEffect, useLayoutEffect } from 'react'
+import type { ReactNode, ErrorInfo } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Stats from './components/Stats'
@@ -17,6 +18,35 @@ import CommitteesPage from './pages/CommitteesPage'
 import CommitteeDetailPage from './pages/CommitteeDetailPage'
 import SecretariatPage from './pages/SecretariatPage'
 import { useReveal } from './hooks/useReveal'
+
+// ── Error boundary — catches render crashes and shows them on screen ──
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null }
+  static getDerivedStateFromError(error: Error) { return { error } }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[ErrorBoundary]', error, info)
+  }
+  render() {
+    if (this.state.error) {
+      const err = this.state.error as Error
+      return (
+        <div style={{
+          color: '#fff', padding: '2rem', fontFamily: 'monospace',
+          background: '#040002', minHeight: '100vh',
+        }}>
+          <h1 style={{ color: '#e74c3c', marginBottom: '1rem' }}>React render crash</h1>
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#ff6b6b' }}>
+            {err.message}
+          </pre>
+          <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '0.75em', opacity: 0.55, marginTop: '1rem' }}>
+            {err.stack}
+          </pre>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 // Instantly scrolls to top on every route change — prevents new pages
 // from inheriting the scroll offset of the previous page, which would
@@ -56,15 +86,17 @@ export default function App() {
   return (
     <>
     <ScrollToTop />
-    <Routes>
-      <Route path="/"           element={<HomePage />}      />
-      <Route path="/faq"        element={<FAQPage />}       />
-      <Route path="/team"       element={<SecretariatPage />} />
-      <Route path="/committees" element={<CommitteesPage />} />
-      <Route path="/committees/:id" element={<CommitteeDetailPage />} />
-      <Route path="/guidelines" element={<GuidelinesPage />} />
-      <Route path="/schedule"   element={<ComingSoonPage />} />
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/"           element={<HomePage />}      />
+        <Route path="/faq"        element={<FAQPage />}       />
+        <Route path="/team"       element={<SecretariatPage />} />
+        <Route path="/committees" element={<CommitteesPage />} />
+        <Route path="/committees/:id" element={<CommitteeDetailPage />} />
+        <Route path="/guidelines" element={<GuidelinesPage />} />
+        <Route path="/schedule"   element={<ComingSoonPage />} />
+      </Routes>
+    </ErrorBoundary>
     </>
   )
 }
