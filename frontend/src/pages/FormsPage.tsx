@@ -83,10 +83,10 @@ export default function FormsPage() {
       <div className={styles.scanH} />
 
       <Navbar />
-      <HomeBeacon />
 
       {/* ── HERO ── */}
       <div className={styles.hero}>
+        <HomeBeacon />
         <motion.p
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 14 }}

@@ -131,9 +131,9 @@ export default function GuidelinesPage() {
       <div className={styles.scanH} />
 
       <Navbar />
-      <HomeBeacon />
 
       <div className={styles.hero}>
+        <HomeBeacon />
         <motion.p
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 14 }}

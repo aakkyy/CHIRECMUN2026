@@ -147,10 +147,10 @@ export default function FAQPage() {
       <div className={styles.ambientGlow} />
 
       <Navbar />
-      <HomeBeacon />
 
       {/* ── HERO ── */}
       <div className={styles.hero}>
+        <HomeBeacon />
         <motion.span
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 14 }}

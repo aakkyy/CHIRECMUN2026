@@ -1,15 +1,9 @@
-.wrap {
-  position: relative;
-  z-index: 10;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 5.8rem 2.5rem 0;
-}
-
 .beacon {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  align-self: flex-start;
+  margin-bottom: 2.5rem;
 
   background: none;
   border: none;
