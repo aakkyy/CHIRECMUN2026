@@ -2,7 +2,6 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  align-self: flex-start;
   margin-bottom: 2.5rem;
 
   background: none;
