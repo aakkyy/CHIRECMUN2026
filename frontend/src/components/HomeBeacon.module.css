@@ -1,8 +1,9 @@
 .beacon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 2.5rem;
+  width: fit-content;
+  margin: 0 auto 2.5rem;
 
   background: none;
   border: none;
