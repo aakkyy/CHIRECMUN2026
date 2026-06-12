@@ -5,6 +5,8 @@ import BlobBg from './BlobBg'
 import styles from './About.module.css'
 import { viewport } from '../lib/motion'
 
+const TITLE_WORDS = ['Shaping', 'the', 'Leaders', 'of', 'Tomorrow']
+
 const pillars = [
   {
     title: 'Represent',
@@ -37,21 +39,12 @@ const pillars = [
   },
 ]
 
-const stats = [
-  { num: '14th',   label: 'Edition'    },
-  { num: '600+',   label: 'Delegates'  },
-  { num: '3',      label: 'Days'       },
-]
-
-const leftStagger = {
-  hidden:  {},
-  visible: { transition: { staggerChildren: 0.1 } },
-}
-
-const leftItem = {
-  hidden:  { opacity: 0, x: -48 },
-  visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 90, damping: 20 } },
-}
+const blurFade = (delay = 0, blur = 14) => ({
+  initial:     { opacity: 0, filter: `blur(${blur}px)` },
+  whileInView: { opacity: 1, filter: 'blur(0px)' },
+  viewport,
+  transition:  { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94], delay },
+})
 
 function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -95,18 +88,28 @@ export default function About() {
         <div className={styles.grid}>
 
           {/* LEFT */}
-          <motion.div
-            className={styles.left}
-            initial="hidden" whileInView="visible" viewport={viewport}
-            variants={leftStagger}
-          >
-            <motion.p className={styles.eyebrow} variants={leftItem}>Who We Are</motion.p>
+          <div className={styles.left}>
 
-            <motion.h2 className={styles.title} variants={leftItem}>
-              Shaping the Leaders<br />of Tomorrow
-            </motion.h2>
+            {/* Eyebrow */}
+            <motion.p className={styles.eyebrow} {...blurFade(0, 10)}>
+              Who We Are
+            </motion.p>
 
-            <motion.p className={styles.body} variants={leftItem}>
+            {/* Title — word-by-word blur reveal */}
+            <h2 className={styles.title}>
+              {TITLE_WORDS.map((word, i) => (
+                <motion.span
+                  key={word + i}
+                  {...blurFade(0.05 + i * 0.08, 20)}
+                  style={{ display: 'inline-block', marginRight: '0.28em' }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h2>
+
+            {/* Body */}
+            <motion.p className={styles.body} {...blurFade(0.42, 10)}>
               CHIREC Model United Nations is one of Hyderabad's most prestigious
               student-run conferences, now entering its 14th Edition. Since inception,
               CHIREC MUN has brought together the sharpest young minds to debate the
@@ -114,25 +117,16 @@ export default function About() {
               connections that last far beyond the conference room.
             </motion.p>
 
-            <motion.p className={styles.body} variants={leftItem}>
+            <motion.p className={styles.body} {...blurFade(0.52, 10)}>
               More than a conference, it is a launchpad. Delegates leave with
               confidence, clarity, and a global perspective that sets them apart.
             </motion.p>
 
-            {/* Stats strip */}
-            <motion.div className={styles.statsStrip} variants={leftItem}>
-              {stats.map((s, i) => (
-                <div key={s.label} className={styles.stat}>
-                  <span className={styles.statNum}>{s.num}</span>
-                  <span className={styles.statLabel}>{s.label}</span>
-                  {i < stats.length - 1 && <span className={styles.statDivider} aria-hidden />}
-                </div>
-              ))}
-            </motion.div>
-
+            {/* CTA */}
             <motion.div
-              variants={leftItem}
-              whileHover={{ x: 4 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              {...blurFade(0.62, 8)}
+              whileHover={{ x: 4 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               style={{ display: 'inline-flex' }}
             >
               <Link to="/team" className={styles.textLink}>
@@ -142,24 +136,14 @@ export default function About() {
                 </svg>
               </Link>
             </motion.div>
-          </motion.div>
+          </div>
 
           {/* RIGHT — unified glass cards */}
-          <motion.div
-            className={styles.pillarsStack}
-            initial={{ opacity: 0, y: 36 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-            style={{ perspective: 1100 }}
-          >
+          <div className={styles.pillarsStack} style={{ perspective: 1100 }}>
             {pillars.map((p, i) => (
               <motion.div
                 key={p.title}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={viewport}
-                transition={{ type: 'spring', stiffness: 90, damping: 20, delay: 0.15 + i * 0.12 }}
+                {...blurFade(0.15 + i * 0.14, 14)}
                 style={{ perspective: 900 }}
               >
                 <TiltCard className={styles.pillarWrap}>
@@ -173,7 +157,7 @@ export default function About() {
                 </TiltCard>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </div>
