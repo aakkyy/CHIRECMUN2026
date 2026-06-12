@@ -83,6 +83,7 @@ export default function FormsPage() {
       <div className={styles.scanH} />
 
       <Navbar />
+      <HomeBeacon />
 
       {/* ── HERO ── */}
       <div className={styles.hero}>
@@ -185,7 +186,6 @@ export default function FormsPage() {
       </div>
 
       <BottomBar />
-      <HomeBeacon />
     </div>
   )
 }

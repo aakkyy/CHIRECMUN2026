@@ -147,6 +147,7 @@ export default function FAQPage() {
       <div className={styles.ambientGlow} />
 
       <Navbar />
+      <HomeBeacon />
 
       {/* ── HERO ── */}
       <div className={styles.hero}>
@@ -200,7 +201,6 @@ export default function FAQPage() {
       </div>
 
       <BottomBar />
-      <HomeBeacon />
     </div>
   )
 }

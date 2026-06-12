@@ -131,6 +131,7 @@ export default function GuidelinesPage() {
       <div className={styles.scanH} />
 
       <Navbar />
+      <HomeBeacon />
 
       <div className={styles.hero}>
         <motion.p
@@ -217,7 +218,6 @@ export default function GuidelinesPage() {
       </div>
 
       <BottomBar />
-      <HomeBeacon />
     </div>
   )
 }
