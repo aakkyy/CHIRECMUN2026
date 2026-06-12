@@ -1,151 +1,133 @@
 /* ═══════════════════════════════════════
-   HOME BEACON — radar / sonar homing signal
+   HOME BEACON — top-right nav pill
    ═══════════════════════════════════════ */
 
 .beacon {
   position: fixed;
-  bottom: 2.2rem;
-  right: 2.2rem;
+  top: 5.4rem;
+  right: 1.6rem;
   z-index: 450;
 
-  /* size context for rings */
-  width: 52px;
-  height: 52px;
-
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 9px;
 
-  background: none;
-  border: none;
-  padding: 0;
+  padding: 0.42rem 0.95rem 0.42rem 0.52rem;
+  border-radius: 999px;
+
+  background: rgba(8, 3, 5, 0.78);
+  border: 1px solid rgba(192, 57, 43, 0.22);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 6px 24px rgba(0, 0, 0, 0.40),
+    0 0 0 1px rgba(0,0,0,0.30);
+
   cursor: pointer;
   outline: none;
+  border-style: solid;
 
-  /* label extends to the left — overflow allowed */
-  overflow: visible;
+  /* border pulse */
+  animation: borderPulse 3.2s ease-in-out infinite;
 }
 
-/* ── Pulsing sonar rings ── */
-.ring {
-  position: absolute;
-  inset: 0;
+@keyframes borderPulse {
+  0%, 100% { border-color: rgba(192, 57, 43, 0.22); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 6px 24px rgba(0,0,0,0.40), 0 0 0 1px rgba(0,0,0,0.30); }
+  50%       { border-color: rgba(192, 57, 43, 0.40); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 6px 24px rgba(0,0,0,0.40), 0 0 16px rgba(192,57,43,0.14), 0 0 0 1px rgba(0,0,0,0.30); }
+}
+
+/* ── Logo chip ── */
+.logoChip {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  border: 1.5px solid rgba(192, 57, 43, 0.55);
-  animation: radarPing 2.8s ease-out infinite;
-  pointer-events: none;
-}
-
-.ring1 { animation-delay: 0s;    }
-.ring2 { animation-delay: 0.9s;  }
-.ring3 { animation-delay: 1.8s;  }
-
-@keyframes radarPing {
-  0%   {
-    transform: scale(1);
-    opacity: 0.65;
-    border-color: rgba(231, 76, 60, 0.60);
-  }
-  70%  {
-    border-color: rgba(192, 57, 43, 0.12);
-  }
-  100% {
-    transform: scale(2.85);
-    opacity: 0;
-    border-color: rgba(192, 57, 43, 0);
-  }
-}
-
-/* ── Core circle ── */
-.core {
-  position: relative;
-  z-index: 2;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: rgba(8, 3, 5, 0.88);
-  border: 1.5px solid rgba(192, 57, 43, 0.30);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.07),
-    0 0 0 3px rgba(192, 57, 43, 0.08),
-    0 8px 28px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(192, 57, 43, 0.12);
+  border: 1px solid rgba(192, 57, 43, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background 0.25s ease;
+  flex-shrink: 0;
+  transition: background 0.22s, border-color 0.22s;
 }
 
-.coreHovered {
-  border-color: rgba(231, 76, 60, 0.58);
-  background: rgba(20, 6, 4, 0.92);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.10),
-    0 0 0 3px rgba(192, 57, 43, 0.15),
-    0 0 32px rgba(192, 57, 43, 0.28),
-    0 8px 28px rgba(0, 0, 0, 0.55);
+.beacon:hover .logoChip {
+  background: rgba(192, 57, 43, 0.22);
+  border-color: rgba(231, 76, 60, 0.38);
 }
 
 .logo {
-  width: 28px;
-  height: 28px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
   border-radius: 50%;
   display: block;
 }
 
-/* ── Hover label — slides in from the right, to the left of the beacon ── */
-.label {
-  position: absolute;
-  right: calc(100% + 14px);
-  top: 50%;
-  transform: translateY(-50%);
+/* ── Label ── */
+.labelGroup {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  pointer-events: none;
-  white-space: nowrap;
+  flex-direction: column;
+  gap: 1px;
 }
 
-.labelLine {
-  display: block;
-  width: 22px;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.70));
-  flex-shrink: 0;
-}
-
-.labelText {
+.labelTop {
   font-family: 'Geist', monospace, sans-serif;
-  font-size: 0.58rem;
-  font-weight: 800;
-  letter-spacing: 0.28em;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(192, 57, 43, 0.80);
-  text-shadow: 0 0 12px rgba(192, 57, 43, 0.40);
+  color: rgba(192, 57, 43, 0.65);
+  line-height: 1;
 }
 
-/* ── Warp click state ── */
-.beaconWarp .core {
-  animation: warpOut 0.32s ease-in forwards;
+.labelMain {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 239, 0.75);
+  line-height: 1;
+  transition: color 0.18s;
 }
-.beaconWarp .ring {
-  animation: none;
-  opacity: 0;
+
+.beacon:hover .labelMain {
+  color: rgba(244, 244, 239, 0.96);
+}
+
+/* ── Arrow icon ── */
+.arrow {
+  color: rgba(192, 57, 43, 0.55);
+  transition: color 0.18s, transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 1px;
+}
+
+.beacon:hover .arrow {
+  color: rgba(231, 76, 60, 0.85);
+  transform: translateX(-2px);
+}
+
+/* ── Warp-out on click ── */
+.beaconWarp {
+  animation: warpOut 0.30s ease-in forwards;
 }
 
 @keyframes warpOut {
   0%   { transform: scale(1);    opacity: 1; }
-  60%  { transform: scale(1.35); opacity: 0.8; box-shadow: 0 0 60px rgba(231,76,60,0.60); }
-  100% { transform: scale(0);    opacity: 0; }
+  60%  { transform: scale(1.06); opacity: 0.85; }
+  100% { transform: scale(0.85); opacity: 0; }
 }
 
-/* ── Hide on very small screens ── */
-@media (max-width: 480px) {
-  .beacon { bottom: 1.2rem; right: 1.2rem; }
-  .label  { display: none; }
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .beacon {
+    top: 4.8rem;
+    right: 1rem;
+    padding: 0.38rem 0.75rem 0.38rem 0.44rem;
+    gap: 7px;
+  }
+  .labelTop { display: none; }
+  .labelMain { font-size: 0.64rem; }
 }

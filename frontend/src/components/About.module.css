@@ -30,16 +30,8 @@
   color: var(--red);
 }
 
-/* growing red accent line under the eyebrow */
 .eyebrowLine {
-  display: block;
-  height: 2px;
-  width: 56px;
-  border-radius: 1px;
-  background: linear-gradient(to right, #e74c3c, rgba(192,57,43,0.15));
-  box-shadow: 0 0 12px rgba(231,76,60,0.55);
-  transform-origin: left center;
-  will-change: transform;
+  display: none;
 }
 
 .title {

@@ -156,7 +156,7 @@
 .divider {
   width: 56px;
   height: 2px;
-  background: linear-gradient(to right, rgba(192,57,43,0.6), rgba(231,76,60,0.9), rgba(192,57,43,0.6));
+  background: rgba(255,255,255,0.10);
   border-radius: 2px;
   margin: 1.8rem auto 0;
   transform-origin: center;

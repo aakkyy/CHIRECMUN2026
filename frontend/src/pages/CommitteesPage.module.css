@@ -67,7 +67,7 @@
 
 .heroDivider {
   width: 72px; height: 2px;
-  background: linear-gradient(to right, transparent, rgba(231,76,60,0.75), transparent);
+  background: rgba(255,255,255,0.10);
   margin: 0 auto; transform-origin: center;
 }
 
