@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import styles from './FAQPage.module.css'
 import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
@@ -46,33 +46,93 @@ const faqs = [
   },
 ]
 
-/* Zero framer-motion in FAQItem — pure CSS for every interaction */
-function FAQItem({ faq, isOpen, onToggle, index }) {
-  return (
-    <div
-      className={`${styles.item} ${isOpen ? styles.itemOpen : ''}`}
-      style={{ animationDelay: `${index * 0.055}s` }}
-    >
-      <button className={styles.question} onClick={onToggle} aria-expanded={isOpen}>
-        <span className={styles.qText}>{faq.q}</span>
-        <div className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ''}`}>
-          <span className={styles.hBar} />
-          <span className={styles.vBar} />
-        </div>
-      </button>
+interface FAQItemProps {
+  faq: { q: string; a: string; soon?: boolean }
+  index: number
+  isOpen: boolean
+  onToggle: () => void
+}
 
-      {/* grid-template-rows trick — no layout reflow, compositor-only */}
-      <div className={`${styles.answerWrap} ${isOpen ? styles.answerWrapOpen : ''}`}>
-        <div className={styles.answerInner}>
-          <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
-        </div>
-      </div>
-    </div>
+function FAQItem({ faq, index, isOpen, onToggle }: FAQItemProps) {
+  const num = String(index + 1).padStart(2, '0')
+
+  return (
+    <motion.div
+      className={`${styles.item} ${isOpen ? styles.itemOpen : ''}`}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ type: 'spring', stiffness: 80, damping: 18, delay: 0.18 + index * 0.07 }}
+    >
+      <motion.button
+        className={styles.row}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        whileHover={{ x: 5 }}
+        transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+      >
+        {/* Index number */}
+        <motion.span
+          className={styles.num}
+          animate={{ opacity: isOpen ? 1 : 0.08 }}
+          transition={{ duration: 0.28 }}
+        >
+          {num}
+        </motion.span>
+
+        {/* Question */}
+        <span className={styles.qText}>{faq.q}</span>
+
+        {/* Chevron */}
+        <motion.div
+          className={styles.chevronWrap}
+          animate={{ rotate: isOpen ? 90 : 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+        >
+          <svg
+            width="20" height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </motion.div>
+      </motion.button>
+
+      {/* Answer */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              height: { type: 'spring', stiffness: 200, damping: 30 },
+              opacity: { duration: 0.22 },
+            }}
+            style={{ overflow: 'hidden' }}
+          >
+            <motion.div
+              className={styles.answerInner}
+              initial={{ y: -10 }}
+              animate={{ y: 0 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 28, delay: 0.05 }}
+            >
+              <p className={`${styles.aText} ${faq.soon ? styles.soon : ''}`}>{faq.a}</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   )
 }
 
 export default function FAQPage() {
-  const [open, setOpen] = useState(null)
+  const [open, setOpen] = useState<number | null>(null)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
@@ -80,7 +140,6 @@ export default function FAQPage() {
     <div className={styles.page}>
       <AuraBg variant="bands" />
 
-      {/* Supplementary CSS light effects layered over the canvas */}
       <div className={`${styles.lightRay} ${styles.ray1}`} />
       <div className={`${styles.lightRay} ${styles.ray2}`} />
       <div className={`${styles.lightRay} ${styles.ray3}`} />
@@ -88,34 +147,45 @@ export default function FAQPage() {
 
       <Navbar />
 
-      {/* Hero text */}
+      {/* ── HERO ── */}
       <div className={styles.hero}>
-        <motion.p className={styles.eyebrow}
-          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22,1,0.36,1] }}
-        >Got Questions?</motion.p>
+        <motion.span
+          className={styles.eyebrow}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
+          Got Questions?
+        </motion.span>
 
-        <h1 className={styles.title}>
-          {['Frequently', 'Asked', 'Questions'].map((word, i) => (
-            <motion.span
-              key={word}
-              className={styles.titleWord}
-              initial={{ opacity: 0, y: 52, rotateX: -22 }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ type: 'spring', stiffness: 88, damping: 16, delay: 0.1 + i * 0.13 }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+        <div className={styles.titleWrap}>
+          <span className={styles.titleBg} aria-hidden>FAQ</span>
+          <h1 className={styles.title}>
+            {['Frequently', 'Asked', 'Questions'].map((word, i) => (
+              <motion.span
+                key={word}
+                className={styles.titleWord}
+                initial={{ opacity: 0, y: 52, rotateX: -22 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{ type: 'spring', stiffness: 88, damping: 16, delay: 0.1 + i * 0.13 }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h1>
+        </div>
 
-        <motion.p className={styles.sub}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        <motion.p
+          className={styles.sub}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.52, duration: 0.6 }}
-        >Everything you need to know about CHIREC MUN 2026.</motion.p>
+        >
+          Everything you need to know about CHIREC MUN 2026.
+        </motion.p>
       </div>
 
-      {/* FAQ list */}
+      {/* ── FAQ LIST ── */}
       <div className={styles.list}>
         {faqs.map((faq, i) => (
           <FAQItem

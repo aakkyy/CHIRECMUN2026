@@ -6,11 +6,7 @@
   overflow-x: hidden;
 }
 
-.overlay {
-  display: none;
-}
-
-/* ── Vertical light rays — slow pendulum sway over the canvas ── */
+/* ── LIGHT RAYS ── */
 .lightRay {
   position: fixed;
   pointer-events: none;
@@ -27,24 +23,11 @@
   50%       { transform: rotate(8deg); }
 }
 
-.ray1 {
-  left: 15%; top: 0; height: 50vh;
-  animation: swayRay 14s ease-in-out infinite;
-}
+.ray1 { left: 15%; top: 0; height: 50vh; animation: swayRay 14s ease-in-out infinite; }
+.ray2 { left: 50%; top: 0; height: 70vh; animation: swayRay 18s ease-in-out infinite; animation-delay: -7s; }
+.ray3 { left: 82%; top: 0; height: 45vh; animation: swayRay 12s ease-in-out infinite; animation-delay: -3s; }
 
-.ray2 {
-  left: 50%; top: 0; height: 70vh;
-  animation: swayRay 18s ease-in-out infinite;
-  animation-delay: -7s;
-}
-
-.ray3 {
-  left: 82%; top: 0; height: 45vh;
-  animation: swayRay 12s ease-in-out infinite;
-  animation-delay: -3s;
-}
-
-/* ── Ambient top glow — slow pulse ── */
+/* ── AMBIENT GLOW ── */
 .ambientGlow {
   position: fixed;
   inset: 0;
@@ -59,33 +42,59 @@
   100% { opacity: 1.0; }
 }
 
-/* ── HERO TEXT ── */
+/* ── HERO ── */
 .hero {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 12rem 2rem 4rem;
+  padding: 12rem 2rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .eyebrow {
   font-family: 'Geist', sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: #e74c3c;
-  margin-bottom: 0.75rem;
+  color: rgba(231,76,60,0.75);
+}
+
+/* Title container: the big "FAQ" watermark + actual heading */
+.titleWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleBg {
+  position: absolute;
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(7rem, 22vw, 16rem);
+  font-weight: 900;
+  color: rgba(192,57,43,0.055);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .title {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
   font-weight: 900;
-  color: #f4f4ef;
-  line-height: 1.18;
-  margin-bottom: 1rem;
+  color: rgba(244,244,239,0.94);
+  line-height: 1.12;
+  margin: 0;
   perspective: 700px;
   cursor: default;
+  position: relative;
+  z-index: 1;
 }
 
 .titleWord {
@@ -97,133 +106,146 @@
 
 .sub {
   font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  color: rgba(231,76,60,0.55);
+  font-size: 0.92rem;
+  color: rgba(231,76,60,0.45);
   letter-spacing: 0.04em;
+  margin-top: 0.4rem;
 }
 
 /* ── FAQ LIST ── */
 .list {
   position: relative;
   z-index: 1;
-  max-width: 780px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2rem 2rem 6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+  padding: 0 2rem 8rem;
+  /* top hairline above first item */
+  border-top: 1px solid rgba(192,57,43,0.10);
 }
 
-/* ── EACH ITEM — CSS entry animation, no framer-motion ── */
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateX(-14px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
+/* ── ITEM ── */
 .item {
-  background: linear-gradient(135deg,
-    rgba(18,4,8,0.82) 0%,
-    rgba(10,2,18,0.78) 100%
-  );
-  border: 1px solid rgba(192,57,43,0.14);
-  border-radius: 6px 20px 20px 6px;
-  overflow: hidden;
-  box-shadow:
-    inset 4px 0 0 rgba(192,57,43,0.40),
-    inset 0 1px 0 rgba(255,255,255,0.03);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  animation: fadeSlideIn 0.38s ease both;
+  position: relative;
+  border-bottom: 1px solid rgba(192,57,43,0.10);
+  transition: background 0.28s ease;
+}
+
+/* Left glow bar */
+.item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: rgba(231,76,60,0);
+  transition: background 0.28s ease;
+  border-radius: 0 2px 2px 0;
 }
 
 .itemOpen {
-  border-color: rgba(231,76,60,0.22);
-  box-shadow:
-    inset 4px 0 0 rgba(231,76,60,0.65),
-    inset 0 1px 0 rgba(255,255,255,0.03);
+  background: rgba(192,57,43,0.03);
+}
+.itemOpen::before {
+  background: rgba(231,76,60,0.72);
 }
 
-/* ── QUESTION ROW ── */
-.question {
+/* ── ROW (the clickable button) ── */
+.row {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.2rem 1.6rem 1.2rem 2rem;
+  gap: 0;
+  padding: 0;
+  padding-right: 2rem;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
 }
 
-.qText {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #e74c3c;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  flex: 1;
+/* ── INDEX NUMBER ── */
+.num {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-weight: 900;
+  color: rgba(231,76,60,1);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 6.5rem;
+  text-align: center;
+  letter-spacing: -0.03em;
+  padding: 1.6rem 0;
+  /* opacity animated by framer-motion */
 }
 
-/* ── +/× TOGGLE — pure CSS rotation ── */
-.toggle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(192,57,43,0.42);
+/* ── QUESTION TEXT ── */
+.qText {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(0.98rem, 2vw, 1.18rem);
+  font-weight: 700;
+  color: rgba(244,244,239,0.78);
+  letter-spacing: 0.01em;
+  line-height: 1.38;
+  flex: 1;
+  padding: 1.8rem 0;
+  transition: color 0.22s ease;
+}
+.itemOpen .qText {
+  color: rgba(244,244,239,0.96);
+}
+
+/* ── CHEVRON ── */
+.chevronWrap {
+  color: rgba(192,57,43,0.40);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  flex-shrink: 0;
-  transition: transform 0.22s ease, background 0.2s, border-color 0.2s;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-left: 1.5rem;
+  transition: color 0.22s ease;
+}
+.itemOpen .chevronWrap {
+  color: rgba(231,76,60,0.90);
 }
 
-.toggleOpen {
-  transform: rotate(45deg);
-  background: rgba(192,57,43,0.15);
-  border-color: rgba(231,76,60,0.55);
-}
-
-.hBar,
-.vBar {
-  position: absolute;
-  width: 10px;
-  height: 1.5px;
-  background: rgba(231,76,60,0.85);
-  border-radius: 2px;
-  display: block;
-}
-
-.vBar { transform: rotate(90deg); }
-
-/* ── ANSWER — grid-template-rows trick, zero layout reflow ── */
-.answerWrap {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.28s ease;
-}
-
-.answerWrapOpen {
-  grid-template-rows: 1fr;
-}
-
+/* ── ANSWER ── */
 .answerInner {
-  overflow: hidden;
-  min-height: 0;
+  /* indent to align with question text (num width) */
+  padding: 0 3rem 1.8rem 6.5rem;
 }
 
 .aText {
   font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(231,76,60,0.72);
-  line-height: 1.85;
-  padding: 0 1.8rem 1.3rem 2rem;
+  font-size: 0.92rem;
+  color: rgba(244,244,239,0.40);
+  line-height: 1.92;
+  margin: 0;
+  border-left: 1.5px solid rgba(192,57,43,0.20);
+  padding-left: 1.4rem;
 }
 
 .soon {
-  color: rgba(231,76,60,0.38);
+  color: rgba(231,76,60,0.32);
   font-style: italic;
   letter-spacing: 0.04em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .hero { padding: 9rem 1.5rem 3.5rem; }
+  .list { padding: 0 1rem 6rem; }
+
+  .num {
+    width: 4.5rem;
+    font-size: 2.2rem;
+    padding: 1.4rem 0;
+  }
+  .qText {
+    font-size: 0.94rem;
+    padding: 1.5rem 0;
+  }
+  .row { padding-right: 1rem; }
+  .chevronWrap { margin-left: 0.8rem; }
+  .answerInner { padding: 0 1rem 1.4rem 4.5rem; }
 }

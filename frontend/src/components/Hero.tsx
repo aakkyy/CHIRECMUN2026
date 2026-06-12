@@ -1,206 +1,150 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import styles from './Hero.module.css'
 import logoImg from '../assets/logo.png'
 import BlobButton from './BlobButton'
 import CinematicAtmosphere from './CinematicAtmosphere'
 
 const CHIREC_LETTERS = [
-  { char: 'C', color: '#e74c3c', glow: 'rgba(231,76,60,0.85)'   },  // red
-  { char: 'H', color: '#22c55e', glow: 'rgba(34,197,94,0.85)'   },  // green
-  { char: 'I', color: '#1d4ed8', glow: 'rgba(29,78,216,0.85)'   },  // dark blue
-  { char: 'R', color: '#e74c3c', glow: 'rgba(231,76,60,0.85)'   },  // red
-  { char: 'E', color: '#22c55e', glow: 'rgba(34,197,94,0.85)'   },  // green
-  { char: 'C', color: '#1e3a8a', glow: 'rgba(30,58,138,0.85)'   },  // dark blue
+  { char: 'C', color: '#e74c3c', glow: 'rgba(231,76,60,0.95)' },
+  { char: 'H', color: '#22c55e', glow: 'rgba(34,197,94,0.95)'  },
+  { char: 'I', color: '#1d4ed8', glow: 'rgba(29,78,216,0.95)'  },
+  { char: 'R', color: '#e74c3c', glow: 'rgba(231,76,60,0.95)'  },
+  { char: 'E', color: '#22c55e', glow: 'rgba(34,197,94,0.95)'  },
+  { char: 'C', color: '#1e3a8a', glow: 'rgba(30,58,138,0.95)'  },
 ]
 
-/* letters crash into position — heavy spring, slight overshoot */
-const letterVariant = {
-  hidden:  { opacity: 0, y: -140, scale: 1.35, rotate: -8 },
-  visible: {
-    opacity: 1, y: 0, scale: 1, rotate: 0,
-    transition: { type: 'spring', stiffness: 240, damping: 17, mass: 1.1 },
-  },
-}
-
-const fadeUp = {
-  hidden:  { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 88, damping: 22 } },
-}
+const fadeUp = (delay = 0) => ({
+  hidden:  { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0,  transition: { type: 'spring', stiffness: 80, damping: 20, delay } },
+})
 
 export default function Hero() {
-  const canvasRef = useRef(null)
-  const heroRef   = useRef(null)
-  const [clicked, setClicked] = useState({})
-  const chirecRowRef = useRef(null)
-  const toggleLetter = (i) => setClicked(prev => ({ ...prev, [i]: !prev[i] }))
+  const canvasRef    = useRef<HTMLCanvasElement>(null)
+  const heroRef      = useRef<HTMLDivElement>(null)
+  const chirecRowRef = useRef<HTMLDivElement>(null)
+  const mouse        = useRef({ x: 0, y: 0 })
+
+  const [clicked,   setClicked]   = useState<Record<number, boolean>>({})
+  const [hoverLeft, setHoverLeft] = useState(false)
+  const [ready,     setReady]     = useState(false)
+
+  const toggleLetter = (i: number) => setClicked(prev => ({ ...prev, [i]: !prev[i] }))
 
   useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (chirecRowRef.current && !chirecRowRef.current.contains(e.target)) {
-        setClicked({})
-      }
+    const h = (e: MouseEvent) => {
+      if (chirecRowRef.current && !chirecRowRef.current.contains(e.target as Node)) setClicked({})
     }
-    document.addEventListener('mousedown', handleOutsideClick)
-    return () => document.removeEventListener('mousedown', handleOutsideClick)
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
   }, [])
 
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
-  const contentOp  = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-  const hintOp     = useTransform(scrollYProgress, [0, 0.15], [1, 0])
-
+  /* atmospheric canvas */
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    let W = window.innerWidth, H = window.innerHeight, t = 0, raf = null
-    let lastTime = 0
-    const FPS = 30, INTERVAL = 1000 / FPS
+    const ctx = canvas.getContext('2d')!
+    let W = 0, H = 0, t = 0, raf = 0, lastTime = 0
+    const INTERVAL = 1000 / 30
 
-    function resize() {
-      W = canvas.width  = window.innerWidth
-      H = canvas.height = window.innerHeight
-    }
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight }
 
-    // ── Mouse parallax tracking ───────────────────────────────
-    let mouseX = W / 2, mouseY = H / 2
-    const onMouse = (e) => { mouseX = e.clientX; mouseY = e.clientY }
+    const onMouse = (e: MouseEvent) => { mouse.current = { x: e.clientX, y: e.clientY } }
     window.addEventListener('mousemove', onMouse)
 
-    // ── Rising ember particles ────────────────────────────────
-    interface Particle { x:number; y:number; vy:number; vx:number; size:number; isBlue:boolean; alpha:number; phase:number }
-    const particles: Particle[] = Array.from({ length: 55 }, () => ({
-      x: Math.random() * W, y: Math.random() * H,
-      vy: -(0.18 + Math.random() * 0.38),
-      vx: (Math.random() - 0.5) * 0.14,
-      size: 0.5 + Math.random() * 1.3,
-      isBlue: Math.random() < 0.32,
-      alpha: 0.35 + Math.random() * 0.50,
-      phase: Math.random() * Math.PI * 2,
+    const bgPts = Array.from({ length: 48 }, () => ({
+      x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+      vy: -(0.18 + Math.random() * 0.36), vx: (Math.random() - 0.5) * 0.12,
+      size: 0.5 + Math.random() * 1.2, isBlue: Math.random() < 0.30,
+      alpha: 0.32 + Math.random() * 0.46, phase: Math.random() * Math.PI * 2,
     }))
 
-    function draw(ts) {
+    function draw(ts: number) {
       if (ts - lastTime < INTERVAL) { raf = requestAnimationFrame(draw); return }
-      lastTime = ts
-      t = ts / 1000
+      lastTime = ts; t = ts / 1000
 
-      // 1. BASE
-      ctx.fillStyle = '#040002'
-      ctx.fillRect(0, 0, W, H)
+      ctx.fillStyle = '#040002'; ctx.fillRect(0, 0, W, H)
 
-      // 2. MOUSE PARALLAX OFFSET
-      const mOffX = (mouseX - W / 2) * 0.025
-      const mOffY = (mouseY - H / 2) * 0.018
+      const mx = mouse.current.x || W / 2, my = mouse.current.y || H / 2
+      const mOX = (mx - W / 2) * 0.022, mOY = (my - H / 2) * 0.015
 
-      // 3. THREE MASSIVE ATMOSPHERIC HALOS
       const HALOS = [
-        { x: W/2 + mOffX*0.8,    y: H*0.70 + mOffY*0.5,  r: Math.min(W,H)*0.88, cr:180, cg:22,  cb:14,  a:0.62, ph:0.0, spd:0.055 },
-        { x: W*0.10 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.42, ph:2.1, spd:0.042 },
-        { x: W*0.90 + mOffX*1.4, y: H*0.36 + mOffY*0.8,  r: Math.min(W,H)*0.60, cr:10,  cg:30,  cb:168, a:0.40, ph:4.8, spd:0.038 },
+        { x: W*0.38+mOX*0.8,  y: H*0.68+mOY*0.5, r: Math.min(W,H)*0.95, cr:180,cg:22,cb:14,  a:0.62, ph:0.0, spd:0.055 },
+        { x: W*0.08+mOX*1.3,  y: H*0.35+mOY*0.8, r: Math.min(W,H)*0.55, cr:10,cg:30,cb:168,  a:0.38, ph:2.1, spd:0.042 },
+        { x: W*0.72+mOX*0.6,  y: H*0.28+mOY*0.4, r: Math.min(W,H)*0.50, cr:10,cg:30,cb:168,  a:0.34, ph:4.8, spd:0.038 },
       ]
       for (const h of HALOS) {
         const pulse = 0.93 + 0.07 * Math.sin(t * h.spd + h.ph)
-        const cx = h.x + Math.sin(t * h.spd * 0.7 + h.ph) * W * 0.016
-        const cy = h.y + Math.cos(t * h.spd * 0.5 + h.ph + 1.3) * H * 0.011
-        const rr = h.r * pulse
-        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr)
+        const cx2   = h.x + Math.sin(t*h.spd*0.7+h.ph)*W*0.014
+        const cy2   = h.y + Math.cos(t*h.spd*0.5+h.ph+1.3)*H*0.010
+        const g = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, h.r * pulse)
         g.addColorStop(0,    `rgba(${h.cr},${h.cg},${h.cb},${h.a})`)
-        g.addColorStop(0.38, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.42).toFixed(3)})`)
-        g.addColorStop(0.72, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.10).toFixed(3)})`)
+        g.addColorStop(0.38, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.40).toFixed(3)})`)
+        g.addColorStop(0.72, `rgba(${h.cr},${h.cg},${h.cb},${(h.a*0.09).toFixed(3)})`)
         g.addColorStop(1,    `rgba(${h.cr},${h.cg},${h.cb},0)`)
-        ctx.fillStyle = g
-        ctx.fillRect(0, 0, W, H)
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
       }
 
-      // 4. PERSPECTIVE GRID — this is the centrepiece
-      const vpX = W / 2 + mOffX * 0.12
-      const vpY = H * 0.68
-      const gridPhase = (t * 0.13) % 1
-
+      /* perspective grid */
+      const vpX = W*0.36 + mOX*0.10, vpY = H*0.68, gPh = (t * 0.13) % 1
       ctx.save()
-
-      // Horizontal lines: perspective-spaced, continuously scrolling toward viewer
-      const N_H = 22
-      for (let i = 0; i < N_H; i++) {
-        const raw = ((i / N_H) + gridPhase) % 1
-        const gp  = Math.pow(raw, 0.62)            // perspective foreshortening
-        const y   = vpY + (H + 80 - vpY) * gp
-        if (y > H + 2 || y < vpY - 2) continue
-        const alpha = gp * 0.24 * (0.78 + 0.22 * Math.sin(t * 0.20 + i * 0.4))
-        ctx.beginPath()
-        ctx.moveTo(0, y)
-        ctx.lineTo(W, y)
+      for (let i = 0; i < 20; i++) {
+        const raw = ((i / 20) + gPh) % 1, gp = Math.pow(raw, 0.62)
+        const y2 = vpY + (H + 80 - vpY) * gp
+        if (y2 > H + 2 || y2 < vpY - 2) continue
+        const alpha = gp * 0.20 * (0.78 + 0.22 * Math.sin(t*0.20+i*0.4))
+        ctx.beginPath(); ctx.moveTo(0,y2); ctx.lineTo(W,y2)
         ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(4)})`
-        ctx.lineWidth = 0.3 + gp * 1.6
-        ctx.stroke()
+        ctx.lineWidth = 0.3 + gp * 1.4; ctx.stroke()
       }
-
-      // Vertical lines radiating from VP
-      const N_V = 38
-      for (let i = 0; i <= N_V; i++) {
-        const xBottom = (i / N_V) * W * 1.65 - W * 0.325
-        const centerFrac = 1 - Math.abs(i / N_V - 0.5) * 2
-        const alpha = centerFrac * 0.14 * (0.72 + 0.28 * Math.sin(t * 0.16 + i * 0.25))
+      for (let i = 0; i <= 32; i++) {
+        const xB = (i/32)*W*1.5 - W*0.25
+        const cF = 1 - Math.abs(i/32-0.5)*2
+        const alpha = cF * 0.11 * (0.72 + 0.28 * Math.sin(t*0.16+i*0.25))
         if (alpha < 0.004) continue
-        ctx.beginPath()
-        ctx.moveTo(vpX, vpY)
-        ctx.lineTo(xBottom, H + 40)
+        ctx.beginPath(); ctx.moveTo(vpX, vpY); ctx.lineTo(xB, H+40)
         ctx.strokeStyle = `rgba(192,57,43,${alpha.toFixed(4)})`
-        ctx.lineWidth = 0.5
-        ctx.stroke()
+        ctx.lineWidth = 0.5; ctx.stroke()
       }
-
       ctx.restore()
 
-      // 5. RISING PARTICLES WITH TRAILS
-      for (const p of particles) {
-        p.y += p.vy
-        p.x += p.vx + Math.sin(t * 0.28 + p.phase) * 0.09
-        if (p.y < -12) { p.y = H + 12; p.x = Math.random() * W; p.phase = Math.random() * Math.PI * 2 }
-
-        const edgeFade = Math.min(1, (H - p.y) / (H * 0.22), Math.max(0, p.y / (H * 0.08)))
-        const a = p.alpha * edgeFade * (0.68 + 0.32 * Math.sin(t * 0.48 + p.phase))
+      /* atmosphere particles */
+      for (const p of bgPts) {
+        p.y += p.vy; p.x += p.vx + Math.sin(t*0.28+p.phase)*0.08
+        if (p.y < -12) { p.y = H+12; p.x = Math.random()*W; p.phase = Math.random()*Math.PI*2 }
+        const eF = Math.min(1, (H-p.y)/(H*0.22), Math.max(0,p.y/(H*0.08)))
+        const a  = p.alpha * eF * (0.68 + 0.32*Math.sin(t*0.48+p.phase))
         if (a < 0.018) continue
-
         const cr = p.isBlue ? '56,160,242' : '231,76,60'
         for (let k = 1; k <= 3; k++) {
-          ctx.beginPath()
-          ctx.arc(p.x, p.y + k * 2.8, p.size * 0.65, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(${cr},${(a * 0.26 / k).toFixed(3)})`
-          ctx.fill()
+          ctx.beginPath(); ctx.arc(p.x, p.y+k*2.6, p.size*0.62, 0, Math.PI*2)
+          ctx.fillStyle = `rgba(${cr},${(a*0.24/k).toFixed(3)})`; ctx.fill()
         }
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${cr},${a.toFixed(3)})`
-        ctx.fill()
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2)
+        ctx.fillStyle = `rgba(${cr},${a.toFixed(3)})`; ctx.fill()
       }
 
-      // 6. VIGNETTE — protect text legibility
-      const vT = ctx.createLinearGradient(0, 0, 0, H * 0.34)
-      vT.addColorStop(0, 'rgba(4,0,2,0.82)'); vT.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vT; ctx.fillRect(0, 0, W, H * 0.34)
-
-      const vB = ctx.createLinearGradient(0, H, 0, H * 0.65)
-      vB.addColorStop(0, 'rgba(4,0,2,0.78)'); vB.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vB; ctx.fillRect(0, H * 0.65, W, H * 0.35)
-
-      const vL = ctx.createLinearGradient(0, 0, W * 0.16, 0)
-      vL.addColorStop(0, 'rgba(4,0,2,0.70)'); vL.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vL; ctx.fillRect(0, 0, W * 0.16, H)
-
-      const vR = ctx.createLinearGradient(W, 0, W * 0.84, 0)
-      vR.addColorStop(0, 'rgba(4,0,2,0.70)'); vR.addColorStop(1, 'rgba(4,0,2,0)')
-      ctx.fillStyle = vR; ctx.fillRect(W * 0.84, 0, W * 0.16, H)
+      /* vignettes */
+      const vT = ctx.createLinearGradient(0,0,0,H*0.30)
+      vT.addColorStop(0,'rgba(4,0,2,0.88)'); vT.addColorStop(1,'rgba(4,0,2,0)')
+      ctx.fillStyle = vT; ctx.fillRect(0,0,W,H*0.30)
+      const vB = ctx.createLinearGradient(0,H,0,H*0.65)
+      vB.addColorStop(0,'rgba(4,0,2,0.82)'); vB.addColorStop(1,'rgba(4,0,2,0)')
+      ctx.fillStyle = vB; ctx.fillRect(0,H*0.65,W,H*0.35)
+      const vL = ctx.createLinearGradient(0,0,W*0.08,0)
+      vL.addColorStop(0,'rgba(4,0,2,0.90)'); vL.addColorStop(1,'rgba(4,0,2,0)')
+      ctx.fillStyle = vL; ctx.fillRect(0,0,W*0.08,H)
 
       raf = requestAnimationFrame(draw)
     }
-    window.addEventListener('resize',resize)
+
+    window.addEventListener('resize', resize)
     resize()
     raf = requestAnimationFrame(draw)
+    setTimeout(() => setReady(true), 120)
     return () => {
       if (raf) cancelAnimationFrame(raf)
-      window.removeEventListener('resize',resize)
+      window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMouse)
     }
   }, [])
@@ -209,98 +153,133 @@ export default function Hero() {
     <section ref={heroRef} className={styles.hero} id="hero">
       <canvas ref={canvasRef} className={styles.canvas} />
       <CinematicAtmosphere />
-      <div className={styles.vignette} />
 
-      <motion.div
-        className={styles.content}
-        style={{ y: contentY, opacity: contentOp }}
-        initial="hidden"
-        animate="visible"
-        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.25 } } }}
+      {/* ── LEFT PANEL — CHIREC ── */}
+      <div
+        className={styles.leftPanel}
+        style={{ flex: hoverLeft ? 1.85 : 1.45 }}
+        onMouseEnter={() => setHoverLeft(true)}
+        onMouseLeave={() => setHoverLeft(false)}
       >
-        {/* Logo — opacity only so CSS float is unaffected */}
-        <motion.div variants={{ hidden: { opacity: 0, scale: 0.7 }, visible: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 80, damping: 18 } } }}>
-          <div className={styles.logoWrap}>
-            <img src={logoImg} alt="CHIREC MUN Logo" className={styles.logoImg} />
-          </div>
+        {/* Red atmospheric glow behind the letters */}
+        <div className={styles.leftGlow} />
+
+        {/* CHIREC — interactive, right-aligned so it bleeds off the left edge */}
+        <motion.div
+          ref={chirecRowRef}
+          className={styles.chirecRow}
+          initial="hidden"
+          animate={ready ? 'visible' : 'hidden'}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
+        >
+          {CHIREC_LETTERS.map((l, i) => (
+            <motion.span
+              key={i}
+              className={styles.chirec}
+              variants={{
+                hidden:  { opacity: 0, x: 60, skewX: 10 },
+                visible: { opacity: 1, x: 0,  skewX: 0, transition: { type: 'spring', stiffness: 200, damping: 22 } },
+              }}
+              style={{
+                color:      clicked[i] ? l.color : 'rgba(244,244,239,0.95)',
+                textShadow: clicked[i]
+                  ? `0 0 100px ${l.glow}, 0 0 40px ${l.glow}`
+                  : '0 0 60px rgba(192,57,43,0.22)',
+                transition: 'color 0.24s ease, text-shadow 0.24s ease',
+                cursor: 'pointer',
+              }}
+              whileHover={{
+                color:      l.color,
+                textShadow: `0 0 80px ${l.glow}, 0 0 28px ${l.glow}`,
+                y: -10, scale: 1.06,
+                transition: { type: 'spring', stiffness: 380, damping: 18 },
+              }}
+              whileTap={{ scale: 0.94 }}
+              onClick={() => toggleLetter(i)}
+            >
+              {l.char}
+            </motion.span>
+          ))}
         </motion.div>
 
-        <motion.span className={styles.badge} variants={fadeUp}>
-          <span className={styles.badgeDot} aria-hidden="true" />
-          Edition XIV
-        </motion.span>
+        {/* Hover hint */}
+        <motion.div
+          className={styles.leftHint}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: hoverLeft ? 0 : 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <span className={styles.hintLine} />
+          <span className={styles.hintText}>hover to reveal</span>
+        </motion.div>
+      </div>
 
-        {/* CHIREC — letter by letter */}
-        <h1 className={styles.title}>
-          <motion.div
-            ref={chirecRowRef}
-            className={styles.chirecRow}
-            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
-          >
-            {CHIREC_LETTERS.map((l, i) => (
-              <motion.span
-                key={i}
-                className={styles.chirec}
-                variants={letterVariant}
-                style={{
-                  cursor: 'pointer',
-                  color: clicked[i] ? l.color : '#f4f4ef',
-                  textShadow: clicked[i]
-                    ? `0 0 65px ${l.glow}, 0 0 28px ${l.glow}`
-                    : 'none',
-                  transition: 'color 0.3s ease, text-shadow 0.3s ease',
-                }}
-                whileHover={{
-                  opacity: 1,
-                  color: l.color,
-                  textShadow: `0 0 50px ${l.glow}, 0 0 20px ${l.glow}`,
-                  y: -10,
-                  scale: 1.12,
-                  transition: { type: 'spring', stiffness: 400, damping: 18 },
-                }}
-                whileTap={{ opacity: 1, scale: 0.94 }}
-                onClick={() => toggleLetter(i)}
-                transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-              >{l.char}</motion.span>
-            ))}
+      {/* ── HAIRLINE DIVIDER ── */}
+      <motion.div
+        className={styles.hairline}
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+      />
+
+      {/* ── RIGHT PANEL — editorial ── */}
+      <div
+        className={styles.rightPanel}
+        style={{ flex: hoverLeft ? 0.65 : 1.0 }}
+      >
+        <motion.div
+          className={styles.rightInner}
+          initial="hidden"
+          animate={ready ? 'visible' : 'hidden'}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.35 } } }}
+        >
+          {/* Logo */}
+          <motion.img
+            src={logoImg}
+            alt="CHIREC MUN"
+            className={styles.logoImg}
+            variants={fadeUp(0)}
+          />
+
+          {/* Edition badge */}
+          <motion.span className={styles.badge} variants={fadeUp(0)}>
+            <span className={styles.badgeDot} />
+            Edition XIV
+          </motion.span>
+
+          {/* MUN + year */}
+          <motion.div className={styles.munBlock} variants={fadeUp(0)}>
+            <span className={styles.munWord}>MUN</span>
+            <span className={styles.munYear}>2026</span>
           </motion.div>
 
-          <motion.span className={styles.mun} variants={fadeUp}>
-            Model United Nations
+          <motion.div className={styles.rHair} variants={fadeUp(0)} />
+
+          {/* Meta */}
+          <motion.div className={styles.metaBlock} variants={fadeUp(0)}>
+            <span>Model United Nations</span>
+            <span>Serilingampally, Hyderabad</span>
+            <span>July 31 – August 2, 2026</span>
+          </motion.div>
+
+          <motion.div className={styles.rHair} variants={fadeUp(0)} />
+
+          {/* Tagline */}
+          <motion.span className={styles.slogan} variants={fadeUp(0)}>
+            Represent · Reason · Resolve
           </motion.span>
 
-          <motion.span className={styles.year} variants={fadeUp}>
-            2026
-          </motion.span>
-        </h1>
-
-        <motion.p className={styles.slogan} variants={fadeUp}>
-          Represent. Reason. Resolve.
-        </motion.p>
-
-        <motion.p className={styles.location} variants={fadeUp}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
-          </svg>
-          CHIREC International School, Serilingampalle · July 31 – Aug 2, 2026
-        </motion.p>
-
-        <motion.div className={styles.actions} variants={fadeUp}>
-          <BlobButton href="#register" className={styles.btnPrimary} variant="red">
-            Register as Delegate
-          </BlobButton>
-          <BlobButton href="#countdown" className={styles.btnGhost} variant="blue">
-            View Countdown
-          </BlobButton>
+          {/* CTAs */}
+          <motion.div className={styles.actions} variants={fadeUp(0)}>
+            <BlobButton href="#register" variant="red" className={styles.btnPrimary}>
+              Register as Delegate
+            </BlobButton>
+            <BlobButton href="/committees" variant="blue" className={styles.btnGhost}>
+              View Committees
+            </BlobButton>
+          </motion.div>
         </motion.div>
-      </motion.div>
-
-      <motion.div className={styles.scrollHint} style={{ opacity: hintOp }}>
-        <span className={styles.scrollLabel}>Scroll</span>
-        <div className={styles.scrollTrack}>
-          <div className={styles.scrollGlider} />
-        </div>
-      </motion.div>
+      </div>
     </section>
   )
 }

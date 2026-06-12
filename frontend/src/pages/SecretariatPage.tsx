@@ -129,6 +129,7 @@ function ProfileModal({
         </div>
 
         <span className={styles.modalRole}>{member.role}</span>
+        <div className={styles.modalDivider} />
         <p className={styles.modalDesc}>
           {member.description || 'Description coming soon.'}
         </p>
