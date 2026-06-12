@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import styles from './GuidelinesPage.module.css'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
+import HomeBeacon from '../components/HomeBeacon'
 
 const sections = [
   {
@@ -216,6 +217,7 @@ export default function GuidelinesPage() {
       </div>
 
       <BottomBar />
+      <HomeBeacon />
     </div>
   )
 }

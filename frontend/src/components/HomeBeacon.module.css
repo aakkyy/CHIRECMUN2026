@@ -1,0 +1,151 @@
+/* ═══════════════════════════════════════
+   HOME BEACON — radar / sonar homing signal
+   ═══════════════════════════════════════ */
+
+.beacon {
+  position: fixed;
+  bottom: 2.2rem;
+  right: 2.2rem;
+  z-index: 450;
+
+  /* size context for rings */
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+
+  /* label extends to the left — overflow allowed */
+  overflow: visible;
+}
+
+/* ── Pulsing sonar rings ── */
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(192, 57, 43, 0.55);
+  animation: radarPing 2.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.ring1 { animation-delay: 0s;    }
+.ring2 { animation-delay: 0.9s;  }
+.ring3 { animation-delay: 1.8s;  }
+
+@keyframes radarPing {
+  0%   {
+    transform: scale(1);
+    opacity: 0.65;
+    border-color: rgba(231, 76, 60, 0.60);
+  }
+  70%  {
+    border-color: rgba(192, 57, 43, 0.12);
+  }
+  100% {
+    transform: scale(2.85);
+    opacity: 0;
+    border-color: rgba(192, 57, 43, 0);
+  }
+}
+
+/* ── Core circle ── */
+.core {
+  position: relative;
+  z-index: 2;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(8, 3, 5, 0.88);
+  border: 1.5px solid rgba(192, 57, 43, 0.30);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    0 0 0 3px rgba(192, 57, 43, 0.08),
+    0 8px 28px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.coreHovered {
+  border-color: rgba(231, 76, 60, 0.58);
+  background: rgba(20, 6, 4, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 3px rgba(192, 57, 43, 0.15),
+    0 0 32px rgba(192, 57, 43, 0.28),
+    0 8px 28px rgba(0, 0, 0, 0.55);
+}
+
+.logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ── Hover label — slides in from the right, to the left of the beacon ── */
+.label {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.labelLine {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(192, 57, 43, 0.70));
+  flex-shrink: 0;
+}
+
+.labelText {
+  font-family: 'Geist', monospace, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(192, 57, 43, 0.80);
+  text-shadow: 0 0 12px rgba(192, 57, 43, 0.40);
+}
+
+/* ── Warp click state ── */
+.beaconWarp .core {
+  animation: warpOut 0.32s ease-in forwards;
+}
+.beaconWarp .ring {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes warpOut {
+  0%   { transform: scale(1);    opacity: 1; }
+  60%  { transform: scale(1.35); opacity: 0.8; box-shadow: 0 0 60px rgba(231,76,60,0.60); }
+  100% { transform: scale(0);    opacity: 0; }
+}
+
+/* ── Hide on very small screens ── */
+@media (max-width: 480px) {
+  .beacon { bottom: 1.2rem; right: 1.2rem; }
+  .label  { display: none; }
+}

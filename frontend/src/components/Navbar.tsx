@@ -29,11 +29,8 @@ export default function Navbar() {
   const menuRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
 
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    setScrolled(y > 24)
-  })
+  useMotionValueEvent(scrollY, 'change', (y) => { setScrolled(y > 24) })
 
-  // Close on outside click
   useEffect(() => {
     if (!menuOpen) return
     const handle = (e: MouseEvent) => {
@@ -45,7 +42,6 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handle)
   }, [menuOpen])
 
-  // Close on route change
   useEffect(() => { setMenuOpen(false) }, [location.pathname])
 
   const handleHomeClick = (e: React.MouseEvent) => {
@@ -64,7 +60,7 @@ export default function Navbar() {
 
       <div className={styles.inner}>
 
-        {/* LEFT */}
+        {/* ── LEFT — brand ── */}
         <div className={styles.brand}>
           <motion.button
             className={styles.logoBtnWrap}
@@ -82,42 +78,40 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* CENTER */}
-        <ul className={styles.linksPill} onMouseLeave={() => setHovered(null)}>
-          {links.map((l) => {
-            const isActive = location.pathname === l.to
-            return (
-              <li key={l.to} className={styles.linkItem}>
-                <Link
-                  to={l.to}
-                  className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
-                  onMouseEnter={() => setHovered(l.to)}
-                >
-                  {hovered === l.to && !isActive && (
-                    <motion.span
-                      layoutId="navHoverPill"
-                      className={styles.hoverPill}
-                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                    />
-                  )}
-                  {isActive && (
-                    <motion.span
-                      layoutId="navActivePill"
-                      className={styles.activePill}
-                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                    />
-                  )}
-                  <span className={styles.linkLabel}>{l.label}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+        {/* ── CENTER — links pill + standalone hamburger ── */}
+        <div className={styles.centerGroup}>
+          <ul className={styles.linksPill} onMouseLeave={() => setHovered(null)}>
+            {links.map((l) => {
+              const isActive = location.pathname === l.to
+              return (
+                <li key={l.to} className={styles.linkItem}>
+                  <Link
+                    to={l.to}
+                    className={`${styles.link} ${isActive ? styles.linkActive : ''}`}
+                    onMouseEnter={() => setHovered(l.to)}
+                  >
+                    {hovered === l.to && !isActive && (
+                      <motion.span
+                        layoutId="navHoverPill"
+                        className={styles.hoverPill}
+                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                      />
+                    )}
+                    {isActive && (
+                      <motion.span
+                        layoutId="navActivePill"
+                        className={styles.activePill}
+                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                      />
+                    )}
+                    <span className={styles.linkLabel}>{l.label}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
 
-        {/* RIGHT */}
-        <div className={styles.rightGroup}>
-
-          {/* Hamburger — Guidelines / FAQs / Mandatory Forms */}
+          {/* ── Standalone hamburger pill ── */}
           <div className={styles.menuWrap} ref={menuRef}>
             <motion.button
               className={`${styles.menuBtn} ${menuOpen ? styles.menuBtnOpen : ''}`}
@@ -126,18 +120,30 @@ export default function Navbar() {
               whileTap={{ scale: 0.88 }}
               transition={{ type: 'spring', stiffness: 400, damping: 22 }}
             >
-              <span className={styles.menuLine} />
-              <span className={styles.menuLine} />
-              <span className={styles.menuLine} />
+              <motion.span
+                className={styles.menuLine}
+                animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 24 }}
+              />
+              <motion.span
+                className={styles.menuLine}
+                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.span
+                className={styles.menuLine}
+                animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 24 }}
+              />
             </motion.button>
 
             <AnimatePresence>
               {menuOpen && (
                 <motion.div
                   className={styles.menuDropdown}
-                  initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
                   transition={{ type: 'spring', stiffness: 420, damping: 28 }}
                 >
                   {menuItems.map((item, i) => (
@@ -161,7 +167,10 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </div>
+        </div>
 
+        {/* ── RIGHT — register only ── */}
+        <div className={styles.rightGroup}>
           <BlobButton href="/#register" className={styles.cta} variant="red">
             Register Now
           </BlobButton>

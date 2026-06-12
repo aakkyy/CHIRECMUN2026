@@ -4,6 +4,7 @@ import styles from './FAQPage.module.css'
 import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
 import BottomBar from '../components/BottomBar'
+import HomeBeacon from '../components/HomeBeacon'
 
 const faqs = [
   {
@@ -199,6 +200,7 @@ export default function FAQPage() {
       </div>
 
       <BottomBar />
+      <HomeBeacon />
     </div>
   )
 }

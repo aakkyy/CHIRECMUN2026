@@ -114,6 +114,15 @@
   z-index: 1;
 }
 
+/* ── CENTER GROUP — links pill + standalone hamburger ── */
+.centerGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1;
+  justify-content: center;
+}
+
 /* ── CENTER LINKS PILL ── */
 .linksPill {
   display: flex;
@@ -190,19 +199,11 @@
   text-shadow: 0 0 14px rgba(231, 76, 60, 0.65);
 }
 
-/* ── RIGHT GROUP — its own floating pill container ── */
+/* ── RIGHT GROUP — Register Now only ── */
 .rightGroup {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
   flex-shrink: 0;
-  padding: 0.30rem 0.30rem;
-  background: rgba(12, 6, 8, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 999px;
-  backdrop-filter: blur(14px) saturate(1.3);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 28px rgba(0,0,0,0.38);
 }
 
 /* ── CTA ── */
@@ -249,9 +250,10 @@
   transition-duration: 0.08s;
 }
 
-/* ── HAMBURGER MENU ── */
+/* ── STANDALONE HAMBURGER — its own floating pill ── */
 .menuWrap {
   position: relative;
+  flex-shrink: 0;
 }
 
 .menuBtn {
@@ -260,23 +262,28 @@
   justify-content: center;
   align-items: center;
   gap: 4.5px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.09);
-  background: rgba(255,255,255,0.04);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(12, 6, 8, 0.52);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 22px rgba(0,0,0,0.35);
   cursor: pointer;
   padding: 0;
   outline: none;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .menuBtn:hover {
-  background: rgba(192,57,43,0.12);
-  border-color: rgba(231,76,60,0.28);
+  background: rgba(192,57,43,0.14);
+  border-color: rgba(231,76,60,0.30);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 6px 22px rgba(0,0,0,0.35), 0 0 18px rgba(192,57,43,0.15);
 }
 .menuBtnOpen {
-  background: rgba(192,57,43,0.16);
-  border-color: rgba(231,76,60,0.38);
+  background: rgba(192,57,43,0.18);
+  border-color: rgba(231,76,60,0.42);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 6px 22px rgba(0,0,0,0.35), 0 0 22px rgba(192,57,43,0.20);
 }
 
 .menuLine {
@@ -285,7 +292,7 @@
   height: 1.5px;
   background: rgba(244,244,239,0.72);
   border-radius: 2px;
-  transition: background 0.2s;
+  transform-origin: center;
 }
 .menuBtn:hover .menuLine,
 .menuBtnOpen .menuLine {
