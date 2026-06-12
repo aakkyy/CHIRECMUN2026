@@ -117,11 +117,12 @@
   will-change: transform;
 }
 
+/* flat tab-indicator tick between card and label — solid, no glow */
 .accent {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(192, 57, 43, 0.45);
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(192,57,43,0.5);
   margin: 0.85rem auto 0.6rem;
 }
 

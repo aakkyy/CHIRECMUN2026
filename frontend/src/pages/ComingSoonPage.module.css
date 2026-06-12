@@ -51,9 +51,10 @@
   margin: 0 0 2rem;
 }
 
+/* 1px hairline, fading at both ends — Huly/GitHub dark-mode separator pattern */
 .divider {
-  width: 80px;
-  height: 2px;
-  background: rgba(255,255,255,0.10);
+  width: 160px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(192,57,43,0.45) 50%, transparent);
   transform-origin: center;
 }

@@ -30,8 +30,11 @@
   color: var(--red);
 }
 
+/* Huly-style hairline: anchored solid at the start, fades out to the right */
 .eyebrowLine {
-  display: none;
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(192,57,43,0.55), transparent);
 }
 
 .title {
