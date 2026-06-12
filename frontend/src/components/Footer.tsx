@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './Footer.module.css'
 import logoImg from '../assets/logo.png'
 import BottomBar from './BottomBar'
@@ -15,6 +16,12 @@ const col2 = [
   { label: 'Instagram',  href: 'https://instagram.com/chirecmun', external: true },
   { label: 'Email Us',   href: 'mailto:contact.mun@chirec.ac.in', external: true },
   { label: 'Register',   href: '#register' },
+]
+
+const col3Pages = [
+  { label: 'FAQs',            to: '/faq'        },
+  { label: 'Guidelines',      to: '/guidelines' },
+  { label: 'Mandatory Forms', to: '/forms'      },
 ]
 
 export default function Footer() {
@@ -56,6 +63,15 @@ export default function Footer() {
                 {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
                 {l.label}
               </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* COL 3 — delegate pages */}
+        <ul className={styles.linkCol}>
+          {col3Pages.map(l => (
+            <li key={l.label}>
+              <Link to={l.to} className={styles.link}>{l.label}</Link>
             </li>
           ))}
         </ul>
