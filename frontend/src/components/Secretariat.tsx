@@ -2,13 +2,10 @@ import { motion } from 'framer-motion'
 import styles from './Secretariat.module.css'
 import { viewport, spring } from '../lib/motion'
 import BlobBg from './BlobBg'
-import devImg from '@assets/dev.jpg'
-import anushaImg from '@assets/anusha.jpg'
-
 const addresses = [
   {
     initials: 'DA', name: 'Dev Agarwal', role: 'Co-Secretary General',
-    photo: devImg,
+    photo: '/media/secretariat/co-sg-1.jpg',
     conf: 'CHIREC MUN 2026', greeting: 'Regards',
     body: [
       'Dear Delegates,',
@@ -22,7 +19,7 @@ const addresses = [
   },
   {
     initials: 'AA', name: 'Anusha Anchlia', role: 'Co-Secretary General',
-    photo: anushaImg,
+    photo: '/media/secretariat/co-sg-2.jpg',
     conf: 'CHIREC MUN 2026', greeting: 'Warm regards',
     body: [
       'Dear Delegates,',
