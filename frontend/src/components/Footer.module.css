@@ -9,44 +9,12 @@
   padding: 0;
 }
 
-/* ── Animated red glow at the very top edge ── */
-.topGlow {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 65%;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(192,57,43,0.25) 20%,
-    rgba(231,76,60,0.70) 50%,
-    rgba(192,57,43,0.25) 80%,
-    transparent 100%
-  );
-  animation: glowPulse 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.topGlow::after {
+/* ── Clean top border ── */
+.footer::before {
   content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: linear-gradient(
-    to bottom,
-    rgba(192,57,43,0.06) 0%,
-    transparent 100%
-  );
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.7; }
-  50%       { opacity: 1; }
+  display: block;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
 }
 
 /* ── Large faded watermark "XIV" ── */
@@ -220,22 +188,14 @@
 }
 
 .colHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   font-family: 'Geist', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.20em;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(244,244,239,0.90);
-}
-
-.colHeaderLine {
-  width: 24px;
-  height: 2px;
-  background: linear-gradient(to right, rgba(231,76,60,0.90), rgba(192,57,43,0.40));
-  border-radius: 2px;
+  color: rgba(244,244,239,0.50);
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .linkList {

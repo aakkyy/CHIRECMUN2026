@@ -53,9 +53,6 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
 
-      {/* ── Animated glow line at top ── */}
-      <div className={styles.topGlow} />
-
       {/* ── Large faded watermark ── */}
       <span className={styles.watermark} aria-hidden="true">XIV</span>
 
@@ -113,7 +110,6 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.colHeader}>
             <span>Navigate</span>
-            <div className={styles.colHeaderLine} />
           </div>
           <ul className={styles.linkList}>
             {navLinks.map(l => (
@@ -131,7 +127,6 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.colHeader}>
             <span>Delegate</span>
-            <div className={styles.colHeaderLine} />
           </div>
           <ul className={styles.linkList}>
             {delegateLinks.map(l => (
@@ -149,7 +144,6 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.colHeader}>
             <span>Contact</span>
-            <div className={styles.colHeaderLine} />
           </div>
           <div className={styles.contactList}>
             <a
@@ -188,7 +182,6 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.colHeader}>
             <span>Event Details</span>
-            <div className={styles.colHeaderLine} />
           </div>
 
           <div className={styles.eventCard}>
