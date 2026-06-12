@@ -90,7 +90,10 @@ export default function CommitteeDetailPage() {
   const committee = COMMITTEES.find(c => c.id === id)
 
   useEffect(() => {
+    // instant scroll — html{scroll-behavior:smooth} would make this animate visually
+    document.documentElement.style.scrollBehavior = 'auto'
     window.scrollTo(0, 0)
+    document.documentElement.style.scrollBehavior = ''
     if (!committee) navigate('/committees')
   }, [id, committee, navigate])
 

@@ -5,146 +5,137 @@ import styles from './CommitteeOrbit.module.css'
 import { COMMITTEES, TYPE_COLORS, TYPE_LABELS, type Committee } from '../data/committees'
 import { viewport } from '../lib/motion'
 
-// Three rings: inner = big UN bodies, middle = specialized, outer = crisis + press
-const INNER_IDS  = ['unsc', 'disec', 'unhrc']
-const MIDDLE_IDS = ['who', 'unctad', 'unodc', 'copuos', 'loksabha']
-const OUTER_IDS  = ['ec', 'jcc', 'sci', 'bcci', 'ip-r', 'ip-p']
+const INNER  = ['unsc', 'disec', 'unhrc']
+const MIDDLE = ['who', 'unctad', 'unodc', 'copuos', 'loksabha']
+const OUTER  = ['ec', 'jcc', 'sci', 'bcci', 'ip-r', 'ip-p']
 
 function byId(ids: string[]): Committee[] {
   return ids.map(id => COMMITTEES.find(c => c.id === id)!).filter(Boolean)
 }
 
-const INNER  = byId(INNER_IDS)
-const MIDDLE = byId(MIDDLE_IDS)
-const OUTER  = byId(OUTER_IDS)
-
-interface CommitteePillProps {
+interface PillProps {
   committee: Committee
-  radius: number
-  angle: number
-  duration: number
-  reverse: boolean
+  x: number
+  y: number
 }
 
-function CommitteePill({ committee, radius, angle, duration, reverse }: CommitteePillProps) {
+function CommitteePill({ committee, x, y }: PillProps) {
   const [hovered, setHovered] = useState(false)
   const navigate = useNavigate()
-  const delay = -(angle / 360) * duration
-  const armAnim  = `orbitCW ${duration}s linear ${delay}s infinite ${reverse ? 'reverse' : 'normal'}`
-  const termAnim = `orbitCCW ${duration}s linear ${delay}s infinite ${reverse ? 'reverse' : 'normal'}`
-
-  const typeColor = TYPE_COLORS[committee.type]
+  const tc = TYPE_COLORS[committee.type]
 
   return (
-    <div
-      className={styles.orbitArm}
-      style={{ animation: armAnim, animationPlayState: 'var(--play-state)' }}
-    >
-      <div
-        className={styles.pillWrap}
-        style={{
-          left: `${radius}px`,
-          animation: termAnim,
-          animationPlayState: 'var(--play-state)',
-        }}
-      >
-        {/* Tooltip */}
-        {hovered && (
-          <div className={styles.tooltip}>
-            <span className={styles.tooltipName}>{committee.name}</span>
-            <span
-              className={styles.tooltipCat}
-              style={{ color: `${typeColor}0.80)`.replace('(', '(') }}
-            >
-              {TYPE_LABELS[committee.type]}
-            </span>
-          </div>
-        )}
-
-        {/* Pill */}
-        <button
-          className={styles.pill}
-          style={{
-            borderColor: hovered
-              ? `${typeColor}0.55)`
-              : `${typeColor}0.18)`,
-            color: hovered
-              ? `${typeColor}0.95)`
-              : `${typeColor}0.45)`,
-            background: hovered
-              ? `${typeColor}0.08)`
-              : 'transparent',
-            boxShadow: hovered
-              ? `0 0 18px ${typeColor}0.15), inset 0 1px 0 rgba(255,255,255,0.06)`
-              : 'none',
-          }}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onClick={() => navigate(`/committees/${committee.id}`)}
-          aria-label={`View ${committee.name}`}
-        >
-          {committee.abbr}
-        </button>
+    /*
+     * THREE separate layers — this is critical for the animation to work:
+     *
+     * 1. POSITIONER  — absolute position at (x,y), no transform
+     * 2. CENTERER    — translate(-50%,-50%) to center pill on the point
+     * 3. COUNTER-SPIN — the CSS animation that counter-rotates
+     *
+     * Mixing translate + animation on the same element breaks the rotation.
+     */
+    <div className={styles.positioner} style={{ left: x, top: y }}>
+      <div className={styles.centerer}>
+        <div className={styles.counterSpin}>
+          {hovered && (
+            <div className={styles.tooltip}>
+              <span className={styles.tooltipName}>{committee.name}</span>
+              <span className={styles.tooltipCat} style={{ color: `${tc}0.82)` }}>
+                {TYPE_LABELS[committee.type]}
+              </span>
+            </div>
+          )}
+          <button
+            className={styles.pill}
+            style={{
+              borderColor: hovered ? `${tc}0.60)` : `${tc}0.22)`,
+              color:       hovered ? `${tc}0.96)` : `${tc}0.52)`,
+              background:  hovered ? `${tc}0.10)` : `${tc}0.03)`,
+              boxShadow:   hovered ? `0 0 18px ${tc}0.18), inset 0 1px 0 rgba(255,255,255,0.06)` : 'none',
+            }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onClick={() => navigate(`/committees/${committee.id}`)}
+            aria-label={`View ${committee.name}`}
+          >
+            {committee.abbr}
+          </button>
+        </div>
       </div>
     </div>
   )
 }
 
 interface RingProps {
-  committees: Committee[]
+  ids: string[]
   radius: number
   duration: number
   reverse?: boolean
 }
 
-function Ring({ committees, radius, duration, reverse = false }: RingProps) {
+function Ring({ ids, radius, duration, reverse = false }: RingProps) {
+  const committees = byId(ids)
   const count = committees.length
+  const diameter = radius * 2
+
   return (
-    <>
-      {committees.map((c, i) => (
-        <CommitteePill
-          key={c.id}
-          committee={c}
-          radius={radius}
-          angle={(i / count) * 360}
-          duration={duration}
-          reverse={reverse}
-        />
-      ))}
-    </>
+    <div
+      className={`${styles.ringWrapper} ${reverse ? styles.ringReverse : ''}`}
+      style={{
+        width:  diameter,
+        height: diameter,
+        /* Negative margins center the wrapper; transform-origin pivots on the visual center */
+        marginLeft: -radius,
+        marginTop:  -radius,
+        transformOrigin: `${radius}px ${radius}px`,
+        /* CSS custom property — propagates to all .counterSpin descendants */
+        ['--ring-dur' as string]: `${duration}s`,
+      }}
+    >
+      {committees.map((c, i) => {
+        // Start at top (-90°) and spread evenly
+        const angle = (i / count) * Math.PI * 2 - Math.PI / 2
+        const x = radius + radius * Math.cos(angle)
+        const y = radius + radius * Math.sin(angle)
+        return <CommitteePill key={c.id} committee={c} x={x} y={y} />
+      })}
+    </div>
   )
 }
 
 export default function CommitteeOrbit() {
   return (
     <section className={styles.section} id="committees-preview">
-      {/* Header */}
+      {/* Background gradient layer */}
+      <div className={styles.sectionBg} aria-hidden="true" />
+
       <motion.div
         className={styles.header}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewport}
         transition={{ type: 'spring', stiffness: 88, damping: 22 }}
       >
         <p className={styles.eyebrow}>What Awaits You</p>
         <h2 className={styles.title}>The Committees</h2>
-        <p className={styles.sub}>
-          Fourteen committees. Hover to pause. Click to explore.
-        </p>
+        <p className={styles.sub}>Hover to pause · click to explore</p>
       </motion.div>
 
-      {/* Orbit stage */}
+      {/* Stage — :hover sets --orbit-play: paused on all children */}
       <motion.div
         className={styles.stage}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={viewport}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ type: 'spring', stiffness: 70, damping: 20, delay: 0.15 }}
       >
-        {/* Ring outlines */}
-        <div className={`${styles.ringCircle} ${styles.rc1}`} />
-        <div className={`${styles.ringCircle} ${styles.rc2}`} />
-        <div className={`${styles.ringCircle} ${styles.rc3}`} />
+        {/* Decorative ring outlines */}
+        <div className={`${styles.ringOutline} ${styles.ro1}`} />
+        <div className={`${styles.ringOutline} ${styles.ro2}`} />
+        <div className={`${styles.ringOutline} ${styles.ro3}`} />
+
+        {/* Radial glow at center */}
+        <div className={styles.stageGlow} aria-hidden="true" />
 
         {/* Center stat */}
         <div className={styles.centerStat}>
@@ -152,25 +143,22 @@ export default function CommitteeOrbit() {
           <span className={styles.centerLabel}>Committees</span>
         </div>
 
-        {/* Orbit hub */}
-        <div className={styles.orbitHub}>
-          <Ring committees={INNER}  radius={145} duration={28} />
-          <Ring committees={MIDDLE} radius={250} duration={48} reverse />
-          <Ring committees={OUTER}  radius={365} duration={68} />
-        </div>
+        {/* Orbit rings */}
+        <Ring ids={INNER}  radius={120} duration={28} />
+        <Ring ids={MIDDLE} radius={205} duration={50} reverse />
+        <Ring ids={OUTER}  radius={300} duration={72} />
       </motion.div>
 
-      {/* CTA link */}
       <motion.div
         className={styles.footer}
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewport}
         transition={{ type: 'spring', stiffness: 88, damping: 22, delay: 0.3 }}
       >
         <a href="/committees" className={styles.viewAll}>
           View all committees
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>

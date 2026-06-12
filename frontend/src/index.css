@@ -162,3 +162,13 @@ button { cursor: pointer; font-family: inherit; }
 .d3 { transition-delay: 0.28s !important; }
 .d4 { transition-delay: 0.38s !important; }
 .d5 { transition-delay: 0.48s !important; }
+
+/* ── Global orbit keyframes (referenced by Hero + CommitteeOrbit inline styles) ── */
+@keyframes orbitCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbitCCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}

@@ -73,6 +73,7 @@ function OrbitRing({ terms, radius, duration, reverse = false, dim = 0.22 }: Orb
 export default function Hero() {
   const chirecRef  = useRef<HTMLDivElement>(null)
   const orbitRef   = useRef<HTMLDivElement>(null)
+  const canvasRef  = useRef<HTMLCanvasElement>(null)
   const rafRef     = useRef<number>(0)
   const mouseTarget  = useRef({ x: 0, y: 0 })
   const mouseLerped  = useRef({ x: 0, y: 0 })
@@ -125,24 +126,114 @@ export default function Hero() {
     }
   }, [])
 
+  // ── Atmospheric canvas — halos, perspective grid, particles ──
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let W = 0, H = 0
+    let canvasRafId = 0, lastDraw = 0, tick = 0
+    // Offscreen canvas holds the static vertical scan-line texture — built once per resize
+    let scanlines: HTMLCanvasElement | null = null
+
+    const init = () => {
+      W = canvas.width  = window.innerWidth
+      H = canvas.height = window.innerHeight
+
+      // Build vertical scan-line texture on an offscreen canvas
+      // Dark 1px stripes every 4px — aurora color shows through the 3px gaps
+      scanlines = document.createElement('canvas')
+      scanlines.width  = W
+      scanlines.height = H
+      const sc = scanlines.getContext('2d')!
+      sc.fillStyle = 'rgba(4,0,2,0.32)'   // dark stripe
+      const spacing  = 4                   // 1px stripe, 3px gap
+      for (let x = 0; x < W; x += spacing) {
+        sc.fillRect(x, 0, 1, H)
+      }
+    }
+    init()
+    const onResize = () => init()
+    window.addEventListener('resize', onResize)
+
+    const drawFrame = (now: number) => {
+      canvasRafId = requestAnimationFrame(drawFrame)
+      if (now - lastDraw < 1000 / 24) return   // 24 fps cap
+      lastDraw = now
+      tick += 0.005
+
+      ctx.clearRect(0, 0, W, H)
+
+      // ── 1. Animated color blobs — soft breathing radial gradients ─────────
+      // These are the large atmospheric pools of color (crimson + deep blue)
+      // that breathe slowly. The scan lines laid on top create the "aurora" texture.
+
+      // Blue blob — left edge (vivid indigo, large)
+      let g = ctx.createRadialGradient(W * 0.04, H * 0.48, 0, W * 0.04, H * 0.48, W * 0.58)
+      g.addColorStop(0,   `rgba(45,60,230,${+(0.92 + Math.sin(tick * 0.55)        * 0.06).toFixed(3)})`)
+      g.addColorStop(0.5, `rgba(30,42,190,${+(0.55 + Math.sin(tick * 0.55)        * 0.06).toFixed(3)})`)
+      g.addColorStop(1,   'rgba(30,42,190,0)')
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+
+      // Crimson blob — center-right (dominant warm zone)
+      g = ctx.createRadialGradient(W * 0.60, H * 0.50, 0, W * 0.60, H * 0.50, W * 0.60)
+      g.addColorStop(0,   `rgba(210,48,36,${+(0.90 + Math.sin(tick * 0.42 + 1.2) * 0.07).toFixed(3)})`)
+      g.addColorStop(0.5, `rgba(175,38,28,${+(0.55 + Math.sin(tick * 0.42 + 1.2) * 0.07).toFixed(3)})`)
+      g.addColorStop(1,   'rgba(175,38,28,0)')
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+
+      // Blue blob — right edge
+      g = ctx.createRadialGradient(W * 0.97, H * 0.44, 0, W * 0.97, H * 0.44, W * 0.48)
+      g.addColorStop(0,   `rgba(38,52,215,${+(0.85 + Math.sin(tick * 0.62 + 2.4) * 0.07).toFixed(3)})`)
+      g.addColorStop(0.5, `rgba(26,38,180,${+(0.50 + Math.sin(tick * 0.62 + 2.4) * 0.07).toFixed(3)})`)
+      g.addColorStop(1,   'rgba(26,38,180,0)')
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+
+      // Secondary blue — upper-left corner accent
+      g = ctx.createRadialGradient(W * 0.15, H * 0.18, 0, W * 0.15, H * 0.18, W * 0.32)
+      g.addColorStop(0, `rgba(50,68,240,${+(0.60 + Math.sin(tick * 0.78 + 3.6)   * 0.08).toFixed(3)})`)
+      g.addColorStop(1, 'rgba(50,68,240,0)')
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+
+      // ── 2. Vertical scan-line texture (blit pre-built offscreen canvas) ───
+      // Drawn OVER the blobs — their color shows through the gaps,
+      // creating the "aurora light through a curtain" effect.
+      if (scanlines) ctx.drawImage(scanlines, 0, 0)
+
+      // ── 3. Radial vignette — darkens edges, focuses the eye on center ─────
+      const vig = ctx.createRadialGradient(
+        W * 0.5, H * 0.5, Math.min(W, H) * 0.20,
+        W * 0.5, H * 0.5, Math.max(W, H) * 0.82
+      )
+      vig.addColorStop(0,    'rgba(4,0,2,0)')
+      vig.addColorStop(0.65, 'rgba(4,0,2,0.22)')
+      vig.addColorStop(1,    'rgba(4,0,2,0.72)')
+      ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H)
+    }
+
+    canvasRafId = requestAnimationFrame(drawFrame)
+    return () => {
+      cancelAnimationFrame(canvasRafId)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
   return (
     <section className={styles.hero} id="hero">
-      {/* ── CSS BACKGROUND — zero canvas, zero lag ── */}
-      <div className={styles.bg} aria-hidden="true" />
+      {/* ── ATMOSPHERIC CANVAS — halos + grid + particles ── */}
+      <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
       <div className={styles.bgPulse} aria-hidden="true" />
 
       {/* ── ORBIT FIELD — pure CSS animations, GPU composited ── */}
       <div ref={orbitRef} className={styles.orbitField} aria-hidden="true">
-        {/* Subtle ring outlines */}
-        <div className={`${styles.ringCircle} ${styles.rc1}`} />
-        <div className={`${styles.ringCircle} ${styles.rc2}`} />
-        <div className={`${styles.ringCircle} ${styles.rc3}`} />
 
         {/* Hub: zero-size anchor at center, all arms branch from here */}
         <div className={styles.orbitHub}>
-          <OrbitRing terms={RING_1_TERMS} radius={170}  duration={24} dim={0.28} />
-          <OrbitRing terms={RING_2_TERMS} radius={295}  duration={44} reverse dim={0.20} />
-          <OrbitRing terms={RING_3_TERMS} radius={430}  duration={72} dim={0.14} />
+          <OrbitRing terms={RING_1_TERMS} radius={280}  duration={24} dim={0.30} />
+          <OrbitRing terms={RING_2_TERMS} radius={420}  duration={44} reverse dim={0.20} />
+          <OrbitRing terms={RING_3_TERMS} radius={560}  duration={72} dim={0.13} />
         </div>
       </div>
 

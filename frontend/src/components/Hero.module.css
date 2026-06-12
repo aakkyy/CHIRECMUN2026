@@ -10,15 +10,14 @@
   background: #040002;
 }
 
-/* ── CSS BACKGROUND — replaces canvas, no JS on main thread ── */
-.bg {
+/* ── ATMOSPHERIC CANVAS — first child, behind everything ── */
+.canvas {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 75% 85%  at 50% 115%,  rgba(192,57,43,0.42) 0%, transparent 62%),
-    radial-gradient(ellipse 50% 60%  at 12% 38%,   rgba(10,30,168,0.24) 0%, transparent 58%),
-    radial-gradient(ellipse 45% 55%  at 88% 22%,   rgba(10,30,168,0.19) 0%, transparent 54%);
+  /* no explicit z-index — sits below all siblings with z-index set */
 }
 
 /* Gentle breathing pulse over the center */
@@ -44,6 +43,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
   /* transform applied via JS for gravity effect */
   will-change: transform;
 }
@@ -58,9 +58,9 @@
   pointer-events: none;
   transform: translate(-50%, -50%);
 }
-.rc1 { width: 340px;  height: 340px; }
-.rc2 { width: 590px;  height: 590px; border-color: rgba(192,57,43,0.065); }
-.rc3 { width: 860px;  height: 860px; border-color: rgba(192,57,43,0.040); }
+.rc1 { width: 560px;  height: 560px; }
+.rc2 { width: 840px;  height: 840px; border-color: rgba(192,57,43,0.065); }
+.rc3 { width: 1120px; height: 1120px; border-color: rgba(192,57,43,0.040); }
 
 /* ── ORBIT HUB — zero-size anchor at center ── */
 .orbitHub {
@@ -171,7 +171,7 @@
 
 .chirec {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(4.6rem, 13vw, 11rem);
+  font-size: clamp(4rem, 11vw, 11rem);
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 0.88;
@@ -211,18 +211,55 @@
   justify-content: center;
 }
 
+/* These classNames land on the <a> / <button> inside BlobButton (.inner) */
 .btnPrimary {
+  padding: 0.9rem 2.2rem;
+  background: rgba(20,6,4,0.88);
+  color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(192,57,43,0.32);
+  border-radius: 999px;
+  font-family: 'Geist', sans-serif;
   font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    0 2px 8px rgba(0,0,0,0.45),
+    0 0 24px rgba(192,57,43,0.10);
+  transition: background 0.30s ease, border-color 0.30s ease, box-shadow 0.30s ease;
+}
+.btnPrimary:hover {
+  background: rgba(42,12,8,0.94);
+  border-color: rgba(231,76,60,0.52);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    0 4px 18px rgba(0,0,0,0.52),
+    0 0 40px rgba(192,57,43,0.24);
 }
 
 .btnGhost {
+  padding: 0.9rem 2.2rem;
+  background: rgba(4,0,2,0.52);
+  color: rgba(244,244,239,0.52);
+  border: 1px solid rgba(244,244,239,0.12);
+  border-radius: 999px;
+  font-family: 'Geist', sans-serif;
   font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 6px rgba(0,0,0,0.30);
+  transition: background 0.30s ease, border-color 0.30s ease, color 0.28s ease, box-shadow 0.28s ease;
+}
+.btnGhost:hover {
+  background: rgba(20,8,16,0.72);
+  border-color: rgba(86,204,242,0.34);
+  color: rgba(244,244,239,0.90);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 4px 14px rgba(0,0,0,0.42),
+    0 0 26px rgba(86,204,242,0.12);
 }
 
 /* ── BOTTOM FADE ── */
@@ -239,19 +276,18 @@
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
-  .rc1 { width: 240px;  height: 240px; }
-  .rc2 { width: 400px;  height: 400px; }
+  .rc1 { width: 320px;  height: 320px; }
+  .rc2 { width: 500px;  height: 500px; }
   .rc3 { display: none; }
 
-  .chirec { font-size: clamp(3.6rem, 22vw, 7rem); }
+  .chirec { font-size: clamp(2rem, 14vw, 4rem); }
 
-  .orbitTerm { font-size: 0.52rem; letter-spacing: 0.12em; }
+  .orbitTerm { font-size: 0.50rem; letter-spacing: 0.11em; }
 }
 
 @media (max-width: 480px) {
-  /* Only innermost ring on very small screens */
-  .orbitField { opacity: 0.6; }
   .rc2 { display: none; }
+  .orbitField { opacity: 0.55; }
   .tagline { margin-bottom: 1.8rem; }
   .actions { flex-direction: column; width: 100%; max-width: 280px; }
   .btnPrimary, .btnGhost { width: 100%; justify-content: center; }

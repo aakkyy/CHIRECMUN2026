@@ -1,118 +1,295 @@
+/* ── SECTION ── */
 .section {
   position: relative;
-  background: #040002;
-  padding: 2rem 0;
+  padding: 6rem 0 5.5rem;
   overflow: hidden;
+  background: #040002;   /* explicit base — sectionBg gradients layer on top */
 }
 
-.topBorder {
+.sectionBg {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right,
-    transparent 0%,
-    rgba(192,57,43,0.35) 20%,
-    rgba(192,57,43,0.60) 50%,
-    rgba(192,57,43,0.35) 80%,
-    transparent 100%
-  );
-}
-
-.bottomBorder {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right,
-    transparent 0%,
-    rgba(192,57,43,0.20) 30%,
-    rgba(192,57,43,0.40) 50%,
-    rgba(192,57,43,0.20) 70%,
-    transparent 100%
-  );
-}
-
-/* Left/right edge fade masks */
-.fadeLeft, .fadeRight {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 180px;
-  z-index: 2;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 55%, rgba(192,57,43,0.22) 0%, transparent 68%),
+    radial-gradient(ellipse 48% 42% at 12% 8%,  rgba(10,30,168,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 44% 38% at 88% 95%, rgba(10,30,168,0.14) 0%, transparent 50%);
   pointer-events: none;
 }
-.fadeLeft  { left:  0; background: linear-gradient(to right,  #040002, transparent); }
-.fadeRight { right: 0; background: linear-gradient(to left,   #040002, transparent); }
 
-.rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+/* Hairline borders */
+.section::before,
+.section::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+.section::before {
+  top: 0;
+  background: linear-gradient(to right,
+    transparent 0%,
+    rgba(192,57,43,0.35) 28%,
+    rgba(192,57,43,0.55) 50%,
+    rgba(192,57,43,0.35) 72%,
+    transparent 100%
+  );
+}
+.section::after {
+  bottom: 0;
+  background: linear-gradient(to right,
+    transparent 0%,
+    rgba(192,57,43,0.18) 38%,
+    rgba(192,57,43,0.30) 50%,
+    rgba(192,57,43,0.18) 62%,
+    transparent 100%
+  );
 }
 
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 0 2rem;
+  margin-bottom: 3.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: rgba(231,76,60,0.85);
+  margin-bottom: 0.75rem;
+  text-shadow: 0 0 20px rgba(231,76,60,0.35);
+}
+
+.title {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 900;
+  color: rgba(244,244,239,0.95);
+  letter-spacing: -0.018em;
+  line-height: 1.04;
+  margin-bottom: 0.65rem;
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.84rem;
+  color: rgba(244,244,239,0.28);
+  letter-spacing: 0.04em;
+}
+
+/* ── MARQUEE OUTER — edge masks via CSS mask ── */
+.marqueeOuter {
+  position: relative;
+  overflow: hidden;
+  padding: 0.4rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 9%,
+    black 91%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 9%,
+    black 91%,
+    transparent 100%
+  );
+}
+
+/* ── ROW WRAP — hover pauses its own track ── */
 .rowWrap {
   overflow: hidden;
-  width: 100%;
+  padding: 0.65rem 0;
 }
 
-/* Infinite scroll track */
+.rowWrap:hover .track,
+.rowWrap:hover .trackReverse {
+  animation-play-state: paused;
+}
+
+/* ── TRACK ── */
 .track {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   width: max-content;
-  animation: scrollLeft 38s linear infinite;
+  animation: marqueeLeft var(--dur, 38s) linear infinite;
+  will-change: transform;
 }
 
 .trackReverse {
-  animation: scrollRight 44s linear infinite;
+  animation-name: marqueeRight;
 }
 
-@keyframes scrollLeft {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* ── CARD ── */
+/*
+ * Hover is handled entirely in CSS using custom properties set inline.
+ * No React useState → no re-renders → instant navigation on click.
+ *   --tc-border       : default border color
+ *   --tc-hover-border : hover border color
+ *   --tc-glow         : hover glow color
+ *   --type-color      : used by ::before gradient
+ */
+.card {
+  flex: 0 0 auto;
+  width: 232px;
+  height: 112px;
+  background: rgba(10,5,8,0.82);
+  border: 1px solid var(--tc-border, rgba(192,57,43,0.11));
+  border-radius: 14px;
+  padding: 0.95rem 1.2rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.26rem;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform     0.20s ease,
+    box-shadow    0.20s ease,
+    border-color  0.20s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
-@keyframes scrollRight {
-  0%   { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+.card:hover {
+  transform: translateY(-7px) scale(1.025);
+  border-color: var(--tc-hover-border, rgba(192,57,43,0.48));
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.60),
+    0 0 28px var(--tc-glow, rgba(192,57,43,0.16)),
+    inset 0 1px 0 rgba(255,255,255,0.09);
 }
 
-/* Committee pill badge */
-.pill {
+/* Top color wash — CSS custom property set inline via React */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48px;
+  background: linear-gradient(
+    to bottom,
+    var(--type-color, rgba(255,255,255,0.08)),
+    transparent
+  );
+  opacity: 0.055;
+  border-radius: 14px 14px 0 0;
+  pointer-events: none;
+  transition: opacity 0.20s ease;
+}
+
+.card:hover::before {
+  opacity: 0.13;
+}
+
+/* Inner top highlight seam */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 18px; right: 18px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.10),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ── TYPE BADGE ── */
+.badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.38rem 1.1rem;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.50rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.13rem 0.52rem;
   border-radius: 999px;
-  border: 1px solid rgba(244,244,239,0.10);
-  background: rgba(244,244,239,0.03);
-  font-family: 'Geist', 'Inter', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
+  border: 1px solid transparent;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+/* ── ABBREVIATION ── */
+.abbr {
+  display: block;
+  font-family: 'Geist', monospace;
+  font-size: 1.42rem;
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  color: rgba(244,244,239,0.90);
+}
+
+/* ── FULL NAME ── */
+.name {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  color: rgba(244,244,239,0.26);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  margin-top: 3.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(244,244,239,0.45);
-  white-space: nowrap;
-  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
-  cursor: default;
+  color: rgba(192,57,43,0.62);
+  text-decoration: none;
+  transition: color 0.22s ease, gap 0.22s ease;
 }
 
-.pill:hover {
-  border-color: rgba(192,57,43,0.45);
-  color: rgba(244,244,239,0.85);
-  background: rgba(192,57,43,0.06);
-}
-
-/* Accent row — slightly red-tinted */
-.pillAccent {
-  border-color: rgba(192,57,43,0.14);
-  color: rgba(231,76,60,0.55);
-}
-
-.pillAccent:hover {
-  border-color: rgba(231,76,60,0.60);
+.viewAll:hover {
   color: rgba(231,76,60,0.95);
-  background: rgba(192,57,43,0.08);
+  gap: 0.85rem;
 }
 
-/* Pause on hover — whole section */
-.section:hover .track {
-  animation-play-state: paused;
+/* ── KEYFRAMES ── */
+@keyframes marqueeLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marqueeRight {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .card { width: 192px; height: 102px; }
+  .abbr { font-size: 1.18rem; }
+}
+
+@media (max-width: 480px) {
+  .card { width: 170px; height: 96px; padding: 0.8rem 1rem 0.75rem; }
+  .abbr { font-size: 1.05rem; }
 }

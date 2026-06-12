@@ -1,78 +1,116 @@
 /* ── SECTION ── */
 .section {
   position: relative;
-  background: var(--theme-bg, #040002);
-  padding: 5rem 2rem;
+  padding: 5rem 2rem 4rem;
   overflow: hidden;
-  border-top: 1px solid rgba(192,57,43,0.10);
-  border-bottom: 1px solid rgba(192,57,43,0.10);
+}
+
+/* ── BACKGROUND — gives the section its own identity ── */
+.sectionBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 60%, rgba(192,57,43,0.14) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 40% at 20% 10%, rgba(10,30,168,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 80% 90%, rgba(10,30,168,0.08) 0%, transparent 50%),
+    #040002;
+  pointer-events: none;
+}
+
+/* Top/bottom border lines */
+.section::before,
+.section::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+.section::before {
+  top: 0;
+  background: linear-gradient(to right, transparent, rgba(192,57,43,0.35) 30%, rgba(192,57,43,0.55) 50%, rgba(192,57,43,0.35) 70%, transparent);
+}
+.section::after {
+  bottom: 0;
+  background: linear-gradient(to right, transparent, rgba(192,57,43,0.18) 40%, rgba(192,57,43,0.30) 50%, rgba(192,57,43,0.18) 60%, transparent);
 }
 
 /* ── HEADER ── */
 .header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   position: relative;
   z-index: 2;
 }
 
 .eyebrow {
   font-family: 'Geist', sans-serif;
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: rgba(231,76,60,0.85);
-  margin-bottom: 0.8rem;
-  text-shadow: 0 0 18px rgba(231,76,60,0.35);
+  margin-bottom: 0.75rem;
+  text-shadow: 0 0 20px rgba(231,76,60,0.35);
 }
 
 .title {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
   font-weight: 900;
-  color: var(--theme-text, rgba(244,244,239,0.95));
-  letter-spacing: -0.015em;
-  line-height: 1.05;
-  margin-bottom: 0.8rem;
+  color: rgba(244,244,239,0.95);
+  letter-spacing: -0.018em;
+  line-height: 1.04;
+  margin-bottom: 0.65rem;
 }
 
 .sub {
   font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  color: rgba(244,244,239,0.32);
-  letter-spacing: 0.02em;
+  font-size: 0.84rem;
+  color: rgba(244,244,239,0.28);
+  letter-spacing: 0.04em;
 }
 
 /* ── ORBIT STAGE ── */
 .stage {
   position: relative;
-  /* Height = diameter of outer ring + breathing room */
-  height: 800px;
-  max-width: 100%;
-  overflow: hidden;
-  /* CSS custom property controls play state — toggled by :hover */
-  --play-state: running;
+  height: 680px;
+  /* ── CSS custom property: pauses ALL orbit animations on hover ── */
+  --orbit-play: running;
 }
 
-/* Pause everything on hover */
 .stage:hover {
-  --play-state: paused;
+  --orbit-play: paused;
 }
 
-/* ── RING OUTLINES ── */
-.ringCircle {
+/* ── DECORATIVE RING OUTLINES ── */
+.ringOutline {
   position: absolute;
   left: 50%;
   top: 50%;
   border-radius: 50%;
-  border: 1px solid rgba(192,57,43,0.08);
+  border: 1px solid rgba(192,57,43,0.10);
   pointer-events: none;
   transform: translate(-50%, -50%);
+  z-index: 0;
 }
-.rc1 { width: 290px;  height: 290px; }
-.rc2 { width: 500px;  height: 500px; border-color: rgba(192,57,43,0.055); }
-.rc3 { width: 730px;  height: 730px; border-color: rgba(192,57,43,0.035); }
+.ro1 { width: 240px;  height: 240px; }
+.ro2 { width: 410px;  height: 410px; border-color: rgba(192,57,43,0.065); }
+.ro3 { width: 600px;  height: 600px; border-color: rgba(192,57,43,0.042); }
+
+/* Subtle radial glow at center */
+.stageGlow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,57,43,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* ── CENTER STAT ── */
 .centerStat {
@@ -83,106 +121,116 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 3;
   pointer-events: none;
+  z-index: 3;
 }
 
 .centerNum {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-size: clamp(3rem, 7vw, 5.2rem);
   font-weight: 900;
   background: linear-gradient(135deg, #e74c3c 0%, #c0392b 55%, #8e1f15 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  line-height: 0.9;
+  line-height: 0.88;
   letter-spacing: -0.03em;
+  text-shadow: none;
+  filter: drop-shadow(0 0 28px rgba(192,57,43,0.45));
 }
 
 .centerLabel {
   font-family: 'Geist', sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.30em;
   text-transform: uppercase;
-  color: rgba(244,244,239,0.22);
+  color: rgba(244,244,239,0.24);
   margin-top: 0.5rem;
 }
 
-/* ── ORBIT HUB ── */
-.orbitHub {
+/* ── RING WRAPPER — the rotating container ── */
+.ringWrapper {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 0;
-  height: 0;
+  border-radius: 50%;
+  /*
+   * Centering via negative margins — NOT transform (would conflict with animation).
+   * margin-left / margin-top are set inline as -${radius}px in the TSX.
+   * transform-origin is set inline to (radius, radius) so the pivot is the visual center.
+   */
+  animation: orbitCW var(--ring-dur, 40s) linear infinite;
+  animation-play-state: var(--orbit-play);
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* ── ORBIT ARM ── */
-.orbitArm {
+.ringReverse {
+  animation-direction: reverse;
+}
+
+/* ── POSITIONER — places pill at (x,y) with no transform ── */
+.positioner {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  transform-origin: 0 0;
+  /* left/top set via inline style */
+  pointer-events: none;
 }
 
-@keyframes orbitCW {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes orbitCCW {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
+/* ── CENTERER — translates pill to be centered on its orbit point ── */
+.centerer {
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-/* ── PILL WRAP — the counter-rotating container ── */
-.pillWrap {
-  position: absolute;
-  top: -0.85em; /* vertically center the pill */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ── COUNTER-SPIN — cancels the ring rotation so pill text stays upright ── */
+.counterSpin {
+  position: relative;
+  animation: orbitCCW var(--ring-dur, 40s) linear infinite;
+  animation-play-state: var(--orbit-play);
+  pointer-events: all;
+}
+
+.counterSpinReverse {
+  animation-direction: reverse;
 }
 
 /* ── TOOLTIP ── */
 .tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 9px);
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10,4,8,0.95);
-  border: 1px solid rgba(192,57,43,0.22);
-  border-radius: 8px;
+  background: rgba(6,2,4,0.97);
+  border: 1px solid rgba(192,57,43,0.26);
+  border-radius: 9px;
   padding: 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.18rem;
-  white-space: nowrap;
-  z-index: 10;
+  gap: 0.16rem;
+  z-index: 20;
   pointer-events: none;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.65);
+  white-space: nowrap;
 }
 
 .tooltipName {
   font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   font-weight: 600;
-  color: rgba(244,244,239,0.90);
+  color: rgba(244,244,239,0.92);
   text-align: center;
   white-space: normal;
-  max-width: 200px;
-  line-height: 1.3;
+  max-width: 190px;
+  line-height: 1.35;
 }
 
 .tooltipCat {
   font-family: 'Geist', sans-serif;
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -190,28 +238,27 @@
 .pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.32rem 0.9rem;
+  padding: 0.32rem 0.88rem;
   border-radius: 999px;
   border: 1px solid transparent;
-  background: transparent;
   font-family: 'Geist', monospace;
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    border-color 0.25s ease,
-    color 0.25s ease,
-    background 0.25s ease,
-    box-shadow 0.25s ease;
+    border-color 0.22s ease,
+    color        0.22s ease,
+    background   0.22s ease,
+    box-shadow   0.22s ease;
 }
 
 /* ── FOOTER CTA ── */
 .footer {
   text-align: center;
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   position: relative;
   z-index: 2;
 }
@@ -221,35 +268,33 @@
   align-items: center;
   gap: 0.5rem;
   font-family: 'Geist', sans-serif;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(192,57,43,0.65);
+  color: rgba(192,57,43,0.62);
   text-decoration: none;
-  transition: color 0.25s ease, gap 0.25s ease;
+  transition: color 0.22s ease, gap 0.22s ease;
 }
 
 .viewAll:hover {
   color: rgba(231,76,60,0.95);
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
-  .stage { height: 560px; }
+  .stage { height: 520px; }
 
-  .rc1 { width: 200px;  height: 200px; }
-  .rc2 { width: 340px;  height: 340px; }
-  .rc3 { width: 480px;  height: 480px; }
+  .ro1 { width: 180px;  height: 180px; }
+  .ro2 { width: 300px;  height: 300px; }
+  .ro3 { width: 430px;  height: 430px; }
 
-  .pill { font-size: 0.56rem; padding: 0.26rem 0.7rem; }
+  .pill { font-size: 0.54rem; padding: 0.24rem 0.65rem; }
 }
 
 @media (max-width: 480px) {
-  .stage { height: 400px; }
-
-  .rc3 { display: none; }
-
-  .pill { font-size: 0.50rem; padding: 0.22rem 0.6rem; }
+  .stage { height: 380px; }
+  .ro3 { display: none; }
+  .pill { font-size: 0.48rem; padding: 0.20rem 0.55rem; }
 }
