@@ -66,7 +66,6 @@ export default function Footer() {
         <div className={styles.brand}>
           <div className={styles.logoRow}>
             <div className={styles.logoWrap}>
-              <span className={styles.logoRing} aria-hidden="true" />
               <img src={logoImg} alt="CHIREC MUN" className={styles.logoImg} />
             </div>
             <div className={styles.brandText}>
@@ -77,7 +76,7 @@ export default function Footer() {
 
           <p className={styles.desc}>
             Three days of diplomacy, debate, and discovery. Bringing together
-            the brightest young minds from across India at CHIREC ISRP Campus.
+            600+ delegates from across India at CHIREC ISRP Campus.
           </p>
 
           <div className={styles.motto}>&ldquo;Represent. Reason. Resolve.&rdquo;</div>
