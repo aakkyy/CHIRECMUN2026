@@ -256,10 +256,10 @@ export default function Hero() {
           transition={{ type: 'spring', stiffness: 80, damping: 22, delay: 0.15 }}
         >
           <img src={logoImg} alt="CHIREC MUN logo" className={styles.logo} />
-          <span className={styles.edition}>
-            <span className={styles.editionDot} />
-            Edition XIV
-          </span>
+          <span className={styles.metaDivider} />
+          <span className={styles.editionLabel}>Edition XIV</span>
+          <span className={styles.metaDivider} />
+          <span className={styles.editionDate}>July 31 – August 2</span>
         </motion.div>
 
         {/* CHIREC — interactive letters */}
