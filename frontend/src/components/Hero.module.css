@@ -4,296 +4,255 @@
   width: 100%;
   min-height: 100svh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #040002;
 }
 
-.canvas {
-  position: absolute; inset: 0; z-index: 0;
-  width: 100%; height: 100%;
+/* ── CSS BACKGROUND — replaces canvas, no JS on main thread ── */
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 75% 85%  at 50% 115%,  rgba(192,57,43,0.42) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 60%  at 12% 38%,   rgba(10,30,168,0.24) 0%, transparent 58%),
+    radial-gradient(ellipse 45% 55%  at 88% 22%,   rgba(10,30,168,0.19) 0%, transparent 54%);
 }
 
-.vignette {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(ellipse 72% 62% at 50% 50%, transparent 38%, rgba(4,0,2,0.52) 100%);
+/* Gentle breathing pulse over the center */
+.bgPulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 55% 65% at 50% 50%,
+    rgba(192,57,43,0.10) 0%,
+    transparent 68%
+  );
+  animation: bgBreath 5.5s ease-in-out infinite;
 }
 
-/* ── CONTENT ── */
-.content {
+@keyframes bgBreath {
+  0%, 100% { opacity: 0.55; transform: scale(1.00); }
+  50%       { opacity: 1.00; transform: scale(1.07); }
+}
+
+/* ── ORBIT FIELD ── */
+.orbitField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* transform applied via JS for gravity effect */
+  will-change: transform;
+}
+
+/* Decorative ring outlines */
+.ringCircle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(192,57,43,0.10);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.rc1 { width: 340px;  height: 340px; }
+.rc2 { width: 590px;  height: 590px; border-color: rgba(192,57,43,0.065); }
+.rc3 { width: 860px;  height: 860px; border-color: rgba(192,57,43,0.040); }
+
+/* ── ORBIT HUB — zero-size anchor at center ── */
+.orbitHub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* ── ORBIT ARM — rotates around hub origin ── */
+.orbitArm {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
+/* ── ORBIT TERM — rides the arm, counter-rotates to stay upright ── */
+.orbitTerm {
+  position: absolute;
+  top: -0.55em;
+  white-space: nowrap;
+  font-family: 'Geist', monospace;
+  font-size: 0.60rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,1); /* opacity controlled via inline style */
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes orbitCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbitCCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* ── CENTER CONTENT ── */
+.center {
   position: relative;
   z-index: 2;
-  width: 100%;
-  max-width: 860px;
-  padding: 6rem 2.4rem 5rem;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1.5rem;
 }
 
-/* ── DOCUMENT HEADER ROW ── */
-.docHeader {
+/* ── TOP META ── */
+.topMeta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.0rem;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
 }
 
-.docLeft {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logoImg {
-  width: 36px;
-  height: 36px;
+.logo {
+  width: 34px;
+  height: 34px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(192,57,43,0.30));
+  filter: drop-shadow(0 0 14px rgba(192,57,43,0.38));
+}
+
+.edition {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.68);
+  border: 1px solid rgba(192,57,43,0.18);
+  border-radius: 999px;
+  padding: 0.26rem 0.85rem;
+}
+
+.editionDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(231,76,60,0.85);
+  animation: dotPulse 2.4s ease-in-out infinite;
   flex-shrink: 0;
 }
 
-.unLabel {
-  font-family: 'Geist', monospace;
-  font-size: 0.60rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(244,244,239,0.30);
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.38; transform: scale(0.65); }
 }
 
-.docRef {
-  font-family: 'Geist', monospace;
-  font-size: 0.60rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: rgba(192,57,43,0.55);
-}
-
-/* ── HAIRLINES ── */
-.fullHair {
-  width: 100%;
-  height: 1px;
-  background: rgba(192,57,43,0.22);
-  margin-bottom: 0.90rem;
-}
-
-.fullHairDim {
-  width: 100%;
-  height: 1px;
-  background: rgba(192,57,43,0.10);
-  margin-bottom: 0.80rem;
-}
-
-/* ── DOC META ROW ── */
-.docMeta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.90rem;
-}
-
-.metaLeft, .metaRight {
-  font-family: 'Geist', monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(244,244,239,0.22);
-}
-
-/* ── RESOLUTION LABEL ── */
-.resLabel {
-  font-family: 'Geist', monospace;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(192,57,43,0.50);
-  text-align: center;
-  display: block;
-  margin-bottom: 1.4rem;
-}
-
-/* ── TITLE BLOCK ── */
-.titleBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  margin: 0 0 1.2rem;
-  text-align: center;
-}
-
-/* ── CHIREC ROW ── */
+/* ── CHIREC LETTERS ── */
 .chirecRow {
   display: flex;
   align-items: baseline;
-  justify-content: center;
-  gap: 0.02em;
-  margin-bottom: 0.18em;
+  gap: 0.01em;
+  margin-bottom: 0.55rem;
 }
 
 .chirec {
   font-family: 'Rubik', sans-serif;
-  font-size: clamp(4.2rem, 11vw, 9.5rem);
+  font-size: clamp(4.6rem, 13vw, 11rem);
   font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 0.92;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
   display: inline-block;
+  cursor: pointer;
   user-select: none;
 }
 
-/* ── MUN + YEAR ── */
-.mun {
-  font-family: 'Geist', monospace;
-  font-size: clamp(0.58rem, 1.4vw, 0.80rem);
-  font-weight: 700;
-  letter-spacing: 0.48em;
-  text-transform: uppercase;
-  color: rgba(192,57,43,0.60);
-  margin-bottom: 0.3rem;
-}
-
-.year {
-  font-family: 'Rubik', sans-serif;
-  font-size: clamp(1.3rem, 3.5vw, 3.0rem);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #922b21 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── BODY LINE ── */
-.bodyLine {
-  font-family: 'Geist', monospace;
-  font-size: 0.60rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+/* ── SUBTITLE ── */
+.munLabel {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: rgba(244,244,239,0.18);
-  text-align: center;
-  margin: 0 0 0.90rem;
-  line-height: 1.8;
+  margin-bottom: 0.8rem;
 }
 
-/* ── STAMP + TAGLINE ROW ── */
-.stampRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3.5rem;
-  padding: 1.8rem 0 0.8rem;
-}
-
-.stamp {
-  width: 120px;
-  height: 120px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 22px rgba(192,57,43,0.18));
-}
-
-.taglineBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.taglineLabel {
-  font-family: 'Geist', monospace;
-  font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(192,57,43,0.42);
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
+/* ── TAGLINE ── */
 .tagline {
-  font-family: 'Rubik', sans-serif;
-  font-size: clamp(1.4rem, 3.5vw, 2.6rem);
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  color: rgba(244,244,239,0.88);
-  line-height: 1.05;
-  display: block;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.60rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.52);
+  margin-bottom: 2.4rem;
 }
 
 /* ── CTAs ── */
 .actions {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.9rem;
   flex-wrap: wrap;
-  padding-top: 1.4rem;
+  justify-content: center;
 }
 
 .btnPrimary {
   font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .btnGhost {
   font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-/* ── SCROLL HINT ── */
-.scrollHint {
+/* ── BOTTOM FADE ── */
+.bottomFade {
   position: absolute;
-  bottom: 2rem; left: 50%; transform: translateX(-50%);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.scrollLabel {
-  font-family: 'Geist', sans-serif;
-  font-size: 0.54rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(244,244,239,0.16);
-}
-
-.scrollTrack {
-  width: 1px; height: 40px;
-  background: rgba(192,57,43,0.12);
-  position: relative; overflow: hidden; border-radius: 1px;
-}
-
-.scrollGlider {
-  position: absolute; top: -100%; width: 100%; height: 100%;
-  background: linear-gradient(to bottom, transparent, rgba(231,76,60,0.70), transparent);
-  animation: scrollGlide 2.0s ease-in-out infinite;
-}
-
-@keyframes scrollGlide {
-  0%   { top: -100%; }
-  100% { top: 200%; }
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, rgba(4,0,2,0.80) 100%);
+  z-index: 1;
 }
 
 /* ── MOBILE ── */
-@media (max-width: 640px) {
-  .content { padding: 5.5rem 1.4rem 4rem; }
-  .docHeader { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.8rem; }
-  .docMeta { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
-  .stampRow { flex-direction: column; gap: 1.8rem; padding: 1.4rem 0 0.6rem; }
-  .stamp { width: 100px; height: 100px; }
-  .tagline { font-size: clamp(1.2rem, 6vw, 2rem); }
-  .actions { flex-direction: column; align-items: stretch; }
-  .btnPrimary, .btnGhost { text-align: center; }
-  .metaRight { display: none; }
+@media (max-width: 768px) {
+  .rc1 { width: 240px;  height: 240px; }
+  .rc2 { width: 400px;  height: 400px; }
+  .rc3 { display: none; }
+
+  .chirec { font-size: clamp(3.6rem, 22vw, 7rem); }
+
+  .orbitTerm { font-size: 0.52rem; letter-spacing: 0.12em; }
+}
+
+@media (max-width: 480px) {
+  /* Only innermost ring on very small screens */
+  .orbitField { opacity: 0.6; }
+  .rc2 { display: none; }
+  .tagline { margin-bottom: 1.8rem; }
+  .actions { flex-direction: column; width: 100%; max-width: 280px; }
+  .btnPrimary, .btnGhost { width: 100%; justify-content: center; }
 }

@@ -5,6 +5,7 @@ import Stats from './components/Stats'
 import About from './components/About'
 import Countdown from './components/Countdown'
 import Secretariat from './components/Secretariat'
+import CommitteeOrbit from './components/CommitteeOrbit'
 import Location from './components/Location'
 import CTA from './components/CTA'
 import Contact from './components/Contact'
@@ -27,6 +28,7 @@ function HomePage() {
       <About />
       <Countdown />
       <Secretariat />
+      <CommitteeOrbit />
       <Location />
       <CTA />
       <Contact />

@@ -1,0 +1,255 @@
+/* ── SECTION ── */
+.section {
+  position: relative;
+  background: var(--theme-bg, #040002);
+  padding: 5rem 2rem;
+  overflow: hidden;
+  border-top: 1px solid rgba(192,57,43,0.10);
+  border-bottom: 1px solid rgba(192,57,43,0.10);
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: rgba(231,76,60,0.85);
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 18px rgba(231,76,60,0.35);
+}
+
+.title {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 900;
+  color: var(--theme-text, rgba(244,244,239,0.95));
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin-bottom: 0.8rem;
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: rgba(244,244,239,0.32);
+  letter-spacing: 0.02em;
+}
+
+/* ── ORBIT STAGE ── */
+.stage {
+  position: relative;
+  /* Height = diameter of outer ring + breathing room */
+  height: 800px;
+  max-width: 100%;
+  overflow: hidden;
+  /* CSS custom property controls play state — toggled by :hover */
+  --play-state: running;
+}
+
+/* Pause everything on hover */
+.stage:hover {
+  --play-state: paused;
+}
+
+/* ── RING OUTLINES ── */
+.ringCircle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(192,57,43,0.08);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.rc1 { width: 290px;  height: 290px; }
+.rc2 { width: 500px;  height: 500px; border-color: rgba(192,57,43,0.055); }
+.rc3 { width: 730px;  height: 730px; border-color: rgba(192,57,43,0.035); }
+
+/* ── CENTER STAT ── */
+.centerStat {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.centerNum {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 55%, #8e1f15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.centerLabel {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: rgba(244,244,239,0.22);
+  margin-top: 0.5rem;
+}
+
+/* ── ORBIT HUB ── */
+.orbitHub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* ── ORBIT ARM ── */
+.orbitArm {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+
+@keyframes orbitCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbitCCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* ── PILL WRAP — the counter-rotating container ── */
+.pillWrap {
+  position: absolute;
+  top: -0.85em; /* vertically center the pill */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── TOOLTIP ── */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10,4,8,0.95);
+  border: 1px solid rgba(192,57,43,0.22);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.18rem;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+}
+
+.tooltipName {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(244,244,239,0.90);
+  text-align: center;
+  white-space: normal;
+  max-width: 200px;
+  line-height: 1.3;
+}
+
+.tooltipCat {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── PILL BUTTON ── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: 'Geist', monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* ── FOOTER CTA ── */
+.footer {
+  text-align: center;
+  margin-top: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.65);
+  text-decoration: none;
+  transition: color 0.25s ease, gap 0.25s ease;
+}
+
+.viewAll:hover {
+  color: rgba(231,76,60,0.95);
+  gap: 0.75rem;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .stage { height: 560px; }
+
+  .rc1 { width: 200px;  height: 200px; }
+  .rc2 { width: 340px;  height: 340px; }
+  .rc3 { width: 480px;  height: 480px; }
+
+  .pill { font-size: 0.56rem; padding: 0.26rem 0.7rem; }
+}
+
+@media (max-width: 480px) {
+  .stage { height: 400px; }
+
+  .rc3 { display: none; }
+
+  .pill { font-size: 0.50rem; padding: 0.22rem 0.6rem; }
+}
