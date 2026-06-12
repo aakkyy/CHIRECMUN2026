@@ -51,8 +51,7 @@ function MemberCard({
       onClick={onClick}
       aria-label={`View profile: ${member.role}`}
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-16px' }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 78, damping: 18, delay: index * 0.10 }}
       whileHover={{ y: -8, transition: { type: 'spring', stiffness: 360, damping: 22 } }}
       whileTap={{ scale: 0.97 }}
@@ -174,8 +173,7 @@ export default function SecretariatPage() {
             <motion.h2
               className={`${styles.levelTitle} ${styles[`lt_${level.members[0].tier}`]}`}
               initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-16px' }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45 }}
             >
               {level.levelTitle}

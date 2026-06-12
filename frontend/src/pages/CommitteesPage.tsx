@@ -101,8 +101,7 @@ export default function CommitteesPage() {
               custom={i}
               variants={cardVariants}
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
+              animate="visible"
               whileHover={{ y: -6, transition: { type: 'spring', stiffness: 280, damping: 20 } }}
             >
               <CommitteeImage id={c.id} abbr={c.abbr} type={c.type} />

@@ -52,8 +52,7 @@ function PersonCard({
     <motion.div
       className={styles.personCard}
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-30px' }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 80, damping: 18, delay: index * 0.09 }}
     >
       <div className={styles.personPhotoWrap}>
@@ -178,8 +177,7 @@ export default function CommitteeDetailPage() {
           <motion.div
             className={styles.sectionHeader}
             initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 80, damping: 18 }}
           >
             <div className={styles.sectionLabel}>
@@ -208,8 +206,7 @@ export default function CommitteeDetailPage() {
         <motion.section
           className={styles.agendaSection}
           initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 75, damping: 18 }}
         >
           <div className={styles.agendaLeft}>
@@ -244,8 +241,7 @@ export default function CommitteeDetailPage() {
         <motion.section
           className={styles.bgGuideSection}
           initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 75, damping: 18, delay: 0.08 }}
         >
           <div className={styles.bgGuideIcon}>

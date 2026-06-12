@@ -180,8 +180,7 @@ export default function GuidelinesPage() {
             custom={si % 2 === 0}
             variants={cardVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-50px' }}
+            animate="visible"
           >
             {/* Icon column */}
             <div className={styles.iconCol}>
@@ -207,8 +206,7 @@ export default function GuidelinesPage() {
         <motion.p
           className={styles.footer}
           initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
           As representatives of nations in a formal diplomatic setting, all participants are expected

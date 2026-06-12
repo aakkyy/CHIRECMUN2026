@@ -135,82 +135,90 @@ export default function Hero() {
 
     let W = 0, H = 0
     let canvasRafId = 0, lastDraw = 0, tick = 0
-    // Offscreen canvas holds the static vertical scan-line texture — built once per resize
     let scanlines: HTMLCanvasElement | null = null
+    let dpr = 1
+
+    // Aurora band height — curtains hang from top, fade out before reaching center text
+    const AURORA_FRAC = 0.48   // fraction of hero height where aurora fully dissolves
 
     const init = () => {
-      W = canvas.width  = window.innerWidth
-      H = canvas.height = window.innerHeight
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      W = window.innerWidth
+      H = window.innerHeight
+      canvas.width  = Math.round(W * dpr)
+      canvas.height = Math.round(H * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      // Build vertical scan-line texture on an offscreen canvas
-      // Dark 1px stripes every 4px — aurora color shows through the 3px gaps
+      // Scan lines only as tall as the aurora band — fine 0.5px light verticals
+      const auroraH = Math.round(H * AURORA_FRAC)
       scanlines = document.createElement('canvas')
-      scanlines.width  = W
-      scanlines.height = H
-      const sc = scanlines.getContext('2d')!
-      sc.fillStyle = 'rgba(4,0,2,0.32)'   // dark stripe
-      const spacing  = 4                   // 1px stripe, 3px gap
+      scanlines.width  = Math.round(W * dpr)
+      scanlines.height = Math.round(auroraH * dpr)
+      const sctx = scanlines.getContext('2d')!
+      sctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      sctx.fillStyle = 'rgba(200,215,255,0.042)'
+      const spacing = 4.5
       for (let x = 0; x < W; x += spacing) {
-        sc.fillRect(x, 0, 1, H)
+        sctx.fillRect(x, 0, 0.5, auroraH)
       }
     }
     init()
-    const onResize = () => init()
-    window.addEventListener('resize', onResize)
+    window.addEventListener('resize', () => init())
 
     const drawFrame = (now: number) => {
       canvasRafId = requestAnimationFrame(drawFrame)
-      if (now - lastDraw < 1000 / 24) return   // 24 fps cap
+      if (now - lastDraw < 1000 / 24) return
       lastDraw = now
-      tick += 0.005
+      tick += 0.016
 
       ctx.clearRect(0, 0, W, H)
 
-      // ── 1. Animated color blobs — soft breathing radial gradients ─────────
-      // These are the large atmospheric pools of color (crimson + deep blue)
-      // that breathe slowly. The scan lines laid on top create the "aurora" texture.
+      const auroraH = H * AURORA_FRAC
 
-      // Blue blob — left edge (vivid indigo, large)
-      let g = ctx.createRadialGradient(W * 0.04, H * 0.48, 0, W * 0.04, H * 0.48, W * 0.58)
-      g.addColorStop(0,   `rgba(45,60,230,${+(0.92 + Math.sin(tick * 0.55)        * 0.06).toFixed(3)})`)
-      g.addColorStop(0.5, `rgba(30,42,190,${+(0.55 + Math.sin(tick * 0.55)        * 0.06).toFixed(3)})`)
-      g.addColorStop(1,   'rgba(30,42,190,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+      // ── Linear continuous drift — modulo wrap, no reversal ──────────────
+      // All blobs drift rightward at different speeds + starting phases.
+      // WRAP > W so blobs re-enter from the left seamlessly.
+      const WRAP = W * 2.0
 
-      // Crimson blob — center-right (dominant warm zone)
-      g = ctx.createRadialGradient(W * 0.60, H * 0.50, 0, W * 0.60, H * 0.50, W * 0.60)
-      g.addColorStop(0,   `rgba(210,48,36,${+(0.90 + Math.sin(tick * 0.42 + 1.2) * 0.07).toFixed(3)})`)
-      g.addColorStop(0.5, `rgba(175,38,28,${+(0.55 + Math.sin(tick * 0.42 + 1.2) * 0.07).toFixed(3)})`)
-      g.addColorStop(1,   'rgba(175,38,28,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+      const p = (speed: number, phase: number) =>
+        (tick * W * speed + W * phase) % WRAP - W * 0.5
 
-      // Blue blob — right edge
-      g = ctx.createRadialGradient(W * 0.97, H * 0.44, 0, W * 0.97, H * 0.44, W * 0.48)
-      g.addColorStop(0,   `rgba(38,52,215,${+(0.85 + Math.sin(tick * 0.62 + 2.4) * 0.07).toFixed(3)})`)
-      g.addColorStop(0.5, `rgba(26,38,180,${+(0.50 + Math.sin(tick * 0.62 + 2.4) * 0.07).toFixed(3)})`)
-      g.addColorStop(1,   'rgba(26,38,180,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+      // 7 curtain blobs — varying color, speed, Y anchor, radius, opacity
+      const blobs = [
+        // color r,g,b    cx                   cy        r-mult  peak   breathFreq  breathPhase
+        { c:'22,28,108',  cx: p(0.055, 0.00),  cy:0.08,  rm:1.50, pk:0.54, bf:0.22, bp:0.0  },
+        { c:'18,22,90',   cx: p(0.082, 0.55),  cy:0.12,  rm:1.20, pk:0.44, bf:0.19, bp:1.4  },
+        { c:'28,18,115',  cx: p(0.041, 1.10),  cy:0.06,  rm:1.35, pk:0.50, bf:0.25, bp:2.8  },
+        { c:'145,36,28',  cx: p(0.036, 0.30),  cy:0.04,  rm:1.65, pk:0.60, bf:0.20, bp:4.2  },
+        { c:'120,28,22',  cx: p(0.061, 1.50),  cy:0.09,  rm:1.40, pk:0.52, bf:0.17, bp:0.7  },
+        { c:'80,20,60',   cx: p(0.048, 0.80),  cy:0.03,  rm:1.25, pk:0.38, bf:0.23, bp:3.5  },
+        { c:'140,32,26',  cx: p(0.028, 1.80),  cy:0.07,  rm:1.55, pk:0.48, bf:0.21, bp:5.1  },
+      ] as const
 
-      // Secondary blue — upper-left corner accent
-      g = ctx.createRadialGradient(W * 0.15, H * 0.18, 0, W * 0.15, H * 0.18, W * 0.32)
-      g.addColorStop(0, `rgba(50,68,240,${+(0.60 + Math.sin(tick * 0.78 + 3.6)   * 0.08).toFixed(3)})`)
-      g.addColorStop(1, 'rgba(50,68,240,0)')
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H)
+      for (const b of blobs) {
+        const op = b.pk + (b.pk * 0.22) * Math.sin(tick * b.bf + b.bp)
+        const cy = H * b.cy
+        const r  = auroraH * b.rm
+        const g  = ctx.createRadialGradient(b.cx, cy, 0, b.cx, cy, r)
+        g.addColorStop(0,    `rgba(${b.c},${op.toFixed(3)})`)
+        g.addColorStop(0.50, `rgba(${b.c},${(op * 0.38).toFixed(3)})`)
+        g.addColorStop(1,    `rgba(${b.c},0)`)
+        ctx.fillStyle = g
+        ctx.fillRect(0, 0, W, auroraH)
+      }
 
-      // ── 2. Vertical scan-line texture (blit pre-built offscreen canvas) ───
-      // Drawn OVER the blobs — their color shows through the gaps,
-      // creating the "aurora light through a curtain" effect.
-      if (scanlines) ctx.drawImage(scanlines, 0, 0)
+      // Scan lines — only over the aurora band
+      if (scanlines) ctx.drawImage(scanlines, 0, 0, W, H * AURORA_FRAC)
 
-      // ── 3. Radial vignette — darkens edges, focuses the eye on center ─────
-      const vig = ctx.createRadialGradient(
-        W * 0.5, H * 0.5, Math.min(W, H) * 0.20,
-        W * 0.5, H * 0.5, Math.max(W, H) * 0.82
-      )
-      vig.addColorStop(0,    'rgba(4,0,2,0)')
-      vig.addColorStop(0.65, 'rgba(4,0,2,0.22)')
-      vig.addColorStop(1,    'rgba(4,0,2,0.72)')
-      ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H)
+      // Dissolve aurora into black — gradient from transparent → #040002 over bottom 25% of band
+      {
+        const fadeStart = auroraH * 0.62
+        const fadeGrad = ctx.createLinearGradient(0, fadeStart, 0, auroraH * 1.05)
+        fadeGrad.addColorStop(0, 'rgba(4,0,2,0)')
+        fadeGrad.addColorStop(1, 'rgba(4,0,2,1)')
+        ctx.fillStyle = fadeGrad
+        ctx.fillRect(0, fadeStart, W, H - fadeStart)
+      }
     }
 
     canvasRafId = requestAnimationFrame(drawFrame)
