@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, type Variants } from 'framer-motion'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import { COMMITTEES, TYPE_COLORS, TYPE_LABELS, type CommitteeType } from '../data/committees'
 import styles from './CommitteesPage.module.css'
 
@@ -122,7 +122,7 @@ export default function CommitteesPage() {
         ))}
       </div>
 
-      <BottomBar />
+      <Footer />
     </div>
   )
 }

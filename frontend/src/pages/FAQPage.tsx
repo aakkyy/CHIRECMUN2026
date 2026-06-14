@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import styles from './FAQPage.module.css'
 import AuraBg from '../components/AuraBg'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import HomeBeacon from '../components/HomeBeacon'
 
 const faqs = [
@@ -200,7 +200,7 @@ export default function FAQPage() {
         ))}
       </div>
 
-      <BottomBar />
+      <Footer />
     </div>
   )
 }

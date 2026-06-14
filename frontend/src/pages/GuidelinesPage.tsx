@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './GuidelinesPage.module.css'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import HomeBeacon from '../components/HomeBeacon'
 
 const sections = [
@@ -217,7 +217,7 @@ export default function GuidelinesPage() {
         </motion.p>
       </div>
 
-      <BottomBar />
+      <Footer />
     </div>
   )
 }

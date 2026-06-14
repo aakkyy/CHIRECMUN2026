@@ -171,7 +171,7 @@ export default function Navbar() {
 
         {/* ── RIGHT — register only ── */}
         <div className={styles.rightGroup}>
-          <BlobButton href="/#register" className={styles.cta} variant="red">
+          <BlobButton href="/register" className={styles.cta} variant="red">
             Register Now
           </BlobButton>
         </div>
