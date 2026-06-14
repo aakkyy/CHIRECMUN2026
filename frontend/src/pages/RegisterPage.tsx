@@ -98,8 +98,8 @@ export default function RegisterPage() {
                     <span className={styles.phaseLabel}>Phase 01</span>
                     <h3 className={styles.phaseTitle}>Complete Payment</h3>
                     <p className={styles.phaseDesc}>
-                      Pay via the official CHIREC payment portal.
-                      You'll receive a transaction ID to use in Phase 02.
+                      Secure your delegate seat through the official payment
+                      portal. Save your transaction ID. You'll need it for Phase 02.
                     </p>
                   </div>
 
@@ -143,8 +143,8 @@ export default function RegisterPage() {
                     <span className={styles.phaseLabel}>Phase 02</span>
                     <h3 className={`${styles.phaseTitle} ${styles.phaseTitleDim}`}>Registration Form</h3>
                     <p className={styles.phaseDesc}>
-                      Fill in delegate details, school info, and committee
-                      preferences. Priority spots go to early applicants.
+                      Tell us who you are, your school, and your top committee
+                      choices. Early applicants get first pick. Don't wait.
                     </p>
                   </div>
 
