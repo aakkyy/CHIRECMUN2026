@@ -3,7 +3,7 @@ import styles from './QuickMarks.module.css'
 const MARKS = [
   'Edition XIV',
   '14 Committees',
-  '300+ Delegates',
+  '600+ Delegates',
   'July 31 – August 2, 2026',
   'CHIREC International School',
   'Hyderabad, India',
