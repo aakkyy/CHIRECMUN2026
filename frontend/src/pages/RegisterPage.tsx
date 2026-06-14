@@ -6,23 +6,26 @@ import styles from './RegisterPage.module.css'
 
 const STATS = [
   { num: '14',   label: 'Committees' },
-  { num: '300+', label: 'Delegates' },
-  { num: '3',    label: 'Days' },
-  { num: 'XIV',  label: 'Edition' },
+  { num: '600+', label: 'Delegates'  },
+  { num: '3',    label: 'Days'       },
+  { num: 'XIV',  label: 'Edition'    },
 ]
 
 const blurIn = (delay = 0) => ({
-  initial:    { opacity: 0, filter: 'blur(10px)', y: 16 },
+  initial:    { opacity: 0, filter: 'blur(8px)', y: 14 },
   animate:    { opacity: 1, filter: 'blur(0px)',  y: 0  },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
+  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay },
 })
 
 export default function RegisterPage() {
   return (
     <div className={styles.page}>
-      <div className={styles.bgOrb1} />
-      <div className={styles.bgOrb2} />
-      <canvas className={styles.bgNoise} aria-hidden="true" />
+
+      {/* ── background ── */}
+      <div className={styles.bgGrad} aria-hidden="true" />
+      <div className={styles.bgGrid} aria-hidden="true" />
+      <div className={styles.bgOrb1} aria-hidden="true" />
+      <div className={styles.bgOrb2} aria-hidden="true" />
 
       <Navbar />
 
@@ -31,26 +34,26 @@ export default function RegisterPage() {
 
         <div className={styles.split}>
 
-          {/* ── LEFT ── */}
+          {/* ══════════════ LEFT ══════════════ */}
           <div className={styles.left}>
 
             <motion.p className={styles.eyebrow} {...blurIn(0.05)}>
               CHIREC MUN 2026 &nbsp;·&nbsp; Edition XIV
             </motion.p>
 
-            <motion.h1 className={styles.headline} {...blurIn(0.13)}>
+            <motion.h1 className={styles.headline} {...blurIn(0.12)}>
               Shape the world.<br />
               <span className={styles.headlineDim}>Start here.</span>
             </motion.h1>
 
-            <motion.p className={styles.desc} {...blurIn(0.22)}>
+            <motion.p className={styles.desc} {...blurIn(0.20)}>
               Three days. Fourteen committees. One chance to represent, reason,
               and resolve on some of the world's most pressing issues.
               Spots are limited — and they go fast.
             </motion.p>
 
-            {/* Stats grid */}
-            <motion.div className={styles.statsGrid} {...blurIn(0.30)}>
+            {/* Stats */}
+            <motion.div className={styles.statsGrid} {...blurIn(0.28)}>
               {STATS.map(s => (
                 <div key={s.label} className={styles.statBox}>
                   <span className={styles.statNum}>{s.num}</span>
@@ -60,7 +63,7 @@ export default function RegisterPage() {
             </motion.div>
 
             {/* Date bar */}
-            <motion.div className={styles.dateBar} {...blurIn(0.40)}>
+            <motion.div className={styles.dateBar} {...blurIn(0.36)}>
               <span className={styles.dateBarLabel}>Conference Dates</span>
               <span className={styles.dateBarValue}>July 31 – August 2, 2026</span>
               <span className={styles.dateBarVenue}>CHIREC International School, Hyderabad</span>
@@ -68,90 +71,109 @@ export default function RegisterPage() {
 
           </div>
 
-          {/* ── RIGHT ── */}
+          {/* ══════════════ RIGHT ══════════════ */}
           <motion.div
             className={styles.right}
-            initial={{ opacity: 0, y: 28 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
           >
-            {/* Watermark */}
-            <span className={styles.watermark} aria-hidden="true">XIV</span>
 
-            <div className={styles.panel}>
-              <div className={styles.panelTop}>
-                <p className={styles.panelTag}>Registration</p>
-                <h2 className={styles.panelTitle}>Two steps to your seat.</h2>
-                <p className={styles.panelSub}>
-                  Complete both steps in order. Your registration is only
-                  confirmed once payment is verified by the Secretariat.
-                </p>
+            <p className={styles.rightEyebrow}>Registration — Two Phases</p>
+
+            {/* ── Phase 01 ── */}
+            <div className={styles.phaseCard}>
+              {/* status strip */}
+              <div className={`${styles.statusStrip} ${styles.statusStripSoon}`}>
+                <span className={styles.statusDot} />
+                <span>Coming Soon</span>
               </div>
 
-              {/* ── Step 1 ── */}
-              <div className={styles.stepWrap}>
-                <div className={styles.stepTrack}>
-                  <div className={styles.stepBubble}>1</div>
-                  <div className={styles.stepLine} />
-                </div>
-                <div className={styles.stepBody}>
-                  <div className={styles.stepMeta}>
-                    <span className={styles.stepMetaLabel}>Step 1</span>
-                    <span className={styles.stepMetaBadge}>
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                      Coming Soon
-                    </span>
-                  </div>
-                  <h3 className={styles.stepTitle}>Complete Payment</h3>
-                  <p className={styles.stepDesc}>
-                    Pay the registration fee via the official CHIREC payment
-                    portal. You'll receive a transaction ID to carry forward.
-                  </p>
-                  <div className={styles.stepBtn} aria-disabled="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>
-                    Pay Registration Fee
-                    <span className={styles.stepBtnLock}>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <div className={styles.phaseInner}>
+                {/* big number */}
+                <span className={styles.phaseNumBg} aria-hidden="true">01</span>
 
-              {/* ── Step 2 ── */}
-              <div className={styles.stepWrap}>
-                <div className={styles.stepTrack}>
-                  <div className={`${styles.stepBubble} ${styles.stepBubbleDim}`}>2</div>
-                </div>
-                <div className={styles.stepBody}>
-                  <div className={styles.stepMeta}>
-                    <span className={styles.stepMetaLabel}>Step 2</span>
-                    <span className={styles.stepMetaBadge}>
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                      Priority Round Opening Soon
-                    </span>
+                <div className={styles.phaseContent}>
+                  <div className={styles.phaseLeft}>
+                    <span className={styles.phaseLabel}>Phase 01</span>
+                    <h3 className={styles.phaseTitle}>Complete Payment</h3>
+                    <p className={styles.phaseDesc}>
+                      Pay via the official CHIREC payment portal.
+                      You'll receive a transaction ID to use in Phase 02.
+                    </p>
                   </div>
-                  <h3 className={styles.stepTitle}>Registration Form</h3>
-                  <p className={styles.stepDesc}>
-                    Fill in your delegate details, school information, and
-                    committee preferences. Priority spots go to early applicants.
-                  </p>
-                  <div className={`${styles.stepBtn} ${styles.stepBtnGhost}`} aria-disabled="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    Fill Registration Form
-                    <span className={styles.stepBtnLock}>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                    </span>
+
+                  <div className={styles.phaseRight}>
+                    <div className={`${styles.phaseBtn} ${styles.phaseBtnDisabled}`} aria-disabled="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/>
+                      </svg>
+                      <span>Pay Fee</span>
+                      <span className={styles.lockIcon}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <p className={styles.panelNote}>
-                Questions? Reach us at{' '}
-                <a href="mailto:contact.mun@chirec.ac.in" className={styles.noteLink}>contact.mun@chirec.ac.in</a>
-                {' '}or DM{' '}
-                <a href="https://instagram.com/chirecmun" target="_blank" rel="noopener noreferrer" className={styles.noteLink}>@chirecmun</a>
-              </p>
             </div>
+
+            {/* connector */}
+            <div className={styles.phaseConnector}>
+              <div className={styles.connectorLine} />
+              <span className={styles.connectorText}>then</span>
+              <div className={styles.connectorLine} />
+            </div>
+
+            {/* ── Phase 02 ── */}
+            <div className={`${styles.phaseCard} ${styles.phaseCardLocked}`}>
+              {/* status strip */}
+              <div className={`${styles.statusStrip} ${styles.statusStripPriority}`}>
+                <span className={`${styles.statusDot} ${styles.statusDotAmber}`} />
+                <span>Priority Round Opening Soon</span>
+              </div>
+
+              <div className={styles.phaseInner}>
+                <span className={`${styles.phaseNumBg} ${styles.phaseNumBgDim}`} aria-hidden="true">02</span>
+
+                <div className={styles.phaseContent}>
+                  <div className={styles.phaseLeft}>
+                    <span className={styles.phaseLabel}>Phase 02</span>
+                    <h3 className={`${styles.phaseTitle} ${styles.phaseTitleDim}`}>Registration Form</h3>
+                    <p className={styles.phaseDesc}>
+                      Fill in delegate details, school info, and committee
+                      preferences. Priority spots go to early applicants.
+                    </p>
+                  </div>
+
+                  <div className={styles.phaseRight}>
+                    <div className={`${styles.phaseBtn} ${styles.phaseBtnGhost}`} aria-disabled="true">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                      </svg>
+                      <span>Fill Form</span>
+                      <span className={styles.lockIcon}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* contact note */}
+            <p className={styles.contactNote}>
+              Questions? &nbsp;
+              <a href="mailto:contact.mun@chirec.ac.in" className={styles.contactLink}>contact.mun@chirec.ac.in</a>
+              &nbsp;·&nbsp;
+              <a href="https://instagram.com/chirecmun" target="_blank" rel="noopener noreferrer" className={styles.contactLink}>@chirecmun</a>
+            </p>
+
           </motion.div>
 
         </div>
