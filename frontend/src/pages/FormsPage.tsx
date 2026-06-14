@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import HomeBeacon from '../components/HomeBeacon'
 import styles from './FormsPage.module.css'
 
@@ -185,7 +185,7 @@ export default function FormsPage() {
         ))}
       </div>
 
-      <BottomBar />
+      <Footer />
     </div>
   )
 }

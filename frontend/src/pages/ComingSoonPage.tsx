@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import AuraBg from '../components/AuraBg'
 import styles from './ComingSoonPage.module.css'
 
@@ -44,7 +44,7 @@ export default function ComingSoonPage() {
           transition={{ delay: 0.65, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
-      <BottomBar />
+      <Footer />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '../components/Navbar'
-import BottomBar from '../components/BottomBar'
+import Footer from '../components/Footer'
 import { SECRETARIAT_LEVELS, type SecretariatMember, type SecTier } from '../data/secretariat'
 import styles from './SecretariatPage.module.css'
 
@@ -204,7 +204,7 @@ export default function SecretariatPage() {
         )}
       </AnimatePresence>
 
-      <BottomBar />
+      <Footer />
     </div>
   )
 }
