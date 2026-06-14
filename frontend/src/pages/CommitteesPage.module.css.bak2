@@ -1,0 +1,202 @@
+/* ── PAGE ── */
+.page {
+  min-height: 100vh;
+  background: #040002;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── AURA BACKGROUND (CSS-only, no canvas) ── */
+.vignette {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 55% at 0%   0%,   rgba(192,57,43,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 45% at 100% 0%,   rgba(192,57,43,0.10) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 50% at 0%   100%, rgba(12,38,172,0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 52% 48% at 100% 100%, rgba(12,38,172,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 85% 75% at 50% 50%,   transparent 30%, rgba(4,0,2,0.80) 100%);
+}
+
+/* Animated orbs */
+.orb {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; z-index: 0; filter: blur(55px);
+}
+.orbRed1  { width:300px; height:300px; background: radial-gradient(circle, rgba(192,57,43,0.22) 0%, transparent 70%); top:8%; left:5%;   animation: floatA 16s ease-in-out infinite; }
+.orbBlue1 { width:380px; height:380px; background: radial-gradient(circle, rgba(12,38,172,0.18) 0%, transparent 70%); top:15%; right:4%; animation: floatB 20s ease-in-out infinite; }
+.orbRed2  { width:260px; height:260px; background: radial-gradient(circle, rgba(192,57,43,0.14) 0%, transparent 70%); bottom:20%; right:8%; animation: floatC 22s ease-in-out infinite; }
+.orbBlue2 { width:320px; height:320px; background: radial-gradient(circle, rgba(28,60,200,0.14) 0%, transparent 70%); bottom:12%; left:6%; animation: floatD 18s ease-in-out infinite; }
+.orbCenter{ width:500px; height:500px; background: radial-gradient(circle, rgba(100,8,8,0.07) 0%, transparent 70%); top:40%; left:50%; transform:translateX(-50%); filter:blur(90px); animation: breathe 26s ease-in-out infinite; }
+
+@keyframes floatA  { 0%,100%{transform:translate(0,0)}     33%{transform:translate(20px,-24px)} 66%{transform:translate(-14px,16px)} }
+@keyframes floatB  { 0%,100%{transform:translate(0,0)}     40%{transform:translate(-22px,18px)} 70%{transform:translate(16px,-12px)} }
+@keyframes floatC  { 0%,100%{transform:translate(0,0)}     30%{transform:translate(-18px,-20px)} 65%{transform:translate(22px,12px)} }
+@keyframes floatD  { 0%,100%{transform:translate(0,0)}     45%{transform:translate(24px,-16px)} 75%{transform:translate(-12px,22px)} }
+@keyframes breathe { 0%,100%{opacity:0.7;transform:translateX(-50%) scale(1)} 50%{opacity:1.0;transform:translateX(-50%) scale(1.08)} }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 10rem 2rem 4rem;
+}
+
+.eyebrow {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.36em; text-transform: uppercase;
+  color: #e74c3c; margin-bottom: 1rem;
+}
+
+.heroTitle {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-weight: 900; color: #f4f4ef;
+  line-height: 1.12; margin-bottom: 1.2rem;
+  display: flex; gap: 0.32em; justify-content: center; flex-wrap: wrap;
+  perspective: 700px;
+}
+
+.heroWord { display: inline-block; transform-origin: bottom center; }
+
+.heroSub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem; color: rgba(244,244,239,0.42);
+  letter-spacing: 0.03em; max-width: 400px; margin: 0 auto 1.8rem;
+}
+
+/* 1px hairline, fading at both ends — Huly/GitHub dark-mode separator pattern */
+.heroDivider {
+  width: 150px; height: 1px;
+  background: rgba(255,255,255,0.10);
+  margin: 0 auto; transform-origin: center;
+}
+
+/* ── COMMITTEE GRID ── */
+.grid {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
+.card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(14,4,8,0.92) 0%, rgba(8,4,18,0.88) 100%);
+  border: 1px solid rgba(192,57,43,0.13);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.32s ease, box-shadow 0.32s ease;
+}
+
+.card:hover {
+  border-color: rgba(192,57,43,0.38);
+  box-shadow:
+    0 0 0 1px rgba(192,57,43,0.18),
+    0 20px 50px rgba(0,0,0,0.55),
+    0 0 40px rgba(192,57,43,0.10);
+}
+
+/* Glow overlay on hover */
+.cardGlow {
+  position: absolute; inset: 0; border-radius: 16px;
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(192,57,43,0.08) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.32s ease; pointer-events: none;
+}
+.card:hover .cardGlow { opacity: 1; }
+
+/* ── IMAGE SLOT ── */
+.imgWrap {
+  position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden;
+  background: rgba(8,2,8,0.95);
+}
+
+.img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0; transition: opacity 0.5s ease;
+}
+.imgLoaded { opacity: 1; }
+
+/* Placeholder when no image uploaded */
+.imgPlaceholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.5rem;
+}
+
+.imgAbbrText {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: rgba(244,244,239,0.18);
+  letter-spacing: 0.12em;
+}
+
+.imgUploadHint {
+  font-family: 'Geist', sans-serif;
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(244,244,239,0.14);
+  border: 1px dashed rgba(244,244,239,0.12);
+  padding: 3px 10px; border-radius: 4px;
+}
+
+/* ── CARD BODY ── */
+.cardBody {
+  padding: 1.2rem 1.4rem 1.4rem;
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+
+/* Category tag */
+.tag {
+  display: inline-block; align-self: flex-start;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.60rem; font-weight: 700;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px;
+  border: 1px solid; margin-bottom: 0.3rem;
+}
+.tag_ga          { color: rgba(231,76,60,0.85);  border-color: rgba(231,76,60,0.22);  background: rgba(231,76,60,0.06); }
+.tag_security    { color: rgba(255,100,80,0.90);  border-color: rgba(255,100,80,0.28); background: rgba(200,30,10,0.08); }
+.tag_specialized { color: rgba(86,160,242,0.85);  border-color: rgba(86,160,242,0.22); background: rgba(12,38,172,0.08); }
+.tag_crisis      { color: rgba(255,160,60,0.85);  border-color: rgba(255,160,60,0.22); background: rgba(180,80,10,0.07); }
+.tag_press       { color: rgba(200,200,200,0.75); border-color: rgba(200,200,200,0.18);background: rgba(100,100,100,0.06); }
+
+/* Committee name */
+.cardName {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(0.82rem, 1.4vw, 0.96rem);
+  font-weight: 700; color: rgba(244,244,239,0.88);
+  line-height: 1.4; margin: 0;
+}
+
+.cardType {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem; color: rgba(244,244,239,0.32);
+  letter-spacing: 0.04em; margin: 0;
+}
+
+/* ── CARD LINK + ARROW HINT ── */
+.cardLink { display: block; text-decoration: none; color: inherit; }
+
+.cardArrow {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'Geist', sans-serif;
+  font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: rgba(192,57,43,0.45);
+  margin-top: 0.8rem;
+  transition: color 0.25s ease, gap 0.25s ease;
+}
+.card:hover .cardArrow {
+  color: rgba(231,76,60,0.90);
+  gap: 10px;
+}
