@@ -4,31 +4,25 @@ import Footer from '../components/Footer'
 import HomeBeacon from '../components/HomeBeacon'
 import styles from './RegisterPage.module.css'
 
-// ── Replace these with your actual links ──────────────────────
-const PAYMENT_LINK = 'https://chirec.ac.in/payment'   // TODO: real payment portal
-const FORM_LINK    = 'https://forms.gle/placeholder'   // TODO: real Google Form link
-
-const FACTS = [
-  '14 committees spanning global policy & crisis',
-  '300+ delegates from schools across India',
-  '3 full days of high-level debate & diplomacy',
-  'Official awards, certificates & recognition',
-  'Edition XIV — our most ambitious year yet',
+const STATS = [
+  { num: '14',   label: 'Committees' },
+  { num: '300+', label: 'Delegates' },
+  { num: '3',    label: 'Days' },
+  { num: 'XIV',  label: 'Edition' },
 ]
 
-const blurUp = (delay = 0) => ({
-  initial:     { opacity: 0, filter: 'blur(8px)', y: 14 },
-  animate:     { opacity: 1, filter: 'blur(0px)', y: 0 },
-  transition:  { duration: 0.55, ease: [0.22, 1, 0.36, 1], delay },
+const blurIn = (delay = 0) => ({
+  initial:    { opacity: 0, filter: 'blur(10px)', y: 16 },
+  animate:    { opacity: 1, filter: 'blur(0px)',  y: 0  },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay },
 })
 
 export default function RegisterPage() {
   return (
     <div className={styles.page}>
-      {/* Background atmosphere */}
       <div className={styles.bgOrb1} />
       <div className={styles.bgOrb2} />
-      <div className={styles.bgGrid} />
+      <canvas className={styles.bgNoise} aria-hidden="true" />
 
       <Navbar />
 
@@ -40,131 +34,116 @@ export default function RegisterPage() {
           {/* ── LEFT ── */}
           <div className={styles.left}>
 
-            {/* Status pill */}
-            <motion.div className={styles.statusPill} {...blurUp(0.05)}>
-              <span className={styles.statusDot} />
-              Registration Open
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1 className={styles.headline} {...blurUp(0.12)}>
-              Debate<br />
-              <span className={styles.headlineAccent}>what matters.</span>
-            </motion.h1>
-
-            {/* Description */}
-            <motion.p className={styles.desc} {...blurUp(0.22)}>
-              Seats are limited. When registrations open, they go fast —
-              300+ delegates compete for spots across 14 committees. Don't
-              be the one who missed it.
+            <motion.p className={styles.eyebrow} {...blurIn(0.05)}>
+              CHIREC MUN 2026 &nbsp;·&nbsp; Edition XIV
             </motion.p>
 
-            {/* Fact list */}
-            <motion.ul className={styles.facts} {...blurUp(0.30)}>
-              {FACTS.map((fact, i) => (
-                <motion.li
-                  key={i}
-                  className={styles.factItem}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.35 + i * 0.07 }}
-                >
-                  <span className={styles.factCheck}>
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  </span>
-                  {fact}
-                </motion.li>
-              ))}
-            </motion.ul>
+            <motion.h1 className={styles.headline} {...blurIn(0.13)}>
+              Shape the world.<br />
+              <span className={styles.headlineDim}>Start here.</span>
+            </motion.h1>
 
-            {/* Date strip */}
-            <motion.div className={styles.dates} {...blurUp(0.72)}>
-              {['Jul 31', 'Aug 1', 'Aug 2'].map((d, i) => (
-                <span key={d} className={styles.dateChip}>
-                  <span className={styles.dateDay}>{d}</span>
-                  <span className={styles.dateSub}>Day {i + 1}</span>
-                </span>
+            <motion.p className={styles.desc} {...blurIn(0.22)}>
+              Three days. Fourteen committees. One chance to represent, reason,
+              and resolve on some of the world's most pressing issues.
+              Spots are limited — and they go fast.
+            </motion.p>
+
+            {/* Stats grid */}
+            <motion.div className={styles.statsGrid} {...blurIn(0.30)}>
+              {STATS.map(s => (
+                <div key={s.label} className={styles.statBox}>
+                  <span className={styles.statNum}>{s.num}</span>
+                  <span className={styles.statLabel}>{s.label}</span>
+                </div>
               ))}
             </motion.div>
+
+            {/* Date bar */}
+            <motion.div className={styles.dateBar} {...blurIn(0.40)}>
+              <span className={styles.dateBarLabel}>Conference Dates</span>
+              <span className={styles.dateBarValue}>July 31 – August 2, 2026</span>
+              <span className={styles.dateBarVenue}>CHIREC International School, Hyderabad</span>
+            </motion.div>
+
           </div>
 
           {/* ── RIGHT ── */}
           <motion.div
             className={styles.right}
-            initial={{ opacity: 0, x: 32 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           >
-            <div className={styles.panel}>
-              <div className={styles.panelGlow} />
+            {/* Watermark */}
+            <span className={styles.watermark} aria-hidden="true">XIV</span>
 
-              <div className={styles.panelHeader}>
-                <p className={styles.panelEyebrow}>CHIREC MUN 2026 · Edition XIV</p>
-                <h2 className={styles.panelTitle}>
-                  Secure your <span className={styles.panelAccent}>seat.</span>
-                </h2>
+            <div className={styles.panel}>
+              <div className={styles.panelTop}>
+                <p className={styles.panelTag}>Registration</p>
+                <h2 className={styles.panelTitle}>Two steps to your seat.</h2>
                 <p className={styles.panelSub}>
-                  Complete payment first, then fill the registration form.
-                  Both steps are required to confirm your spot.
+                  Complete both steps in order. Your registration is only
+                  confirmed once payment is verified by the Secretariat.
                 </p>
               </div>
 
-              {/* Step 1 */}
-              <motion.a
-                href={PAYMENT_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.step}
-                whileHover={{ scale: 1.015 }}
-                whileTap={{ scale: 0.985 }}
-                transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-              >
-                <div className={styles.stepLeft}>
-                  <span className={styles.stepNum}>Step 1</span>
-                  <span className={styles.stepTitle}>Complete Payment</span>
-                  <span className={styles.stepDesc}>
-                    Pay the registration fee through the official CHIREC payment portal to confirm your seat.
-                  </span>
+              {/* ── Step 1 ── */}
+              <div className={styles.stepWrap}>
+                <div className={styles.stepTrack}>
+                  <div className={styles.stepBubble}>1</div>
+                  <div className={styles.stepLine} />
                 </div>
-                <div className={styles.stepArrow}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                <div className={styles.stepBody}>
+                  <div className={styles.stepMeta}>
+                    <span className={styles.stepMetaLabel}>Step 1</span>
+                    <span className={styles.stepMetaBadge}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                      Coming Soon
+                    </span>
+                  </div>
+                  <h3 className={styles.stepTitle}>Complete Payment</h3>
+                  <p className={styles.stepDesc}>
+                    Pay the registration fee via the official CHIREC payment
+                    portal. You'll receive a transaction ID to carry forward.
+                  </p>
+                  <div className={styles.stepBtn} aria-disabled="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>
+                    Pay Registration Fee
+                    <span className={styles.stepBtnLock}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </span>
+                  </div>
                 </div>
-              </motion.a>
-
-              {/* Step connector */}
-              <div className={styles.connector}>
-                <div className={styles.connectorLine} />
-                <span className={styles.connectorLabel}>then</span>
-                <div className={styles.connectorLine} />
               </div>
 
-              {/* Step 2 */}
-              <motion.a
-                href={FORM_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.step} ${styles.stepGhost}`}
-                whileHover={{ scale: 1.015 }}
-                whileTap={{ scale: 0.985 }}
-                transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-              >
-                <div className={styles.stepLeft}>
-                  <span className={styles.stepNum}>Step 2</span>
-                  <span className={styles.stepTitle}>Registration Form</span>
-                  <span className={styles.stepDesc}>
-                    Fill in your details, school, and committee preferences via our registration form.
-                  </span>
+              {/* ── Step 2 ── */}
+              <div className={styles.stepWrap}>
+                <div className={styles.stepTrack}>
+                  <div className={`${styles.stepBubble} ${styles.stepBubbleDim}`}>2</div>
                 </div>
-                <div className={styles.stepArrow}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                <div className={styles.stepBody}>
+                  <div className={styles.stepMeta}>
+                    <span className={styles.stepMetaLabel}>Step 2</span>
+                    <span className={styles.stepMetaBadge}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                      Priority Round Opening Soon
+                    </span>
+                  </div>
+                  <h3 className={styles.stepTitle}>Registration Form</h3>
+                  <p className={styles.stepDesc}>
+                    Fill in your delegate details, school information, and
+                    committee preferences. Priority spots go to early applicants.
+                  </p>
+                  <div className={`${styles.stepBtn} ${styles.stepBtnGhost}`} aria-disabled="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    Fill Registration Form
+                    <span className={styles.stepBtnLock}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </span>
+                  </div>
                 </div>
-              </motion.a>
+              </div>
 
               <p className={styles.panelNote}>
                 Questions? Reach us at{' '}
