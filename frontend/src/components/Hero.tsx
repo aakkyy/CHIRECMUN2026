@@ -326,7 +326,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 80, damping: 22, delay: 1.35 }}
         >
-          <BlobButton href="#register" variant="red" className={styles.btnPrimary}>
+          <BlobButton href="/register" variant="red" className={styles.btnPrimary}>
             Register as Delegate
           </BlobButton>
           <BlobButton href="/committees" variant="blue" className={styles.btnGhost}>
