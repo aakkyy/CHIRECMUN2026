@@ -3,47 +3,47 @@
 ══════════════════════════════════════════════ */
 .page {
   min-height: 100vh;
-  background: #0c0008;
+  background: #1a0012;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Gradient wash so the page isn't pure black */
+/* Strong gradient wash — actually visible */
 .bgGrad {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(192,57,43,0.13) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 10% 80%, rgba(29,78,216,0.07) 0%, transparent 55%);
+    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(192,57,43,0.28) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 50% at 5% 85%, rgba(29,78,216,0.12) 0%, transparent 52%),
+    linear-gradient(160deg, #1a0012 0%, #0e000a 55%, #12000f 100%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Subtle dot grid */
+/* Dot grid — bright enough to actually see */
 .bgGrid {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 .bgOrb1 {
   position: fixed;
-  top: -180px; left: -180px;
-  width: 640px; height: 640px;
+  top: -160px; left: -160px;
+  width: 700px; height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(192,57,43,0.22) 0%, transparent 62%);
   pointer-events: none; z-index: 0;
 }
 .bgOrb2 {
   position: fixed;
-  bottom: -140px; right: -140px;
-  width: 520px; height: 520px;
+  bottom: -130px; right: -130px;
+  width: 580px; height: 580px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(29,78,216,0.07) 0%, transparent 68%);
+  background: radial-gradient(circle, rgba(29,78,216,0.13) 0%, transparent 65%);
   pointer-events: none; z-index: 0;
 }
 
@@ -322,7 +322,7 @@
 .phaseDesc {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
-  color: rgba(244,244,239,0.32);
+  color: rgba(244,244,239,0.52);
   line-height: 1.65;
   max-width: 260px;
 }
