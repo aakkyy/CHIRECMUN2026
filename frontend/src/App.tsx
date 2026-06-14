@@ -18,6 +18,7 @@ import CommitteesPage from './pages/CommitteesPage'
 import CommitteeDetailPage from './pages/CommitteeDetailPage'
 import SecretariatPage from './pages/SecretariatPage'
 import FormsPage from './pages/FormsPage'
+import RegisterPage from './pages/RegisterPage'
 import { useReveal } from './hooks/useReveal'
 
 // ── Error boundary — catches render crashes and shows them on screen ──
@@ -97,6 +98,7 @@ export default function App() {
         <Route path="/guidelines" element={<GuidelinesPage />} />
         <Route path="/schedule"   element={<ComingSoonPage />} />
         <Route path="/forms"      element={<FormsPage />} />
+        <Route path="/register"   element={<RegisterPage />} />
       </Routes>
     </ErrorBoundary>
     </>
