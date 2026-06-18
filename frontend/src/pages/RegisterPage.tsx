@@ -118,7 +118,6 @@ export default function RegisterPage() {
             {/* ── Connector ── */}
             <div className={styles.phaseConnector}>
               <div className={styles.connLine} />
-              <span className={styles.connChip}>then</span>
               <div className={styles.connLine} />
             </div>
 
