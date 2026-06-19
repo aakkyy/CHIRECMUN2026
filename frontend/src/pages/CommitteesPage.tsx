@@ -18,9 +18,8 @@ function CommitteeImage({ id, abbr, type }: { id: string; abbr: string; type: Co
           src={`/media/committees/${id}.jpg`}
           alt={abbr}
           className={styles.img}
-          loading="eager"
+          loading="lazy"
           decoding="async"
-          fetchPriority="high"
           onError={() => setHasError(true)}
         />
       ) : (
