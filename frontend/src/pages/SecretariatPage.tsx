@@ -12,15 +12,18 @@ function PortraitPhoto({ slug, role, tier }: { slug: string; role: string; tier:
 
   return (
     <div className={`${styles.portrait} ${styles[`portrait_${tier}`]}`}>
-      <img
-        src={`/media/secretariat/${slug}.jpg`}
-        alt={role}
-        loading="lazy"
-        decoding="async"
-        className={`${styles.portraitImg} ${loaded ? styles.portraitImgLoaded : ''}`}
-        onLoad={() => { setLoaded(true); setErr(false) }}
-        onError={() => setErr(true)}
-      />
+      <picture>
+        <source srcSet={`/media/secretariat/${slug}.webp`} type="image/webp" />
+        <img
+          src={`/media/secretariat/${slug}.jpg`}
+          alt={role}
+          loading="eager"
+          decoding="async"
+          className={`${styles.portraitImg} ${loaded ? styles.portraitImgLoaded : ''}`}
+          onLoad={() => { setLoaded(true); setErr(false) }}
+          onError={() => setErr(true)}
+        />
+      </picture>
       {(!loaded || err) && (
         <div className={styles.portraitPlaceholder}>
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.22)" strokeWidth="0.9">
