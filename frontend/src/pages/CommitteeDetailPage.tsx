@@ -56,15 +56,18 @@ function PersonCard({
       transition={{ type: 'spring', stiffness: 80, damping: 18, delay: index * 0.09 }}
     >
       <div className={styles.personPhotoWrap}>
-        <img
-          src={`/media/dais/${committeeId}-${roleSlug}.jpg`}
-          alt={role}
-          loading="lazy"
-          decoding="async"
-          className={`${styles.personPhoto} ${loaded ? styles.personPhotoLoaded : ''}`}
-          onLoad={() => { setLoaded(true); setHasError(false) }}
-          onError={() => setHasError(true)}
-        />
+        <picture>
+          <source srcSet={`/media/dais/${committeeId}-${roleSlug}.webp`} type="image/webp" />
+          <img
+            src={`/media/dais/${committeeId}-${roleSlug}.jpg`}
+            alt={role}
+            loading="eager"
+            decoding="async"
+            className={`${styles.personPhoto} ${loaded ? styles.personPhotoLoaded : ''}`}
+            onLoad={() => { setLoaded(true); setHasError(false) }}
+            onError={() => setHasError(true)}
+          />
+        </picture>
         {(!loaded || hasError) && (
           <div className={styles.personPhotoPlaceholder}>
             <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.28)" strokeWidth="1.2">

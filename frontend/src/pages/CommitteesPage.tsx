@@ -14,14 +14,17 @@ function CommitteeImage({ id, abbr, type }: { id: string; abbr: string; type: Co
   return (
     <div className={styles.imgWrap}>
       {!hasError ? (
-        <img
-          src={`/media/committees/${id}.jpg`}
-          alt={abbr}
-          className={styles.img}
-          loading="lazy"
-          decoding="async"
-          onError={() => setHasError(true)}
-        />
+        <picture>
+          <source srcSet={`/media/committees/${id}.webp`} type="image/webp" />
+          <img
+            src={`/media/committees/${id}.jpg`}
+            alt={abbr}
+            className={styles.img}
+            loading="eager"
+            decoding="async"
+            onError={() => setHasError(true)}
+          />
+        </picture>
       ) : (
         <div
           className={styles.imgPlaceholder}
