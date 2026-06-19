@@ -7,29 +7,28 @@ import { COMMITTEES, TYPE_COLORS, TYPE_LABELS, type CommitteeType } from '../dat
 import styles from './CommitteesPage.module.css'
 
 function CommitteeImage({ id, abbr, type }: { id: string; abbr: string; type: CommitteeType }) {
-  const [hasError, setHasError] = useState(true) // start with placeholder until image loads
-  const [loaded, setLoaded] = useState(false)
+  const [hasError, setHasError] = useState(false)
 
   const col = TYPE_COLORS[type] || TYPE_COLORS.ga
 
   return (
     <div className={styles.imgWrap}>
-      {/* Actual image — hidden until loaded */}
-      <img
-        src={`/media/committees/${id}.jpg`}
-        alt={abbr}
-        className={`${styles.img} ${loaded ? styles.imgLoaded : ''}`}
-        onLoad={() => { setHasError(false); setLoaded(true) }}
-        onError={() => setHasError(true)}
-      />
-      {/* Placeholder — visible when image missing */}
-      {hasError && (
+      {!hasError ? (
+        <img
+          src={`/media/committees/${id}.jpg`}
+          alt={abbr}
+          className={styles.img}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          onError={() => setHasError(true)}
+        />
+      ) : (
         <div
           className={styles.imgPlaceholder}
           style={{ background: `linear-gradient(135deg, ${col}0.18) 0%, rgba(4,0,2,0.95) 100%)` }}
         >
           <span className={styles.imgAbbrText}>{abbr}</span>
-          <span className={styles.imgUploadHint}>Image Pending</span>
         </div>
       )}
     </div>
