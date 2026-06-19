@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import styles from './Hero.module.css'
-import logoImg from '../assets/logo.png'
 import BlobButton from './BlobButton'
+
+const logoImg = '/static/react/logo.png'
 
 const CHIREC_LETTERS = [
   { char: 'C', color: '#e74c3c', glow: 'rgba(231,76,60,0.95)' },
