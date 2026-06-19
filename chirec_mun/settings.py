@@ -31,9 +31,14 @@ except ImportError:
 SECRET_KEY = 'django-insecure-2mbzz(!c$pn&*gn4!k3vqz=nfs9n_g!6eojol_5y(u$$ss0=d0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = FALSE
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 
+    "chirecmun.in"
+    "www.chirecmun.in"
+    
+
+                ]
 
 
 # Application definition
