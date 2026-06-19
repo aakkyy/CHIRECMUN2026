@@ -26,6 +26,11 @@ CSRF_TRUSTED_ORIGINS = [
     h for h in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if h
 ]
 
+# ── HTTPS redirect (production only) ──────────────────────────
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+
 # ── Apps ──────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
