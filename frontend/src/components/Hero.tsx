@@ -255,7 +255,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 80, damping: 22, delay: 0.15 }}
         >
-          <img src={logoImg} alt="CHIREC MUN logo" className={styles.logo} />
+          <img src={logoImg} alt="CHIREC MUN logo" className={styles.logo} fetchPriority="high" />
           <span className={styles.metaDivider} />
           <span className={styles.editionLabel}>Edition XIV</span>
           <span className={styles.metaDivider} />
