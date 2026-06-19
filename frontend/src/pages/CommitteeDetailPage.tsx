@@ -59,6 +59,8 @@ function PersonCard({
         <img
           src={`/media/dais/${committeeId}-${roleSlug}.jpg`}
           alt={role}
+          loading="lazy"
+          decoding="async"
           className={`${styles.personPhoto} ${loaded ? styles.personPhotoLoaded : ''}`}
           onLoad={() => { setLoaded(true); setHasError(false) }}
           onError={() => setHasError(true)}

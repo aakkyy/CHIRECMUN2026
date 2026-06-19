@@ -15,6 +15,8 @@ function PortraitPhoto({ slug, role, tier }: { slug: string; role: string; tier:
       <img
         src={`/media/secretariat/${slug}.jpg`}
         alt={role}
+        loading="lazy"
+        decoding="async"
         className={`${styles.portraitImg} ${loaded ? styles.portraitImgLoaded : ''}`}
         onLoad={() => { setLoaded(true); setErr(false) }}
         onError={() => setErr(true)}
