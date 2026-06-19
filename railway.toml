@@ -1,8 +1,8 @@
 [build]
 builder = "nixpacks"
-buildCommand = "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+buildCommand = "pip install -r requirements.txt && python manage.py collectstatic --noinput"
 
 [deploy]
-startCommand = "gunicorn chirec_mun.wsgi --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+startCommand = "python manage.py migrate && gunicorn chirec_mun.wsgi --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
