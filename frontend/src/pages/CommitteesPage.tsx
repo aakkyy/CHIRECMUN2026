@@ -80,7 +80,7 @@ export default function CommitteesPage() {
         <motion.p className={styles.heroSub}
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.52, duration: 0.6 }}
-        >14 committees across diplomacy, crisis, law, and press.</motion.p>
+        >13 committees across diplomacy, crisis, law, and press.</motion.p>
 
         <motion.div className={styles.heroDivider}
           initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}

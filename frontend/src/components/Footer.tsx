@@ -203,7 +203,7 @@ export default function Footer() {
               </span>
               <div>
                 <span className={styles.eventLabel}>Duration</span>
-                <span className={styles.eventValue}>3 Days · 14 Committees</span>
+                <span className={styles.eventValue}>3 Days · 13 Committees</span>
               </div>
             </div>
             <div className={styles.eventSep} />

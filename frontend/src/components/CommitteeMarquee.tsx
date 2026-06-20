@@ -90,7 +90,7 @@ export default function CommitteeMarquee() {
       >
         <p className={styles.eyebrow}>What Awaits You</p>
         <h2 className={styles.title}>The Committees</h2>
-        <p className={styles.sub}>14 committees across 5 tracks</p>
+        <p className={styles.sub}>13 committees across 5 tracks</p>
       </motion.div>
 
       <motion.div
@@ -112,7 +112,7 @@ export default function CommitteeMarquee() {
         transition={{ type: 'spring', stiffness: 88, damping: 22, delay: 0.3 }}
       >
         <a href="/committees" className={styles.viewAll}>
-          Explore all 14 committees
+          Explore all 13 committees
           <svg
             width="12" height="12" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
