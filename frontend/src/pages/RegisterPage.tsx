@@ -5,7 +5,7 @@ import HomeBeacon from '../components/HomeBeacon'
 import styles from './RegisterPage.module.css'
 
 const STATS = [
-  { num: '14',   label: 'Committees' },
+  { num: '13',   label: 'Committees' },
   { num: '600+', label: 'Delegates'  },
   { num: '3',    label: 'Days'       },
   { num: 'XIV',  label: 'Edition'    },

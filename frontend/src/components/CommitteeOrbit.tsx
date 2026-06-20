@@ -139,7 +139,7 @@ export default function CommitteeOrbit() {
 
         {/* Center stat */}
         <div className={styles.centerStat}>
-          <span className={styles.centerNum}>14</span>
+          <span className={styles.centerNum}>13</span>
           <span className={styles.centerLabel}>Committees</span>
         </div>
 
