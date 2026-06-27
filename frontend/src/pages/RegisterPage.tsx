@@ -148,6 +148,23 @@ export default function RegisterPage() {
 
           </div>
 
+          {/* ── Mandatory Forms Banner ── */}
+          <motion.div
+            className={styles.formsBanner}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.9)" strokeWidth="2" style={{ flexShrink: 0 }}>
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v4M12 16h.01"/>
+            </svg>
+            <p className={styles.formsBannerText}>
+              <strong>Important:</strong> All delegates must download, sign, and carry the mandatory forms on Day 1 or they will not be permitted entry.{' '}
+              <a href="/forms" className={styles.formsBannerLink}>View Mandatory Forms →</a>
+            </p>
+          </motion.div>
+
           <p className={styles.contactNote}>
             Questions? Reach us at{' '}
             <a href="mailto:contact.mun@chirec.ac.in" className={styles.contactLink}>contact.mun@chirec.ac.in</a>
