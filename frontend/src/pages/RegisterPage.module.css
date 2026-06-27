@@ -392,6 +392,35 @@
   border-radius: 999px;
 }
 
+/* ── Mandatory forms banner ── */
+.formsBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(192,57,43,0.08);
+  border: 1px solid rgba(192,57,43,0.28);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  max-width: 600px;
+  width: 100%;
+  align-self: center;
+}
+.formsBannerText {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(244,244,239,0.72);
+  line-height: 1.6;
+  margin: 0;
+}
+.formsBannerLink {
+  color: rgba(231,76,60,0.9);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.18s;
+}
+.formsBannerLink:hover { color: #e74c3c; }
+
 /* ── Contact note ── */
 .contactNote {
   font-family: 'Inter', sans-serif;
