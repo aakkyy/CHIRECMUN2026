@@ -1,11 +1,14 @@
 import json
+import os
+import resend
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.core.mail import send_mail
 from django.conf import settings
 from .models import DelegateRegistration
+
+resend.api_key = os.environ.get('RESEND_API_KEY', '')
 
 
 def index(request):
@@ -38,20 +41,20 @@ def contact(request):
         return JsonResponse({'error': 'firstName, email and message are required.'}, status=400)
 
     full_name = f'{first} {last}'.strip()
+    recipient = os.environ.get('CONTACT_RECIPIENT', 'contact.mun@chirec.ac.in')
 
     try:
-        send_mail(
-            subject=f'CHIREC MUN 2026 — Enquiry from {full_name}',
-            message=(
+        resend.Emails.send({
+            'from': 'CHIREC MUN <onboarding@resend.dev>',
+            'to': [recipient],
+            'subject': f'CHIREC MUN 2026 — Enquiry from {full_name}',
+            'text': (
                 f'Name:    {full_name}\n'
                 f'Email:   {email}\n'
                 f'{"─" * 40}\n\n'
                 f'{message}'
             ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.CONTACT_RECIPIENT],
-            fail_silently=False,
-        )
+        })
     except Exception as exc:
         return JsonResponse({'error': f'Mail error: {exc}'}, status=500)
 
@@ -88,11 +91,15 @@ def register(request):
 
     full_name = f"{reg.first_name} {reg.last_name}"
 
+    recipient = os.environ.get('CONTACT_RECIPIENT', 'contact.mun@chirec.ac.in')
+
     # Confirmation to delegate
     try:
-        send_mail(
-            subject='CHIREC MUN 2026 — Registration Received',
-            message=(
+        resend.Emails.send({
+            'from': 'CHIREC MUN <onboarding@resend.dev>',
+            'to': [reg.email],
+            'subject': 'CHIREC MUN 2026 — Registration Received',
+            'text': (
                 f'Dear {reg.first_name},\n\n'
                 f'Your registration for CHIREC MUN 2026 has been received!\n\n'
                 f'Details:\n'
@@ -105,18 +112,17 @@ def register(request):
                 f'See you at the conference!\n'
                 f'CHIREC MUN 2026 Secretariat'
             ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[reg.email],
-            fail_silently=True,
-        )
+        })
     except Exception:
         pass
 
     # Notify organizers
     try:
-        send_mail(
-            subject=f'New Registration #{reg.id}: {full_name} — {reg.school}',
-            message=(
+        resend.Emails.send({
+            'from': 'CHIREC MUN <onboarding@resend.dev>',
+            'to': [recipient],
+            'subject': f'New Registration #{reg.id}: {full_name} — {reg.school}',
+            'text': (
                 f'New delegate registration:\n\n'
                 f'  Name:          {full_name}\n'
                 f'  School:        {reg.school}\n'
@@ -129,10 +135,7 @@ def register(request):
                 f'  Transaction ID: {reg.transaction_id}\n'
                 f'  Dietary:       {reg.dietary or "None"}\n'
             ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.CONTACT_RECIPIENT],
-            fail_silently=True,
-        )
+        })
     except Exception:
         pass
 
