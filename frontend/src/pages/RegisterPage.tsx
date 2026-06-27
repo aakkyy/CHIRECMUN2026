@@ -44,7 +44,7 @@ export default function RegisterPage() {
           </motion.h1>
 
           <motion.p className={styles.desc} {...fadeUp(0.19)}>
-            Three days. Fourteen committees. One chance to represent, reason,
+            Three days. Thirteen committees. One chance to represent, reason,
             and resolve on some of the world's most pressing issues.
             Spots are limited and they go fast.
           </motion.p>
@@ -80,37 +80,32 @@ export default function RegisterPage() {
           <div className={styles.phaseGrid}>
 
             {/* ── Phase 01 ── */}
-            <div className={styles.phaseCard}>
-              <div className={`${styles.statusStrip} ${styles.statusStripGreen}`}>
-                <span className={`${styles.dot} ${styles.dotGreen}`} />
-                Open Now
+            <div className={`${styles.phaseCard} ${styles.phaseCardDim}`}>
+              <div className={`${styles.statusStrip} ${styles.statusStripAmber}`}>
+                <span className={`${styles.dot} ${styles.dotAmber}`} />
+                Coming Soon
               </div>
 
               <div className={styles.phaseBody}>
-                <span className={styles.phaseNumBg} aria-hidden="true">01</span>
+                <span className={`${styles.phaseNumBg} ${styles.phaseNumBgDim}`} aria-hidden="true">01</span>
 
                 <div className={styles.phaseContent}>
                   <p className={styles.phaseTag}>Phase 01</p>
-                  <h2 className={styles.phaseTitle}>Register Now</h2>
+                  <h2 className={`${styles.phaseTitle} ${styles.phaseTitleDim}`}>Register Now</h2>
                   <p className={styles.phaseDesc}>
-                    Priority Round applications out now!
+                    Round 1 Delegate Applications coming soon.
                   </p>
 
-                  <a
-                    href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=gtzSBu1vO02SGDfTT7BAW4J3U5c18QpFrxiPyTk3MHlUM0dGUEVSSVVRVlJOT0FNT05NTkdTSjJBWi4u&utm_source=ig&utm_medium=social&utm_content=link_in_bio&route=shorturl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.phaseBtn} ${styles.phaseBtnActive}`}
-                  >
+                  <div className={`${styles.phaseBtn} ${styles.phaseBtnGhost}`} aria-disabled="true">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
                       <polyline points="14 2 14 8 20 8"/>
                     </svg>
                     Apply Now
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.lockSvg}>
+                      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
                     </svg>
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
