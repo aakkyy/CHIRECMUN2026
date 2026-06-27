@@ -70,6 +70,33 @@ export default function RegisterPage() {
 
         </section>
 
+        {/* ════════════════ MANDATORY FORMS BANNER ════════════════ */}
+        <motion.a
+          href="/forms"
+          className={styles.formsBanner}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
+        >
+          <div className={styles.formsBannerLeft}>
+            <span className={styles.formsBannerPulse} aria-hidden="true" />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div className={styles.formsBannerBody}>
+            <p className={styles.formsBannerTitle}>Mandatory Forms Required</p>
+            <p className={styles.formsBannerSub}>All delegates must carry signed copies of the Tech Release and Liability Release forms on Day 1. Missing forms = no entry.</p>
+          </div>
+          <div className={styles.formsBannerCta}>
+            View Forms
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </motion.a>
+
         {/* ════════════════ PHASE CARDS ════════════════ */}
         <motion.section
           className={styles.phases}
@@ -147,23 +174,6 @@ export default function RegisterPage() {
             </div>
 
           </div>
-
-          {/* ── Mandatory Forms Banner ── */}
-          <motion.div
-            className={styles.formsBanner}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.9)" strokeWidth="2" style={{ flexShrink: 0 }}>
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 8v4M12 16h.01"/>
-            </svg>
-            <p className={styles.formsBannerText}>
-              <strong>Important:</strong> All delegates must download, sign, and carry the mandatory forms on Day 1 or they will not be permitted entry.{' '}
-              <a href="/forms" className={styles.formsBannerLink}>View Mandatory Forms →</a>
-            </p>
-          </motion.div>
 
           <p className={styles.contactNote}>
             Questions? Reach us at{' '}
