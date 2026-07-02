@@ -6,12 +6,12 @@ export interface DaisMember {
 export const DAIS: Record<string, DaisMember[]> = {
   disec: [
     { role: 'Chairperson',      name: 'Eswar Chava' },
-    { role: 'Vice Chairperson', name: 'Prabhas Adabala' },
+    { role: 'Vice Chair', name: 'Prabhas Adabala' },
     { role: 'Rapporteur',       name: 'Vivaan Bhushan' },
   ],
   unhrc: [
     { role: 'Chairperson',      name: 'Chaarmika Nagalla' },
-    { role: 'Vice Chairperson', name: 'Sarayu' },
+    { role: 'Vice Chair', name: 'Sarayu' },
     { role: 'Rapporteur',       name: 'Anvit Katturi' },
   ],
 }
