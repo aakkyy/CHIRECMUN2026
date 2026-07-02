@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { COMMITTEES, TYPE_COLORS, TYPE_LABELS } from '../data/committees'
+import { DAIS } from '../data/dais'
 import styles from './CommitteeDetailPage.module.css'
 
 // ── Hero image with full-bleed fallback ──────────────────────
@@ -37,10 +38,12 @@ function HeroImage({ id, abbr, type }: { id: string; abbr: string; type: string 
 // ── Dais member card with photo placeholder ───────────────────
 function PersonCard({
   role,
+  name,
   committeeId,
   index,
 }: {
   role: string
+  name: string
   committeeId: string
   index: number
 }) {
@@ -81,7 +84,7 @@ function PersonCard({
 
       <div className={styles.personInfo}>
         <span className={styles.personRole}>{role}</span>
-        <p className={styles.personName}>To Be Announced</p>
+        <p className={styles.personName}>{name || 'To Be Announced'}</p>
       </div>
     </motion.div>
   )
@@ -196,10 +199,15 @@ export default function CommitteeDetailPage() {
           </motion.div>
 
           <div className={styles.daisGrid}>
-            {['Chairperson', 'Vice Chair', 'Rapporteur'].map((role, i) => (
+            {(DAIS[committee.id] ?? [
+              { role: 'Chairperson',      name: '' },
+              { role: 'Vice Chairperson', name: '' },
+              { role: 'Rapporteur',       name: '' },
+            ]).map((member, i) => (
               <PersonCard
-                key={role}
-                role={role}
+                key={member.role}
+                role={member.role}
+                name={member.name}
                 committeeId={committee.id}
                 index={i}
               />
