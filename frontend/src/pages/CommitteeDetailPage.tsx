@@ -49,7 +49,7 @@ function PersonCard({
 }) {
   const [loaded, setLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
-  const roleSlug = role.toLowerCase().replace(/\s+/g, '-').replace(/\//g, '-')
+  const nameSlug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 
   return (
     <motion.div
@@ -60,9 +60,9 @@ function PersonCard({
     >
       <div className={styles.personPhotoWrap}>
         <picture>
-          <source srcSet={`/media/dais/${committeeId}-${roleSlug}.webp`} type="image/webp" />
+          <source srcSet={`/media/dais/${committeeId}-${nameSlug}.webp`} type="image/webp" />
           <img
-            src={`/media/dais/${committeeId}-${roleSlug}.jpg`}
+            src={`/media/dais/${committeeId}-${nameSlug}.jpg`}
             alt={role}
             loading="eager"
             decoding="async"

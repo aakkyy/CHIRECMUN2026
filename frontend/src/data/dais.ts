@@ -31,7 +31,7 @@ export const DAIS: Record<string, DaisMember[]> = {
   jcc: [
     { role: 'Crisis Director',     name: 'Aravind Y Belur' },
     { role: 'Co-Chairperson',      name: 'Fazil Razak' },
-    { role: 'Co-Chairperson',      name: 'Ayush R' },
+    { role: 'Co-Chairperson',      name: '' },
     { role: 'Co-Vice Chairperson', name: 'Vihaan Reddy' },
     { role: 'Co-Vice Chairperson', name: 'La Verna Chand' },
   ],
