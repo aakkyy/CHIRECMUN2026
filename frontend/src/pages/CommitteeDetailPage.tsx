@@ -201,7 +201,7 @@ export default function CommitteeDetailPage() {
           <div className={styles.daisGrid}>
             {(DAIS[committee.id] ?? [
               { role: 'Chairperson',      name: '' },
-              { role: 'Vice Chairperson', name: '' },
+              { role: 'Vice Chair', name: '' },
               { role: 'Rapporteur',       name: '' },
             ]).map((member, i) => (
               <PersonCard
