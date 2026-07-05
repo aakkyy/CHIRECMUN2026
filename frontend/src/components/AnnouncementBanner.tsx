@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import styles from './AnnouncementBanner.module.css'
 
-const BANNER_H = 44
+const BANNER_H = 40
 
 export default function AnnouncementBanner() {
   const [visible, setVisible] = useState(true)
@@ -29,24 +29,21 @@ export default function AnnouncementBanner() {
           <div className={styles.inner}>
             <span className={styles.badge}>OPEN</span>
             <p className={styles.text}>
-              Round 1 Delegate &amp; IP Registration is now open
+              Round 1 Delegate &amp; IP Registration is live — spots are limited
               <span className={styles.sep} aria-hidden="true">·</span>
               <Link to="/register" className={styles.cta}>Apply Now →</Link>
             </p>
           </div>
 
-          <motion.button
+          <button
             className={styles.close}
             onClick={() => setVisible(false)}
             aria-label="Dismiss announcement"
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.88 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
-          </motion.button>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

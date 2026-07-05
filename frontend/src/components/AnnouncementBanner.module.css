@@ -3,40 +3,66 @@
   top: 0;
   left: 0;
   right: 0;
+  height: 40px;
   z-index: 600;
   background: #0d0204;
-  border-bottom: 1px solid rgba(192, 57, 43, 0.3);
-  box-shadow: 0 2px 24px rgba(192, 57, 43, 0.07);
+  border-bottom: 1px solid rgba(192, 57, 43, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
+/* shimmer sweep across the bar background */
+.banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent       20%,
+    rgba(192,57,43,0.10) 40%,
+    rgba(255,255,255,0.06) 50%,
+    rgba(192,57,43,0.10) 60%,
+    transparent       80%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -100% center; }
+}
+
 .inner {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
 }
 
 .badge {
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   color: #c0392b;
-  border: 1px solid rgba(192, 57, 43, 0.5);
+  border: 1px solid rgba(192, 57, 43, 0.45);
   border-radius: 4px;
-  padding: 2px 6px;
+  padding: 2px 5px;
   text-transform: uppercase;
   flex-shrink: 0;
+  line-height: 1;
 }
 
 .text {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.78);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -44,41 +70,46 @@
 }
 
 .sep {
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .cta {
   color: rgba(192, 57, 43, 0.9);
   text-decoration: none;
-  border-bottom: 1px solid rgba(192, 57, 43, 0.35);
+  border-bottom: 1px solid rgba(192, 57, 43, 0.3);
   padding-bottom: 1px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .cta:hover {
   color: #c0392b;
-  border-color: rgba(192, 57, 43, 0.75);
+  border-color: rgba(192, 57, 43, 0.65);
 }
 
+/* close — pure CSS, no Framer Motion so it never jumps */
 .close {
   position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 14px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  height: 24px;
+  width: 24px;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   transition: color 0.15s ease, background 0.15s ease;
-  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  z-index: 1;
 }
 
 .close:hover {
-  color: rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.07);
 }
