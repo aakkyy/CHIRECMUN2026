@@ -139,6 +139,44 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* ── CONTACT ── */}
+        <div className={styles.col}>
+          <div className={styles.colHeader}>
+            <span>Contact</span>
+          </div>
+          <div className={styles.contactList}>
+            <a
+              href="mailto:contact.mun@chirec.ac.in"
+              className={styles.contactItem}
+            >
+              <span className={styles.contactIcon}><MailIcon /></span>
+              <span className={styles.contactText}>
+                <span className={styles.contactLabel}>General Enquiries</span>
+                contact.mun@chirec.ac.in
+              </span>
+            </a>
+            <a
+              href="https://instagram.com/chirecmun"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.contactItem}
+            >
+              <span className={styles.contactIcon}><IgIcon /></span>
+              <span className={styles.contactText}>
+                <span className={styles.contactLabel}>Instagram</span>
+                @chirecmun
+              </span>
+            </a>
+            <div className={styles.contactItem}>
+              <span className={styles.contactIcon}><PinIcon /></span>
+              <span className={styles.contactText}>
+                <span className={styles.contactLabel}>Venue</span>
+                CHIREC ISRP Campus,<br />Serilingampally, Hyderabad
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* ── EVENT DETAILS ── */}
         <div className={styles.col}>
           <div className={styles.colHeader}>
