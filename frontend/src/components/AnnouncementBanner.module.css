@@ -1,0 +1,106 @@
+.banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: #0e7490;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* subtle shimmer sweep */
+.banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
+  50%       { opacity: 0.6; transform: scale(0.85); box-shadow: 0 0 0 4px rgba(255,255,255,0); }
+}
+
+.text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.sep {
+  opacity: 0.45;
+}
+
+.cta {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.cta:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.close {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+  line-height: 1;
+}
+
+.close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}

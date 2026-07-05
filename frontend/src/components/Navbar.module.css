@@ -1,11 +1,12 @@
 /* ── NAVBAR — ultra-thin glassmorphism bar ── */
 .nav {
   position: fixed;
-  top: 0;
+  top: var(--banner-h, 0px);
   left: 0;
   right: 0;
   z-index: 500;
   background: transparent;
+  transition: top 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* no unified glass bar — each section is its own floating pill */

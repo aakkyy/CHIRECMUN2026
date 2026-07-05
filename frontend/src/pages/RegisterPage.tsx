@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HomeBeacon from '../components/HomeBeacon'
+import FormsInterstitial from '../components/FormsInterstitial'
 import styles from './RegisterPage.module.css'
 
 const STATS = [
@@ -20,6 +21,7 @@ const fadeUp = (delay = 0) => ({
 export default function RegisterPage() {
   return (
     <div className={styles.page}>
+      <FormsInterstitial />
 
       <div className={styles.bgGrad}   aria-hidden="true" />
       <div className={styles.bgGrid}   aria-hidden="true" />

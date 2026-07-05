@@ -19,6 +19,7 @@ import SecretariatPage from './pages/SecretariatPage'
 import FormsPage from './pages/FormsPage'
 import RegisterPage from './pages/RegisterPage'
 import { useReveal } from './hooks/useReveal'
+import AnnouncementBanner from './components/AnnouncementBanner'
 
 // ── Error boundary — catches render crashes and shows them on screen ──
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
@@ -85,6 +86,7 @@ function HomePage() {
 export default function App() {
   return (
     <>
+    <AnnouncementBanner />
     <ScrollToTop />
     <ErrorBoundary>
       <Routes>
