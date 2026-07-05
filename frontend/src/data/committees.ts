@@ -21,8 +21,7 @@ export const COMMITTEES: Committee[] = [
   { id: 'jcc',      abbr: 'JCC',    name: 'Joint Crisis Cabinet',                             category: 'Crisis Committee',      type: 'crisis' },
   { id: 'sci',      abbr: 'SCI',    name: 'Supreme Court of India',                           category: 'Legal Body',            type: 'crisis' },
   { id: 'bcci',     abbr: 'BCCI',   name: 'Board of Control for Cricket in India',            category: 'Specialized Committee', type: 'crisis' },
-  { id: 'ip-r',     abbr: 'IP',     name: 'International Press — Reporters',                  category: 'Press Corps',           type: 'press' },
-  { id: 'ip-p',     abbr: 'IP',     name: 'International Press — Photojournalists',           category: 'Press Corps',           type: 'press' },
+  { id: 'ip-p',     abbr: 'IP',     name: 'International Press',                             category: 'Press Corps',           type: 'press' },
 ]
 
 export const TYPE_COLORS: Record<CommitteeType, string> = {

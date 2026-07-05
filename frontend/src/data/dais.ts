@@ -6,7 +6,7 @@ export interface DaisMember {
 export const DAIS: Record<string, DaisMember[]> = {
   disec: [
     { role: 'Chairperson',   name: 'Eswar Chava' },
-    { role: 'Vice Chair',    name: 'Prabhas Adabala' },
+    { role: 'Vice Chair',    name: 'Dhanush Malhotra' },
     { role: 'Rapporteur',    name: 'Vivaan Bhushan' },
   ],
   unhrc: [
@@ -15,7 +15,7 @@ export const DAIS: Record<string, DaisMember[]> = {
     { role: 'Rapporteur',    name: 'Anvit Katturi' },
   ],
   bcci: [
-    { role: 'Chairperson',        name: 'Sharan Veluri' },
+    { role: 'Chairperson',         name: 'Sharan Veluri' },
     { role: 'Co-Vice Chairperson', name: 'Arnav Kaul' },
     { role: 'Co-Vice Chairperson', name: 'Sanjaay Rajkumar' },
   ],
@@ -31,7 +31,7 @@ export const DAIS: Record<string, DaisMember[]> = {
   jcc: [
     { role: 'Crisis Director',     name: 'Aravind Y Belur' },
     { role: 'Co-Chairperson',      name: 'Fazil Razak' },
-    { role: 'Co-Chairperson',      name: '' },
+    { role: 'Co-Chairperson',      name: 'Ayush R' },
     { role: 'Co-Vice Chairperson', name: 'Vihaan Reddy' },
     { role: 'Co-Vice Chairperson', name: 'La Verna Chand' },
   ],
@@ -52,7 +52,7 @@ export const DAIS: Record<string, DaisMember[]> = {
   ],
   unctad: [
     { role: 'Chairperson',   name: 'Sashank Srinivas' },
-    { role: 'Vice Chair',    name: 'Dhanush Malhotra' },
+    { role: 'Vice Chair',    name: 'Avirbhav Danamaraju' },
     { role: 'Rapporteur',    name: 'Abhinav Agarwal' },
   ],
   ec: [
@@ -64,5 +64,10 @@ export const DAIS: Record<string, DaisMember[]> = {
     { role: 'Co-Chairperson', name: 'Deeksha Singh' },
     { role: 'Co-Chairperson', name: 'Niva Barde' },
     { role: 'Rapporteur',     name: 'Arshia Talwar' },
+  ],
+  'ip-p': [
+    { role: 'Head of IP',             name: 'Sai Preethi Polu' },
+    { role: 'Editor in Chief',        name: 'Aanya Patel' },
+    { role: 'Director of Photography', name: 'Sankrushi' },
   ],
 }

@@ -191,31 +191,36 @@ export default function RegisterPage() {
             </div>
 
             {/* ── Phase 03: Allocation Matrix ── */}
-            <div className={`${styles.phaseCard} ${styles.phaseCardDim}`}>
-              <div className={`${styles.statusStrip} ${styles.statusStripAmber}`}>
-                <span className={`${styles.dot} ${styles.dotAmber}`} />
-                Coming Soon
+            <div className={styles.phaseCard}>
+              <div className={`${styles.statusStrip} ${styles.statusStripGreen}`}>
+                <span className={`${styles.dot} ${styles.dotGreen}`} />
+                Open Now
               </div>
 
               <div className={styles.phaseBody}>
-                <span className={`${styles.phaseNumBg} ${styles.phaseNumBgDim}`} aria-hidden="true">03</span>
+                <span className={styles.phaseNumBg} aria-hidden="true">03</span>
 
                 <div className={styles.phaseContent}>
                   <p className={styles.phaseTag}>Phase 03</p>
-                  <h2 className={`${styles.phaseTitle} ${styles.phaseTitleDim}`}>Allocation Matrix</h2>
+                  <h2 className={styles.phaseTitle}>Allocation Matrix</h2>
                   <p className={styles.phaseDesc}>
                     Check the spreadsheet to see your allocation.
                   </p>
 
-                  <div className={`${styles.phaseBtn} ${styles.phaseBtnGhost}`} aria-disabled="true">
+                  <a
+                    href="https://cognitaschoolsuk-my.sharepoint.com/:x:/g/personal/policy_mun_chirec_ac_in/IQCFZQpTLMT3QJjROuyqJpc8AWYqTT70dK05nxgAOi0QGrM"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.phaseBtn} ${styles.phaseBtnActive}`}
+                  >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>
                     </svg>
                     View Allocation Matrix
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={styles.lockSvg}>
-                      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
