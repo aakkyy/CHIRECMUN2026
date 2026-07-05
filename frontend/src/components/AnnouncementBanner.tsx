@@ -27,9 +27,8 @@ export default function AnnouncementBanner() {
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className={styles.inner}>
-            <span className={styles.badge}>OPEN</span>
             <p className={styles.text}>
-              Round 1 Delegate &amp; IP Registration is live — spots are limited
+              Round 1 Delegate &amp; IP Registration is live
               <span className={styles.sep} aria-hidden="true">·</span>
               <Link to="/register" className={styles.cta}>Apply Now →</Link>
             </p>
