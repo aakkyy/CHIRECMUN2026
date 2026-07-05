@@ -3,34 +3,14 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 44px;
-  background: #0e7490;
   z-index: 600;
+  background: #0d0204;
+  border-bottom: 1px solid rgba(192, 57, 43, 0.3);
+  box-shadow: 0 2px 24px rgba(192, 57, 43, 0.07);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-/* subtle shimmer sweep */
-.banner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.07) 50%,
-    transparent 70%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 3.5s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
 }
 
 .inner {
@@ -39,26 +19,24 @@
   gap: 12px;
 }
 
-.liveDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fff;
+.badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #c0392b;
+  border: 1px solid rgba(192, 57, 43, 0.5);
+  border-radius: 4px;
+  padding: 2px 6px;
+  text-transform: uppercase;
   flex-shrink: 0;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1;   transform: scale(1);    box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
-  50%       { opacity: 0.6; transform: scale(0.85); box-shadow: 0 0 0 4px rgba(255,255,255,0); }
 }
 
 .text {
   font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.82);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -66,20 +44,20 @@
 }
 
 .sep {
-  opacity: 0.45;
+  opacity: 0.3;
 }
 
 .cta {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(192, 57, 43, 0.9);
   text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(192, 57, 43, 0.35);
   padding-bottom: 1px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .cta:hover {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.85);
+  color: #c0392b;
+  border-color: rgba(192, 57, 43, 0.75);
 }
 
 .close {
@@ -89,7 +67,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   padding: 6px;
   display: flex;
@@ -101,6 +79,6 @@
 }
 
 .close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
 }
