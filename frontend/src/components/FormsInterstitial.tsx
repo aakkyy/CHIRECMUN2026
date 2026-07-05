@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import styles from './FormsInterstitial.module.css'
 
 export default function FormsInterstitial() {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
+
+  // Delay mount so the page finishes its entrance animation first
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 300)
+    return () => clearTimeout(t)
+  }, [])
 
   return (
     <AnimatePresence>
@@ -19,12 +25,11 @@ export default function FormsInterstitial() {
         >
           <motion.div
             className={styles.modal}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{    opacity: 0, y: 16 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+            exit={{    opacity: 0, y: 20 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* header row */}
             <div className={styles.header}>
               <div className={styles.iconBadge}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
