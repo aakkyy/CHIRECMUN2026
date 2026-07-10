@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { COMMITTEES, TYPE_COLORS, TYPE_LABELS } from '../data/committees'
 import { DAIS } from '../data/dais'
+import { AGENDAS } from '../data/agendas'
 import styles from './CommitteeDetailPage.module.css'
 
 // ── Hero image with full-bleed fallback ──────────────────────
@@ -216,39 +217,106 @@ export default function CommitteeDetailPage() {
         </section>
 
         {/* ── AGENDA ── */}
-        <motion.section
-          className={styles.agendaSection}
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 75, damping: 18 }}
-        >
-          <div className={styles.agendaLeft}>
-            <div className={styles.agendaLine} />
-          </div>
+        {(() => {
+          const agenda = AGENDAS[committee.id]
 
-          <div className={styles.agendaRight}>
-            <div className={styles.sectionLabel}>
-              <span className={styles.labelDotBlue} />
-              Coming Soon
-            </div>
-            <h2 className={styles.sectionTitle}>Agenda</h2>
-            <p className={styles.sectionDesc}>
-              The committee's agenda topic will be released once finalized. Stay tuned for updates on the official topic for debate.
-            </p>
-
-            <div className={styles.agendaPlaceholders}>
-              {[1].map(n => (
-                <div key={n} className={styles.agendaPlaceholder}>
-                  <span className={styles.agendaPlaceholderNum}>{n < 10 ? `0${n}` : n}</span>
-                  <div className={styles.agendaPlaceholderContent}>
-                    <div className={styles.agendaPlaceholderBar} />
-                    <div className={styles.agendaPlaceholderBarShort} />
+          // Classified
+          if (agenda?.classified) {
+            return (
+              <motion.section
+                className={styles.agendaSection}
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 75, damping: 18 }}
+              >
+                <div className={styles.agendaLeft}>
+                  <div className={styles.agendaLine} />
+                </div>
+                <div className={styles.agendaRight}>
+                  <div className={styles.sectionLabel}>
+                    <span className={styles.labelDotBlue} />
+                    Agenda
+                  </div>
+                  <h2 className={styles.sectionTitle}>Agenda</h2>
+                  <div className={styles.classifiedBox}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.7)" strokeWidth="1.8">
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0110 0v4" />
+                    </svg>
+                    <span className={styles.classifiedLabel}>CLASSIFIED</span>
+                    <p className={styles.classifiedDesc}>The agenda for this committee is not available to the public at this time.</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
+              </motion.section>
+            )
+          }
+
+          // Has items
+          if (agenda?.items?.length) {
+            return (
+              <motion.section
+                className={styles.agendaSection}
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 75, damping: 18 }}
+              >
+                <div className={styles.agendaLeft}>
+                  <div className={styles.agendaLine} />
+                </div>
+                <div className={styles.agendaRight}>
+                  <div className={styles.sectionLabel}>
+                    <span className={styles.labelDotBlue} />
+                    {agenda.items.length > 1 ? `${agenda.items.length} Topics` : '1 Topic'}
+                  </div>
+                  <h2 className={styles.sectionTitle}>Agenda</h2>
+                  <div className={styles.agendaItems}>
+                    {agenda.items.map((item, i) => (
+                      <div key={i} className={styles.agendaItem}>
+                        <span className={styles.agendaItemNum}>{String(i + 1).padStart(2, '0')}</span>
+                        <p className={styles.agendaItemText}>{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.section>
+            )
+          }
+
+          // Coming Soon fallback
+          return (
+            <motion.section
+              className={styles.agendaSection}
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 75, damping: 18 }}
+            >
+              <div className={styles.agendaLeft}>
+                <div className={styles.agendaLine} />
+              </div>
+              <div className={styles.agendaRight}>
+                <div className={styles.sectionLabel}>
+                  <span className={styles.labelDotBlue} />
+                  Coming Soon
+                </div>
+                <h2 className={styles.sectionTitle}>Agenda</h2>
+                <p className={styles.sectionDesc}>
+                  The committee's agenda topic will be released once finalized. Stay tuned for updates on the official topic for debate.
+                </p>
+                <div className={styles.agendaPlaceholders}>
+                  {[1].map(n => (
+                    <div key={n} className={styles.agendaPlaceholder}>
+                      <span className={styles.agendaPlaceholderNum}>{n < 10 ? `0${n}` : n}</span>
+                      <div className={styles.agendaPlaceholderContent}>
+                        <div className={styles.agendaPlaceholderBar} />
+                        <div className={styles.agendaPlaceholderBarShort} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.section>
+          )
+        })()}
 
         {/* ── BACKGROUND GUIDE ── */}
         <motion.section
