@@ -189,14 +189,7 @@ export default function CommitteeDetailPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 80, damping: 18 }}
           >
-            <div className={styles.sectionLabel}>
-              <span className={styles.labelDot} />
-              Coming Soon
-            </div>
-            <h2 className={styles.sectionTitle}>Meet the Dais</h2>
-            <p className={styles.sectionDesc}>
-              The Chairs, Vice Chairs, and Rapporteurs for this committee will be announced closer to the conference.
-            </p>
+            <h2 className={styles.sectionTitle}>Meet the EB</h2>
           </motion.div>
 
           <div className={styles.daisGrid}>

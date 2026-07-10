@@ -62,6 +62,5 @@ export const AGENDAS: Record<string, CommitteeAgenda> = {
       'Deliberating on the current auction and retention system used in franchise cricket and discussing potential changes to improve it',
     ],
   },
-  'jcc-1': { items: [], classified: true },
-  'jcc-2': { items: [], classified: true },
+  jcc: { items: [], classified: true },
 }

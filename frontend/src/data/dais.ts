@@ -28,15 +28,12 @@ export const DAIS: Record<string, DaisMember[]> = {
     { role: 'President',   name: 'Aprameya' },
     { role: 'Vice Chair',  name: 'Aanya Jain' },
   ],
-  'jcc-1': [
-    { role: 'Crisis Director',        name: 'Aravind Y Belur' },
-    { role: 'Cabinet Chairperson',    name: 'Fazil Razak' },
-    { role: 'Cabinet Vice Chairperson', name: 'Vihaan Reddy' },
-  ],
-  'jcc-2': [
-    { role: 'Crisis Director',        name: 'Aravind Y Belur' },
-    { role: 'Cabinet Chairperson',    name: 'Ayush R' },
-    { role: 'Cabinet Vice Chairperson', name: 'La Verna Chand' },
+  jcc: [
+    { role: 'Crisis Director',             name: 'Aravind Y Belur' },
+    { role: 'Cabinet I Chairperson',       name: 'Fazil Razak' },
+    { role: 'Cabinet I Vice Chairperson',  name: 'Vihaan Reddy' },
+    { role: 'Cabinet II Chairperson',      name: 'Ayush R' },
+    { role: 'Cabinet II Vice Chairperson', name: 'La Verna Chand' },
   ],
   sci: [
     { role: 'Chief Justice', name: 'Ananth Dhanwantri' },
