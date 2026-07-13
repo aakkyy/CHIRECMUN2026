@@ -110,9 +110,9 @@ export default function RegisterPage() {
 
             {/* ── Phase 01: Delegate Registration ── */}
             <div className={styles.phaseCard}>
-              <div className={`${styles.statusStrip} ${styles.statusStripGreen}`}>
-                <span className={`${styles.dot} ${styles.dotGreen}`} />
-                Open Now
+              <div className={`${styles.statusStrip} ${styles.statusStripRed}`}>
+                <span className={`${styles.dot} ${styles.dotRed}`} />
+                Closed
               </div>
 
               <div className={styles.phaseBody}>
@@ -122,24 +122,16 @@ export default function RegisterPage() {
                   <p className={styles.phaseTag}>Phase 01</p>
                   <h2 className={styles.phaseTitle}>Delegate Registration</h2>
                   <p className={styles.phaseDesc}>
-                    Round 1 Delegate Applications are open now.
+                    Round 1 Delegate Applications are now closed.
                   </p>
 
-                  <a
-                    href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=gtzSBu1vO02SGDfTT7BAW4J3U5c18QpFrxiPyTk3MHlUMTI3Qk8yWVlXSDM1UElJUjZPUE44SlcxRS4u&route=shorturl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.phaseBtn} ${styles.phaseBtnActive}`}
-                  >
+                  <div className={`${styles.phaseBtn} ${styles.phaseBtnGhost}`}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                      <polyline points="14 2 14 8 20 8"/>
+                      <rect x="3" y="11" width="18" height="11" rx="2"/>
+                      <path d="M7 11V7a5 5 0 0110 0v4"/>
                     </svg>
-                    Apply Now
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </a>
+                    Round 2 Coming Soon — Stay Tuned
+                  </div>
                 </div>
               </div>
             </div>
@@ -152,9 +144,9 @@ export default function RegisterPage() {
 
             {/* ── Phase 02: IP Registration ── */}
             <div className={styles.phaseCard}>
-              <div className={`${styles.statusStrip} ${styles.statusStripGreen}`}>
-                <span className={`${styles.dot} ${styles.dotGreen}`} />
-                Open Now
+              <div className={`${styles.statusStrip} ${styles.statusStripRed}`}>
+                <span className={`${styles.dot} ${styles.dotRed}`} />
+                Closed
               </div>
 
               <div className={styles.phaseBody}>
@@ -164,24 +156,16 @@ export default function RegisterPage() {
                   <p className={styles.phaseTag}>Phase 02</p>
                   <h2 className={styles.phaseTitle}>IP Registration</h2>
                   <p className={styles.phaseDesc}>
-                    International Press applications are open now.
+                    Round 1 International Press applications are now closed.
                   </p>
 
-                  <a
-                    href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=gtzSBu1vO02SGDfTT7BAW7lVwOEa8VdJix4pjIgOkt5UQUxUTzBHQ04xVkRWWEpHMVI5TUFKWFRDQy4u&route=shorturl"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.phaseBtn} ${styles.phaseBtnActive}`}
-                  >
+                  <div className={`${styles.phaseBtn} ${styles.phaseBtnGhost}`}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                      <polyline points="14 2 14 8 20 8"/>
+                      <rect x="3" y="11" width="18" height="11" rx="2"/>
+                      <path d="M7 11V7a5 5 0 0110 0v4"/>
                     </svg>
-                    Apply Now
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </a>
+                    Round 2 Coming Soon — Stay Tuned
+                  </div>
                 </div>
               </div>
             </div>
