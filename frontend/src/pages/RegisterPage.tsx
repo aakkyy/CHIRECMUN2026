@@ -210,7 +210,7 @@ export default function RegisterPage() {
                   </p>
 
                   <a
-                    href="https://cognitaschoolsuk-my.sharepoint.com/:x:/g/personal/policy_mun_chirec_ac_in/IQCFZQpTLMT3QJjROuyqJpc8AWYqTT70dK05nxgAOi0QGrM"
+                    href="https://cognitaschoolsuk-my.sharepoint.com/:x:/g/personal/policy_mun_chirec_ac_in/IQCFZQpTLMT3QJjROuyqJpc8AWYqTT70dK05nxgAOi0QGrM?web=1"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${styles.phaseBtn} ${styles.phaseBtnActive}`}
