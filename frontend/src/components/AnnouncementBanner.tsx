@@ -28,9 +28,9 @@ export default function AnnouncementBanner() {
         >
           <div className={styles.inner}>
             <p className={styles.text}>
-              Round 1 IP &amp; Delegate forms are closed
+              Round 2 Delegate &amp; IP Registration is live
               <span className={styles.sep} aria-hidden="true">·</span>
-              <Link to="/register" className={styles.cta}>Round 2 Coming Soon →</Link>
+              <Link to="/register" className={styles.cta}>Apply Now →</Link>
             </p>
           </div>
 
