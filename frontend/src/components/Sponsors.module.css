@@ -140,13 +140,13 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  filter: brightness(0) invert(1);
-  opacity: 0.75;
-  transition: opacity 0.2s ease;
+  opacity: 0.88;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .logoCard:hover .logoImg {
   opacity: 1;
+  transform: scale(1.03);
 }
 
 .logoFallback {
