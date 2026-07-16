@@ -22,10 +22,10 @@ const SPONSORS = [
   { name: 'Lumbini Builders',  slug: 'lumbini-builders' },
 ]
 
-function SponsorLogo({ name, slug, size }: { name: string; slug: string; size: 'large' | 'small' }) {
+function SponsorLogo({ name, slug, size, title }: { name: string; slug: string; size: 'large' | 'small'; title?: boolean }) {
   const [err, setErr] = useState(false)
   return (
-    <div className={`${styles.logoCard} ${size === 'large' ? styles.logoCardLarge : styles.logoCardSmall}`}>
+    <div className={`${styles.logoCard} ${size === 'large' ? styles.logoCardLarge : styles.logoCardSmall} ${title ? styles.logoCardTitle : ''}`}>
       {!err ? (
         <img
           src={`/media/sponsors/${slug}.png`}
@@ -68,7 +68,7 @@ export default function Sponsors() {
       {/* Title Sponsors */}
       <div className={styles.tier}>
         <motion.p
-          className={styles.tierLabel}
+          className={`${styles.tierLabel} ${styles.tierLabelGold}`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -87,7 +87,7 @@ export default function Sponsors() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <SponsorLogo name={s.name} slug={s.slug} size="large" />
+              <SponsorLogo name={s.name} slug={s.slug} size="large" title />
             </motion.div>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function Sponsors() {
       {/* Sponsors */}
       <div className={styles.tier}>
         <motion.p
-          className={styles.tierLabel}
+          className={`${styles.tierLabel} ${styles.tierLabelDim}`}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

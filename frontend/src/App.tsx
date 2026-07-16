@@ -78,8 +78,8 @@ function HomePage() {
       <Countdown />
       <Secretariat />
       <CommitteeMarquee />
-      <Sponsors />
       <Location />
+      <Sponsors />
       <Footer />
     </>
   )

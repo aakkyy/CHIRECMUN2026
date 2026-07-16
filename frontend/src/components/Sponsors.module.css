@@ -55,19 +55,27 @@
 .tierLabel {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(192,57,43,0.70);
   margin: 0 0 1.6rem;
+}
+
+.tierLabelGold {
+  color: rgba(218, 165, 32, 0.85);
+}
+
+.tierLabelDim {
+  color: rgba(255,255,255,0.35);
 }
 
 .tierDot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: rgba(192,57,43,0.75);
+  background: rgba(218,165,32,0.80);
+  box-shadow: 0 0 6px rgba(218,165,32,0.35);
   flex-shrink: 0;
 }
 
@@ -76,6 +84,18 @@
   border-radius: 50%;
   background: rgba(255,255,255,0.20);
   flex-shrink: 0;
+}
+
+/* Title sponsor card gets a gold tint */
+.logoCardTitle {
+  border-color: rgba(218,165,32,0.18);
+  background: rgba(218,165,32,0.04);
+}
+
+.logoCardTitle:hover {
+  border-color: rgba(218,165,32,0.40);
+  background: rgba(218,165,32,0.08);
+  box-shadow: 0 0 20px rgba(218,165,32,0.08);
 }
 
 /* ── Divider ── */
