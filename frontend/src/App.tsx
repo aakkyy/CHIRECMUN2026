@@ -9,6 +9,7 @@ import Countdown from './components/Countdown'
 import Secretariat from './components/Secretariat'
 import CommitteeMarquee from './components/CommitteeMarquee'
 import Location from './components/Location'
+import Sponsors from './components/Sponsors'
 import Footer from './components/Footer'
 import FAQPage from './pages/FAQPage'
 import GuidelinesPage from './pages/GuidelinesPage'
@@ -77,6 +78,7 @@ function HomePage() {
       <Countdown />
       <Secretariat />
       <CommitteeMarquee />
+      <Sponsors />
       <Location />
       <Footer />
     </>

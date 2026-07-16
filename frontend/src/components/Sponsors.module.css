@@ -1,0 +1,166 @@
+.section {
+  position: relative;
+  padding: 6rem 2rem 5rem;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 300px;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(192,57,43,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.65);
+  margin: 0 0 0.75rem;
+}
+
+.title {
+  font-family: var(--font-brand);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--theme-text);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.titleUnderline {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(192,57,43,0.8), rgba(192,57,43,0.2));
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+/* ── Tier label ── */
+.tier {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.tierLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(192,57,43,0.70);
+  margin: 0 0 1.6rem;
+}
+
+.tierDot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(192,57,43,0.75);
+  flex-shrink: 0;
+}
+
+.tierDotDim {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.20);
+  flex-shrink: 0;
+}
+
+/* ── Divider ── */
+.divider {
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+}
+
+/* ── Logo cards ── */
+.logoCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+.logoCard:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(192,57,43,0.22);
+  transform: translateY(-2px);
+}
+
+.logoCardLarge {
+  padding: 1.4rem 2rem;
+  height: 110px;
+}
+
+.logoCardSmall {
+  padding: 1rem 1.4rem;
+  height: 80px;
+}
+
+.logoImg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.logoCard:hover .logoImg {
+  opacity: 1;
+}
+
+.logoFallback {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ── Grids ── */
+.titleGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.sponsorGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.85rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .titleGrid  { grid-template-columns: repeat(3, 1fr); }
+  .sponsorGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .section { padding: 4rem 1.25rem 3.5rem; }
+  .titleGrid  { grid-template-columns: repeat(2, 1fr); }
+  .sponsorGrid { grid-template-columns: repeat(3, 1fr); }
+  .logoCardLarge { height: 80px; padding: 1rem 1.2rem; }
+  .logoCardSmall { height: 64px; padding: 0.75rem 1rem; }
+}
