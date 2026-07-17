@@ -62,5 +62,5 @@ export const AGENDAS: Record<string, CommitteeAgenda> = {
       'Deliberating on the current auction and retention system used in franchise cricket and discussing potential changes to improve it',
     ],
   },
-  jcc: { items: [], classified: true },
+  jcc: { items: ['The Phoney War 1939'] },
 }
