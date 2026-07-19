@@ -1,15 +1,15 @@
 // Add a committee ID here once its Background Guide PDF is uploaded to media/backgrounds/{id}.pdf
 export const BG_AVAILABLE = new Set<string>([
-  // 'who',
-  // 'disec',
+  'who',
+  'disec',
   // 'unhrc',
-  // 'unodc',
+  'unodc',
   // 'loksabha',
   // 'ec',
-  // 'copuos',
-  // 'unctad',
-  // 'sci',
-  // 'unsc',
+  'copuos',
+  'unctad',
+  'sci',
+  'unsc',
   // 'bcci',
   // 'jcc',
 ])
