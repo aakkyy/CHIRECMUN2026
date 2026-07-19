@@ -6,7 +6,7 @@ export const BG_AVAILABLE = new Set<string>([
   'unodc',
   'loksabha',
   'ec',
-  'copuos',
+  // 'copuos',
   'unctad',
   'sci',
   'unsc',
