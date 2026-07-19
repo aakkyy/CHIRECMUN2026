@@ -12,4 +12,5 @@ export const BG_AVAILABLE = new Set<string>([
   'unsc',
   'bcci',
   'jcc',
+  'ip-p',
 ])
