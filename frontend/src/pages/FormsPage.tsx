@@ -16,7 +16,7 @@ const forms = [
     title: 'Code of Conduct',
     desc: 'Outlines the behavioural standards all participants are expected to uphold throughout CHIREC MUN 2026. Read thoroughly before the conference.',
     file: '/media/forms/coc.pdf',
-    available: false,
+    available: true,
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(231,76,60,0.82)" strokeWidth="1.6">
         <path d="M9 11l3 3L22 4"/>
