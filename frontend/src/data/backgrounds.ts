@@ -2,11 +2,11 @@
 export const BG_AVAILABLE = new Set<string>([
   'who',
   'disec',
-  // 'unhrc',
+  'unhrc',
   'unodc',
   'loksabha',
   'ec',
-  // 'copuos',
+  'copuos',
   'unctad',
   'sci',
   'unsc',
