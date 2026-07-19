@@ -557,6 +557,30 @@
   transition: none;
 }
 
+.downloadBtnActive {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 0.78rem 1.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(192,57,43,0.55);
+  background: rgba(192,57,43,0.12);
+  font-family: 'Geist', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(220,80,60,0.95);
+  cursor: pointer;
+  margin-top: 1.4rem;
+  width: fit-content;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.downloadBtnActive:hover {
+  background: rgba(192,57,43,0.22);
+  border-color: rgba(192,57,43,0.80);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(192,57,43,0.22);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .daisGrid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }

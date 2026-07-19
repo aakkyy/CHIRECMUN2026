@@ -6,6 +6,7 @@ import Footer from '../components/Footer'
 import { COMMITTEES, TYPE_COLORS, TYPE_LABELS } from '../data/committees'
 import { DAIS } from '../data/dais'
 import { AGENDAS } from '../data/agendas'
+import { BG_AVAILABLE } from '../data/backgrounds'
 import styles from './CommitteeDetailPage.module.css'
 
 // ── Hero image with full-bleed fallback ──────────────────────
@@ -312,39 +313,60 @@ export default function CommitteeDetailPage() {
         })()}
 
         {/* ── BACKGROUND GUIDE ── */}
-        <motion.section
-          className={styles.bgGuideSection}
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 75, damping: 18, delay: 0.08 }}
-        >
-          <div className={styles.bgGuideIcon}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.82)" strokeWidth="1.5">
-              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-              <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
-            </svg>
-          </div>
+        {(() => {
+          const hasGuide = BG_AVAILABLE.has(committee.id)
+          return (
+            <motion.section
+              className={styles.bgGuideSection}
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 75, damping: 18, delay: 0.08 }}
+            >
+              <div className={styles.bgGuideIcon}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(192,57,43,0.82)" strokeWidth="1.5">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                  <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3" />
+                </svg>
+              </div>
 
-          <div className={styles.bgGuideBody}>
-            <div className={styles.sectionLabel}>
-              <span className={styles.labelDot} />
-              Coming Soon
-            </div>
-            <h2 className={styles.bgGuideTitle}>Background Guide</h2>
-            <p className={styles.sectionDesc}>
-              The Background Guide (Study Guide) will be available for download before the conference. It contains all the context delegates need to prepare for substantive debate.
-            </p>
+              <div className={styles.bgGuideBody}>
+                <div className={styles.sectionLabel}>
+                  <span className={hasGuide ? styles.labelDot : styles.labelDotBlue} />
+                  {hasGuide ? 'Available Now' : 'Coming Soon'}
+                </div>
+                <h2 className={styles.bgGuideTitle}>Background Guide</h2>
+                <p className={styles.sectionDesc}>
+                  {hasGuide
+                    ? 'Download the Background Guide to prepare for substantive debate. Read it carefully before the conference.'
+                    : 'The Background Guide (Study Guide) will be available for download before the conference. It contains all the context delegates need to prepare for substantive debate.'}
+                </p>
 
-            <button className={styles.downloadBtn} disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M12 15V3M7 10l5 5 5-5M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" />
-              </svg>
-              Download PDF — Coming Soon
-            </button>
-          </div>
+                {hasGuide ? (
+                  <a
+                    href={`/media/backgrounds/${committee.id}.pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.downloadBtnActive}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M12 15V3M7 10l5 5 5-5M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" />
+                    </svg>
+                    Download Background Guide
+                  </a>
+                ) : (
+                  <button className={styles.downloadBtn} disabled>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M12 15V3M7 10l5 5 5-5M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" />
+                    </svg>
+                    Download PDF — Coming Soon
+                  </button>
+                )}
+              </div>
 
-          <div className={styles.bgGuideGlow} />
-        </motion.section>
+              <div className={styles.bgGuideGlow} />
+            </motion.section>
+          )
+        })()}
 
       </div>
 
