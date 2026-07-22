@@ -37,7 +37,7 @@ export const DAIS: Record<string, DaisMember[]> = {
   ],
   sci: [
     { role: 'Chief Justice', name: 'Ananth Dhanwantri' },
-    { role: 'Justice',       name: 'Rida Saher' },
+    { role: 'Justice',       name: 'Seeya Adasada' },
     { role: 'Court Master',  name: 'Hayagreev D' },
   ],
   copuos: [

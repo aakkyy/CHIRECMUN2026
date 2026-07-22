@@ -7,7 +7,6 @@ const TITLE_SPONSORS = [
   { name: 'Bhrunda',             slug: 'bhrunda' },
   { name: 'G Pulla Reddy Sweets',slug: 'g-pulla-reddy-sweets' },
   { name: 'Hi Sun',              slug: 'hi-sun' },
-  { name: 'Legala Grp',          slug: 'legala-grp' },
 ]
 
 const SPONSORS = [
