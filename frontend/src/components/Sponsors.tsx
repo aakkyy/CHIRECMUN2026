@@ -10,15 +10,13 @@ const TITLE_SPONSORS = [
 ]
 
 const SPONSORS = [
-  { name: 'Veeresh',           slug: 'veeresh' },
   { name: 'Midwest Energy',    slug: 'midwest-energy' },
   { name: 'ERP Tech',          slug: 'erp-tech' },
   { name: 'Mussadilal',        slug: 'mussadilal' },
-  { name: 'Parthasarathy',     slug: 'parthasarathy' },
   { name: 'BOP Consultants',   slug: 'bop-consultants' },
   { name: 'Qatalys Tech',      slug: 'qatalys-tech' },
   { name: 'Greencity Estates', slug: 'greencity-estates' },
-  { name: 'Lumbini Builders',  slug: 'lumbini-builders' },
+  { name: 'Saabi',             slug: 'saabi' },
 ]
 
 function SponsorLogo({ name, slug, size, title }: { name: string; slug: string; size: 'large' | 'small'; title?: boolean }) {
